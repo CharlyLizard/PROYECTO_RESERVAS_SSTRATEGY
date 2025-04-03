@@ -1,7 +1,26 @@
-<header class="bg-green-700 text-white p-4 flex items-center justify-between w-full rounded-t-2xl">
+<header class="bg-green-700 text-white p-4 flex items-center justify-between rounded-t-2xl">
+  <!-- Logo -->
   <div class="flex items-center space-x-2">
     <mat-icon>check_circle</mat-icon>
     <h1 class="text-lg font-semibold">SStrategy</h1>
   </div>
-  <span class="text-sm">Service | Jane Doe</span>
+
+  <!-- Stepper en el Header -->
+  <div class="flex space-x-4">
+    <div
+      *ngFor="let item of steps; let i = index"
+      class="relative group flex items-center justify-center w-8 h-8 border-2 rounded-lg cursor-pointer transition-all duration-300"
+      [ngClass]="{
+        'bg-white text-green-700 border-white': step === i,
+        'bg-black text-white border-gray-400': step !== i
+      }"
+    >
+      {{ i + 1 }}
+
+      <!-- Tooltip (nube de información) -->
+      <span class="absolute left-1/2 -translate-x-1/2 top-10 bg-black text-white text-xs p-1 rounded-md opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+        {{ item }}
+      </span>
+    </div>
+  </div>
 </header>

@@ -12,7 +12,7 @@ import { FooterComponent } from "../../Footer/footer.component";
 
 @Component({
   selector: 'app-first-window',
-  imports: [MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule, CommonModule, CalendarioComponent, ZonaHorariaComponent, HorasReservaComponent, HeaderComponent],
+  imports: [MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule, CommonModule, CalendarioComponent, ZonaHorariaComponent, HorasReservaComponent],
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent {

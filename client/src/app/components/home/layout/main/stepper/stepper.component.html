@@ -1,0 +1,27 @@
+<main class="bg-white rounded-2xl shadow-xl max-w-4xl mx-auto mt-8">
+  <!-- HEADER CON EL STEPPER -->
+  <app-header [step]="currentStep"></app-header>
+
+  <!-- CONTENIDO DEL PASO ACTUAL -->
+  <ng-container [ngSwitch]="currentStep">
+    <app-first-window *ngSwitchCase="0"></app-first-window>
+    <app-second-window *ngSwitchCase="1"></app-second-window>
+  </ng-container>
+
+  <!-- BOTONES DE NAVEGACIÓN -->
+  <!-- Contenedor de botones -->
+  <div class="p-4 mx-4 mt-6 flex" [ngClass]="{'justify-between': currentStep > 0, 'justify-end': currentStep === 0}">
+    <!-- Botón ATRÁS (Solo aparece en los pasos 1 y 2) -->
+    <button *ngIf="currentStep > 0" (click)="prevStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+      ATRÁS
+    </button>
+
+    <!-- Botón SIGUIENTE -->
+    <button *ngIf="currentStep < 2" (click)="nextStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+      SIGUIENTE
+    </button>
+  </div>
+
+
+
+</main>
