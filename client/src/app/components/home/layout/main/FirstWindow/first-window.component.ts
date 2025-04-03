@@ -16,5 +16,18 @@ import { FooterComponent } from "../../Footer/footer.component";
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent {
-  selectedTimeZone = 'Madrid';
+  selectedDate: Date | null = null;
+  selectedHour: string | null = null;
+  selectedTimezone: string | null = null;
+
+  onDateSelected(date: Date | null) {
+    this.selectedDate = date;
+  }
+
+  onHourSelected(hour: string) {
+    this.selectedHour = hour;
+  }
+  onTimezoneSelected(timezone: string) {
+    this.selectedTimezone = timezone;
+  }
 }

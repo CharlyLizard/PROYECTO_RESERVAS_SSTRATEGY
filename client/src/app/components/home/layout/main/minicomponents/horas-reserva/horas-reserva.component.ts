@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'horas-reserva',
@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './horas-reserva.component.html'
 })
 export class HorasReservaComponent {
+  @Output() hourChange = new EventEmitter<string>();
   hours: string[] = [];
 
   constructor() {
@@ -26,5 +27,9 @@ export class HorasReservaComponent {
         this.hours.push(`${time} ${ampm}`);
       }
     }
+
+  }
+  onHourSelected(hour: string) {
+    this.hourChange.emit(hour);
   }
 }
