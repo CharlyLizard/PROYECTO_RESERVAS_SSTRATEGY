@@ -27,7 +27,6 @@ export class HorasReservaComponent {
         this.hours.push(`${time} ${ampm}`);
       }
     }
-
   }
   onHourSelected(hour: string) {
     this.hourChange.emit(hour);
