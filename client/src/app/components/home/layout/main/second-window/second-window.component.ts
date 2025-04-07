@@ -18,16 +18,25 @@ export class SecondWindowComponent {
     notas: '',
   };
 
-  constructor(private reservasService: ReservasDataService) {}
-
-  goBack() {
-    // Lógica para retroceder al paso anterior
-    this.reservasService.prevStep();
+  constructor(private reservasService: ReservasDataService) {
+    // Cargar datos existentes si los hay
+    const contactInfo = this.reservasService.getContactInfo();
+    if (contactInfo && Object.keys(contactInfo).length > 0) {
+      this.formData = { ...contactInfo };
+    }
   }
 
-  goNext() {
-    console.log('Datos del formulario:', this.formData);
+  // Método para validar el formulario
+  isFormValid(): boolean {
+    return !!this.formData.nombre &&
+           !!this.formData.apellido &&
+           !!this.formData.email &&
+           !!this.formData.telefono;
+  }
+
+  // Método para guardar los datos
+  saveData(): void {
+    console.log('Datos del formulario guardados:', this.formData);
     this.reservasService.setContactInfo(this.formData);
-    this.reservasService.nextStep();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CalendarioComponent } from "../minicomponents/calendario/calendario.component";
 import { CommonModule, NgSwitch } from '@angular/common';
 import { FirstWindowComponent } from "../FirstWindow/first-window.component";
@@ -15,12 +15,20 @@ import { T } from '@angular/cdk/keycodes';
 })
 
 export class StepperComponent {
-  currentStep = 0; // Paso actual
+  currentStep = 0;
+
+  @ViewChild(SecondWindowComponent) secondWindowComponent!: SecondWindowComponent;
 
   constructor(private reservasService: ReservasDataService) {}
+
   // Avanzar al siguiente paso
   nextStep(): void {
-    if (this.currentStep < 2) {
+    // Si estamos en el paso del formulario (paso 1), guardar los datos antes de avanzar
+    if (this.currentStep === 1 && this.secondWindowComponent) {
+      this.secondWindowComponent.saveData();
+    }
+
+    if (this.canProceed() && this.currentStep < 2) {
       this.currentStep++;
     }
   }
@@ -36,9 +44,11 @@ export class StepperComponent {
   canProceed(): boolean {
     if (this.currentStep === 0) {
       return this.reservasService.isFirstStepComplete();
+    } else if (this.currentStep === 1) {
+      // Si tenemos referencia al componente, verificar si el formulario es válido
+      return this.secondWindowComponent ? this.secondWindowComponent.isFormValid() : false;
     }
 
-    // Para otros pasos puedes agregar más validaciones
     return true;
   }
 }
