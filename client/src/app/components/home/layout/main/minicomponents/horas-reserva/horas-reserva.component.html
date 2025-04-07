@@ -1,10 +1,12 @@
 <div class="flex flex-col space-y-3 max-h-[370px] overflow-y-auto border border-gray-300 rounded-lg p-2">
-  <button
-  *ngFor="let hour of hours"
-  class="bg-white border border-gray-300 text-gray-800 py-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-300"
-  (click)="onHourSelected(hour)"
->
-  {{ hour }}
-</button>
+  @for (hour of hours; track hour) {
+    <button
+      class="bg-white border border-gray-300 text-gray-800 py-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-300"
+      [class.bg-green-100]="isSelected(hour)"
+      [class.border-green-500]="isSelected(hour)"
+      (click)="onHourSelected(hour)"
+    >
+      {{ hour }}
+    </button>
+  }
 </div>
-

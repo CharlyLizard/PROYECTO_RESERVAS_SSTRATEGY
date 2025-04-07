@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'horas-reserva',
@@ -7,11 +7,21 @@ import { Component, EventEmitter, Output } from '@angular/core';
   templateUrl: './horas-reserva.component.html'
 })
 export class HorasReservaComponent {
+  @Input() initialHour: string | null = null;
   @Output() hourChange = new EventEmitter<string>();
+
   hours: string[] = [];
+  selectedHour: string | null = null;
 
   constructor() {
     this.generateHours();
+  }
+
+  ngOnInit() {
+    // Inicializar con la hora guardada si existe
+    if (this.initialHour) {
+      this.selectedHour = this.initialHour;
+    }
   }
 
   generateHours() {
@@ -28,7 +38,14 @@ export class HorasReservaComponent {
       }
     }
   }
+
   onHourSelected(hour: string) {
+    this.selectedHour = hour;
     this.hourChange.emit(hour);
+  }
+
+  // Método para verificar si una hora está seleccionada
+  isSelected(hour: string): boolean {
+    return hour === this.selectedHour;
   }
 }

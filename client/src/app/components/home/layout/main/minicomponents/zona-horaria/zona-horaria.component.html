@@ -3,10 +3,10 @@
   <mat-select
     class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
     (selectionChange)="onTimezoneSelected($event.value)"
+    [value]="selectedTimezone"
   >
     <mat-option value="Madrid">Madrid (+1:00)</mat-option>
     <mat-option value="New York">New York (-5:00)</mat-option>
     <mat-option value="Tokyo">Tokyo (+9:00)</mat-option>
   </mat-select>
 </div>
-

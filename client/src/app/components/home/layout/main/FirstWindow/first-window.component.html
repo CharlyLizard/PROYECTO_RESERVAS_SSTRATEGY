@@ -10,8 +10,8 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <calendario [initialDate]="selectedDate" (dateChange)="onDateSelected($event)"></calendario>
     <div class="flex flex-col space-y-4">
-      <zona-horaria (timezoneChange)="onTimezoneSelected($event)"></zona-horaria>
-      <horas-reserva (hourChange)="onHourSelected($event)"></horas-reserva>
+      <zona-horaria [initialTimezone]="selectedTimezone" (timezoneChange)="onTimezoneSelected($event)"></zona-horaria>
+      <horas-reserva [initialHour]="selectedHour" (hourChange)="onHourSelected($event)"></horas-reserva>
     </div>
   </div>
 

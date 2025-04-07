@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'zona-horaria',
@@ -6,9 +6,20 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './zona-horaria.component.html'
 })
 export class ZonaHorariaComponent {
-  @Output() timezoneChange = new EventEmitter<string>(); // ✅ Emitir la zona horaria seleccionada
+  @Input() initialTimezone: string | null = null;
+  @Output() timezoneChange = new EventEmitter<string>();
+
+  selectedTimezone: string | null = null;
+
+  ngOnInit() {
+    // Inicializar con el valor guardado si existe
+    if (this.initialTimezone) {
+      this.selectedTimezone = this.initialTimezone;
+    }
+  }
 
   onTimezoneSelected(timezone: string) {
-    this.timezoneChange.emit(timezone); // ✅ Emitir el valor seleccionado
+    this.selectedTimezone = timezone;
+    this.timezoneChange.emit(timezone);
   }
 }
