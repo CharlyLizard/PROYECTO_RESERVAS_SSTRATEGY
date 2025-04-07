@@ -8,7 +8,7 @@ import { SecondWindowComponent } from "../second-window/second-window.component"
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
-  imports: [NgSwitch, CommonModule, FirstWindowComponent, HeaderComponent, SecondWindowComponent],
+  imports: [FirstWindowComponent, HeaderComponent, SecondWindowComponent],
 })
 
 export class StepperComponent {

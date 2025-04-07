@@ -3,25 +3,30 @@
   <app-header [step]="currentStep"></app-header>
 
   <!-- CONTENIDO DEL PASO ACTUAL -->
-  <ng-container [ngSwitch]="currentStep">
-    <app-first-window *ngSwitchCase="0"></app-first-window>
-    <app-second-window *ngSwitchCase="1"></app-second-window>
-  </ng-container>
+  @switch (currentStep) {
+    @case (0) {
+      <app-first-window></app-first-window>
+    }
+    @case (1) {
+      <app-second-window></app-second-window>
+    }
+  }
 
   <!-- BOTONES DE NAVEGACIÓN -->
   <!-- Contenedor de botones -->
-  <div class="p-4 mx-4 mt-6 flex" [ngClass]="{'justify-between': currentStep > 0, 'justify-end': currentStep === 0}">
+  <div class="p-4 mx-4 mt-6 flex" [class.justify-between]="currentStep > 0" [class.justify-end]="currentStep === 0">
     <!-- Botón ATRÁS (Solo aparece en los pasos 1 y 2) -->
-    <button *ngIf="currentStep > 0" (click)="prevStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
-      ATRÁS
-    </button>
+    @if (currentStep > 0) {
+      <button (click)="prevStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+        ATRÁS
+      </button>
+    }
 
     <!-- Botón SIGUIENTE -->
-    <button *ngIf="currentStep < 2" (click)="nextStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
-      SIGUIENTE
-    </button>
+    @if (currentStep < 2) {
+      <button (click)="nextStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+        SIGUIENTE
+      </button>
+    }
   </div>
-
-
-
 </main>

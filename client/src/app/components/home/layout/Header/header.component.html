@@ -7,20 +7,21 @@
 
   <!-- Stepper en el Header -->
   <div class="flex space-x-4">
-    <div
-      *ngFor="let item of steps; let i = index"
-      class="relative group flex items-center justify-center w-8 h-8 border-2 rounded-lg cursor-pointer transition-all duration-300"
-      [ngClass]="{
-        'bg-white text-green-700 border-white': step === i,
-        'bg-black text-white border-gray-400': step !== i
-      }"
-    >
-      {{ i + 1 }}
+    @for (item of steps; track $index; let i = $index) {
+      <div
+        class="relative group flex items-center justify-center w-8 h-8 border-2 rounded-lg cursor-pointer transition-all duration-300"
+        [ngClass]="{
+          'bg-white text-green-700 border-white': step === i,
+          'bg-black text-white border-gray-400': step !== i
+        }"
+      >
+        {{ i + 1 }}
 
-      <!-- Tooltip (nube de información) -->
-      <span class="absolute left-1/2 -translate-x-1/2 top-10 bg-black text-white text-xs p-1 rounded-md opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-        {{ item }}
-      </span>
-    </div>
+        <!-- Tooltip (nube de información) -->
+        <span class="absolute left-1/2 -translate-x-1/2 top-10 bg-black text-white text-xs p-1 rounded-md opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          {{ item }}
+        </span>
+      </div>
+    }
   </div>
 </header>
