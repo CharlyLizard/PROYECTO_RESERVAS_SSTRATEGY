@@ -1,1 +1,115 @@
-<p>second-window works!</p>
+<div class="p-8">
+  <h2 class="text-center text-gray-800 text-xl font-semibold mb-6">
+    INGRESE SU INFORMACIÓN
+  </h2>
+
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Nombre -->
+    <div>
+      <label class="block text-gray-700 font-medium">Nombre *</label>
+      <input
+        type="text"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.nombre"
+        name="nombre"
+        required
+      />
+    </div>
+
+    <!-- Apellido -->
+    <div>
+      <label class="block text-gray-700 font-medium">Apellido *</label>
+      <input
+        type="text"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.apellido"
+        name="apellido"
+        required
+      />
+    </div>
+
+    <!-- Dirección de E-mail -->
+    <div>
+      <label class="block text-gray-700 font-medium">Dirección de E-mail *</label>
+      <input
+        type="email"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.email"
+        name="email"
+        required
+      />
+    </div>
+
+    <!-- Número de teléfono -->
+    <div>
+      <label class="block text-gray-700 font-medium">Número de teléfono *</label>
+      <input
+        type="tel"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.telefono"
+        name="telefono"
+        required
+      />
+    </div>
+
+    <!-- Domicilio -->
+    <div>
+      <label class="block text-gray-700 font-medium">Domicilio</label>
+      <input
+        type="text"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.domicilio"
+        name="domicilio"
+      />
+    </div>
+
+    <!-- Ciudad -->
+    <div>
+      <label class="block text-gray-700 font-medium">Ciudad</label>
+      <input
+        type="text"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.ciudad"
+        name="ciudad"
+      />
+    </div>
+
+    <!-- Código postal -->
+    <div>
+      <label class="block text-gray-700 font-medium">Código postal</label>
+      <input
+        type="text"
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.codigoPostal"
+        name="codigoPostal"
+      />
+    </div>
+
+    <!-- Notas -->
+    <div class="md:col-span-2">
+      <label class="block text-gray-700 font-medium">Notas</label>
+      <textarea
+        class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+        [(ngModel)]="formData.notas"
+        name="notas"
+        rows="3"
+      ></textarea>
+    </div>
+  </form>
+
+  <!-- Botones -->
+  <div class="mt-6 flex justify-between">
+    <button
+      class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800"
+      (click)="goBack()"
+    >
+      ATRÁS
+    </button>
+    <button
+      class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+      (click)="goNext()"
+    >
+      SIGUIENTE
+    </button>
+  </div>
+</div>

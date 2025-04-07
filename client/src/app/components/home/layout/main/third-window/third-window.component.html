@@ -4,28 +4,25 @@
   </h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Información del servicio -->
-    <div>
-      <h3 class="text-gray-700 font-medium">Service</h3>
-      <p>Jane Doe</p>
-      <p>15/04/2025 11:30 am</p>
-      <p>30 Minutos</p>
-      <p>Madrid (+1:00)</p>
-    </div>
-
     <!-- Información de contacto -->
     <div>
       <h3 class="text-gray-700 font-medium">Información de contacto</h3>
-      <p>Carlos Martín Salvatierra</p>
-      <p>carlosmartinsalvatierra.com</p>
-      <p>666666666</p>
-      <p>28806</p>
-      <p>Madrid, 28806</p>
+      <p><strong>Nombre:</strong> {{ contactInfo?.nombre }}</p>
+      <p><strong>Apellido:</strong> {{ contactInfo?.apellido }}</p>
+      <p><strong>Email:</strong> {{ contactInfo?.email }}</p>
+      <p><strong>Teléfono:</strong> {{ contactInfo?.telefono }}</p>
+      <p><strong>Domicilio:</strong> {{ contactInfo?.domicilio }}</p>
+      <p><strong>Ciudad:</strong> {{ contactInfo?.ciudad }}</p>
+      <p><strong>Código Postal:</strong> {{ contactInfo?.codigoPostal }}</p>
+      <p><strong>Notas:</strong> {{ contactInfo?.notas }}</p>
     </div>
   </div>
 
   <!-- Botones -->
   <div class="mt-6 flex justify-between">
+    <button class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+      ATRÁS
+    </button>
     <button class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600">
       CONFIRMAR
     </button>
