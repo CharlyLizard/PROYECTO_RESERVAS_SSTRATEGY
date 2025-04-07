@@ -24,7 +24,10 @@
 
     <!-- Botón SIGUIENTE -->
     @if (currentStep < 2) {
-      <button (click)="nextStep()" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+      <button
+        (click)="nextStep()"
+        class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="!canProceed()">
         SIGUIENTE
       </button>
     }

@@ -4,6 +4,7 @@ import { CommonModule, NgSwitch } from '@angular/common';
 import { FirstWindowComponent } from "../FirstWindow/first-window.component";
 import { HeaderComponent } from "../../Header/header.component";
 import { SecondWindowComponent } from "../second-window/second-window.component";
+import { ReservasDataService } from '../../../../../services/reservas-data.service';
 
 @Component({
   selector: 'app-stepper',
@@ -14,6 +15,7 @@ import { SecondWindowComponent } from "../second-window/second-window.component"
 export class StepperComponent {
   currentStep = 0; // Paso actual
 
+  constructor(private reservasService: ReservasDataService) {}
   // Avanzar al siguiente paso
   nextStep(): void {
     if (this.currentStep < 2) {
@@ -26,5 +28,15 @@ export class StepperComponent {
     if (this.currentStep > 0) {
       this.currentStep--;
     }
+  }
+
+  // Método para verificar si se puede avanzar al siguiente paso
+  canProceed(): boolean {
+    if (this.currentStep === 0) {
+      return this.reservasService.isFirstStepComplete();
+    }
+
+    // Para otros pasos puedes agregar más validaciones
+    return true;
   }
 }

@@ -30,4 +30,11 @@ export class ReservasDataService {
     this.selectedHour = null;
     this.selectedTimezone = null;
   }
+
+  // Método para verificar si todos los datos del primer paso están completos
+  isFirstStepComplete(): boolean {
+    return this.selectedDate !== null &&
+           this.selectedHour !== null &&
+           this.selectedTimezone !== null;
+  }
 }
