@@ -5,11 +5,13 @@ import { FirstWindowComponent } from "../FirstWindow/first-window.component";
 import { HeaderComponent } from "../../Header/header.component";
 import { SecondWindowComponent } from "../second-window/second-window.component";
 import { ReservasDataService } from '../../../../../services/reservas-data.service';
+import { ThirdWindowComponent } from '../third-window/third-window.component';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
-  imports: [FirstWindowComponent, HeaderComponent, SecondWindowComponent],
+  imports: [FirstWindowComponent, HeaderComponent, SecondWindowComponent, CommonModule,ThirdWindowComponent],
 })
 
 export class StepperComponent {
