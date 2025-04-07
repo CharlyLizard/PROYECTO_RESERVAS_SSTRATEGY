@@ -34,6 +34,17 @@ export class ReservasDataService {
     return this.contactInfo;
   }
 
+  getReservationDetails() {
+    return {
+      date: this.selectedDate,
+      hour: this.selectedHour,
+      timezone: this.selectedTimezone,
+      contactInfo: this.contactInfo,
+    };
+  }
+  // Método para verificar si todos los datos del primer paso están completos
+
+
   // Método para limpiar todos los datos
   clearData() {
     this.selectedDate = null;

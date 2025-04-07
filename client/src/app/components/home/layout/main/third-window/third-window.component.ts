@@ -1,17 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReservasDataService } from './../../../../../services/reservas-data.service';
-
 @Component({
   selector: 'app-third-window',
   templateUrl: './third-window.component.html',
+  imports: [CommonModule],
 })
 export class ThirdWindowComponent implements OnInit {
-  contactInfo: any = null;
+  reservationDetails: any = null;
 
   constructor(private reservasService: ReservasDataService) {}
 
   ngOnInit() {
-    // Recuperar los datos de contacto desde el servicio
-    this.contactInfo = this.reservasService.getContactInfo();
+    this.reservationDetails = this.reservasService.getReservationDetails();
   }
 }

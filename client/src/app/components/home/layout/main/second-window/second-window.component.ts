@@ -26,9 +26,8 @@ export class SecondWindowComponent {
   }
 
   goNext() {
-    // Guardar los datos en el servicio
+    console.log('Datos del formulario:', this.formData);
     this.reservasService.setContactInfo(this.formData);
-    // Avanzar al siguiente paso
     this.reservasService.nextStep();
   }
 }
