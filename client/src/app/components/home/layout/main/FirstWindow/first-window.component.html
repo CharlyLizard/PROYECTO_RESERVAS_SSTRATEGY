@@ -8,7 +8,7 @@
 
   <!-- Grid para dividir el contenido en dos columnas -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <calendario (dateChange)="onDateSelected($event)"></calendario>
+    <calendario [initialDate]="selectedDate" (dateChange)="onDateSelected($event)"></calendario>
     <div class="flex flex-col space-y-4">
       <zona-horaria (timezoneChange)="onTimezoneSelected($event)"></zona-horaria>
       <horas-reserva (hourChange)="onHourSelected($event)"></horas-reserva>
