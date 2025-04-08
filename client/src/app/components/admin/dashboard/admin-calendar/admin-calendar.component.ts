@@ -1,38 +1,66 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { FullCalendarModule } from '@fullcalendar/angular'; // FullCalendar module
+import dayGridPlugin from '@fullcalendar/daygrid'; // DayGrid plugin
+import timeGridPlugin from '@fullcalendar/timegrid'; // TimeGrid plugin
+import interactionPlugin from '@fullcalendar/interaction'; // Interaction plugin
 
 @Component({
   selector: 'app-admin-calendar',
   templateUrl: './admin-calendar.component.html',
   styleUrls: ['./admin-calendar.component.css'],
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule
-  ]
+  imports: [FullCalendarModule]
 })
 export class AdminCalendarComponent {
-  selectedDate: Date = new Date();
+  calendarOptions: any;
 
-  // Método para resetear la fecha al día actual
-  resetToToday(): void {
-    this.selectedDate = new Date();
+  constructor() {
+    this.calendarOptions = {
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'dayGridWeek', // Default view
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,timeGridDay'
+      },
+      events: [
+        {
+          title: 'Cita 1',
+          start: '2025-04-06T10:00:00',
+          end: '2025-04-06T11:00:00'
+        },
+        {
+          title: 'Cita 2',
+          start: '2025-04-07T14:00:00',
+          end: '2025-04-07T15:00:00'
+        }
+      ],
+      editable: true, // Allow event dragging and resizing
+      selectable: true, // Allow date selection
+      select: this.handleDateSelect.bind(this), // Handle date selection
+      eventClick: this.handleEventClick.bind(this) // Handle event click
+    };
   }
 
-  dateChanged(event: Date) {
-    this.selectedDate = event;
-    // Aquí podrías cargar las citas para esta fecha
+  handleDateSelect(selectInfo: any) {
+    const title = prompt('Ingrese el título del evento:');
+    const calendarApi = selectInfo.view.calendar;
+
+    calendarApi.unselect(); // Clear selection
+
+    if (title) {
+      calendarApi.addEvent({
+        title,
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay
+      });
+    }
   }
 
-  hasAppointments(date: Date): boolean {
-    // Lógica para verificar si hay citas en esta fecha
-    return Math.random() > 0.6; // Para demostración, aleatorio
+  handleEventClick(clickInfo: any) {
+    if (confirm(`¿Desea eliminar el evento '${clickInfo.event.title}'?`)) {
+      clickInfo.event.remove();
+    }
   }
 }
