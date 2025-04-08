@@ -12,8 +12,10 @@
         class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         [(ngModel)]="formData.nombre"
         name="nombre"
-        required
       />
+      <div class="text-red-500 text-sm">
+        {{ getErrorMessage('nombre') }}
+      </div>
     </div>
 
     <!-- Apellido -->
@@ -24,8 +26,10 @@
         class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         [(ngModel)]="formData.apellido"
         name="apellido"
-        required
       />
+      <div class="text-red-500 text-sm">
+        {{ getErrorMessage('apellido') }}
+      </div>
     </div>
 
     <!-- Dirección de E-mail -->
@@ -36,8 +40,10 @@
         class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         [(ngModel)]="formData.email"
         name="email"
-        required
       />
+      <div class="text-red-500 text-sm">
+        {{ getErrorMessage('email') }}
+      </div>
     </div>
 
     <!-- Número de teléfono -->
@@ -48,8 +54,10 @@
         class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         [(ngModel)]="formData.telefono"
         name="telefono"
-        required
       />
+      <div class="text-red-500 text-sm">
+        {{ getErrorMessage('telefono') }}
+      </div>
     </div>
 
     <!-- Domicilio -->
@@ -83,6 +91,9 @@
         [(ngModel)]="formData.codigoPostal"
         name="codigoPostal"
       />
+      <div class="text-red-500 text-sm">
+        {{ getErrorMessage('codigoPostal') }}
+      </div>
     </div>
 
     <!-- Notas -->
@@ -96,6 +107,5 @@
       ></textarea>
     </div>
   </form>
-  
 
 </div>

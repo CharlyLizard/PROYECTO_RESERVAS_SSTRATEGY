@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './second-window.component.html',
   imports: [FormsModule],
 })
+
 export class SecondWindowComponent {
   formData = {
     nombre: '',
@@ -18,6 +19,8 @@ export class SecondWindowComponent {
     notas: '',
   };
 
+  validationErrors: { [key: string]: string } = {};
+
   constructor(private reservasService: ReservasDataService) {
     // Cargar datos existentes si los hay
     const contactInfo = this.reservasService.getContactInfo();
@@ -28,15 +31,54 @@ export class SecondWindowComponent {
 
   // Método para validar el formulario
   isFormValid(): boolean {
-    return !!this.formData.nombre &&
-           !!this.formData.apellido &&
-           !!this.formData.email &&
-           !!this.formData.telefono;
+    this.validationErrors = {}; // Limpiar errores previos
+
+    if (!this.formData.nombre.trim()) {
+      this.validationErrors['nombre'] = 'El nombre es obligatorio.';
+    }
+
+    if (!this.formData.apellido.trim()) {
+      this.validationErrors['apellido'] = 'El apellido es obligatorio.';
+    }
+
+    if (!this.formData.email.trim()) {
+      this.validationErrors['email'] = 'El email es obligatorio.';
+    } else if (!this.isValidEmail(this.formData.email)) {
+      this.validationErrors['email'] = 'El email no es válido.';
+    }
+
+    if (!this.formData.telefono.trim()) {
+      this.validationErrors['telefono'] = 'El teléfono es obligatorio.';
+    } else if (!/^[0-9]{9,15}$/.test(this.formData.telefono)) {
+      this.validationErrors['telefono'] = 'El teléfono debe tener entre 9 y 15 dígitos.';
+    }
+
+    if (this.formData.codigoPostal && !/^[0-9]{5}$/.test(this.formData.codigoPostal)) {
+      this.validationErrors['codigoPostal'] = 'El código postal debe tener 5 dígitos.';
+    }
+
+    // Retornar true si no hay errores
+    return Object.keys(this.validationErrors).length === 0;
   }
 
   // Método para guardar los datos
   saveData(): void {
-    console.log('Datos del formulario guardados:', this.formData);
-    this.reservasService.setContactInfo(this.formData);
+    if (this.isFormValid()) {
+      console.log('Datos del formulario guardados:', this.formData);
+      this.reservasService.setContactInfo(this.formData);
+    } else {
+      console.error('Errores de validación:', this.validationErrors);
+    }
+  }
+
+  // Método auxiliar para obtener el mensaje de error de un campo
+  getErrorMessage(field: string): string {
+    return this.validationErrors[field] || '';
+  }
+
+  // Método auxiliar para validar el formato del email
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 }
