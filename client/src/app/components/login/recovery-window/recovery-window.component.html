@@ -1,0 +1,51 @@
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">¿OLVIDÓ SU CONTRASEÑA?</h2>
+  <p class="text-sm text-center text-gray-600 mb-6">
+    Ingrese su nombre de usuario y su dirección de E-mail para obtener una nueva contraseña.
+  </p>
+
+  <form>
+    <!-- Campo Nombre de Usuario -->
+    <div class="mb-4">
+      <label for="username" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Ingrese su nombre de usuario aquí..."
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-700"
+      />
+    </div>
+
+    <!-- Campo Dirección de E-mail -->
+    <div class="mb-4">
+      <label for="email" class="block text-sm font-medium text-gray-700">Dirección de E-mail</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Ingrese su dirección de E-mail aquí..."
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-700"
+      />
+    </div>
+
+    <!-- Enlace para regresar -->
+    <div class="mb-4 text-left">
+      <a routerLink="/login" class="text-sm text-green-600 hover:underline">Regresar a la página de inicio de sesión</a>
+    </div>
+
+    <!-- Botón de Regenerar Contraseña -->
+    <button
+      type="submit"
+      class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      <span>REGENERAR CONTRASEÑA</span>
+    </button>
+  </form>
+
+  <!-- Pie de página -->
+  <p class="text-center text-sm text-gray-500 mt-6">
+    Powered by <a href="#" class="text-green-600 hover:underline">EasyAppointments</a>
+  </p>
+</div>
