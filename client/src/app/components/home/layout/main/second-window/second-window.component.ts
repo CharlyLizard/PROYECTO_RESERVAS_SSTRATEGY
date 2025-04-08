@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ReservasDataService } from './../../../../../services/reservas-data.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormGroup, FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-second-window',
   templateUrl: './second-window.component.html',
@@ -21,7 +21,19 @@ export class SecondWindowComponent {
 
   validationErrors: { [key: string]: string } = {};
 
-  constructor(private reservasService: ReservasDataService) {
+  form: FormGroup;
+
+  constructor(private reservasService: ReservasDataService, private fb: FormBuilder) {
+    this.form = this.fb.group({
+      nombre: [''],
+      apellido: [''],
+      email: [''],
+      telefono: [''],
+      domicilio: [''],
+      ciudad: [''],
+      codigoPostal: [''],
+      notas: [''],
+    });
     // Cargar datos existentes si los hay
     const contactInfo = this.reservasService.getContactInfo();
     if (contactInfo && Object.keys(contactInfo).length > 0) {
@@ -75,6 +87,8 @@ export class SecondWindowComponent {
   getErrorMessage(field: string): string {
     return this.validationErrors[field] || '';
   }
+
+
 
   // Método auxiliar para validar el formato del email
   private isValidEmail(email: string): boolean {

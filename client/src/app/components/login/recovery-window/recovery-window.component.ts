@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'app-recovery-window',
   imports: [RouterLink],
-  templateUrl: './footer.component.html'
+  templateUrl: './recovery-window.component.html',
 })
-export class FooterComponent {
+export class RecoveryWindowComponent {
 
 }
