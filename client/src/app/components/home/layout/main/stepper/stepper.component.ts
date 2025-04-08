@@ -1,17 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
-import { CalendarioComponent } from "../minicomponents/calendario/calendario.component";
 import { CommonModule, NgSwitch } from '@angular/common';
 import { FirstWindowComponent } from "../FirstWindow/first-window.component";
 import { HeaderComponent } from "../../Header/header.component";
 import { SecondWindowComponent } from "../second-window/second-window.component";
 import { ReservasDataService } from '../../../../../services/reservas-data.service';
 import { ThirdWindowComponent } from '../third-window/third-window.component';
-import { T } from '@angular/cdk/keycodes';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
-  imports: [FirstWindowComponent, HeaderComponent, SecondWindowComponent, CommonModule,ThirdWindowComponent],
+  imports: [FirstWindowComponent, HeaderComponent, SecondWindowComponent, CommonModule,ThirdWindowComponent,MatIconModule],
 })
 
 export class StepperComponent {
@@ -50,5 +50,18 @@ export class StepperComponent {
     }
 
     return true;
+  }
+
+  confirm(): void {
+    const formData = this.reservasService.getContactInfo();
+
+    // Obtener los datos de la cita desde el servicio ReservasDataService
+    const appointmentData = this.reservasService.getReservationDetails();
+
+    // Mostrar los datos en la consola
+    console.log('Datos del formulario:', formData);
+    console.log('Datos de la cita:', appointmentData);
+
+    // Aquí puedes realizar acciones adicionales, como enviar los datos a un servidor
   }
 }

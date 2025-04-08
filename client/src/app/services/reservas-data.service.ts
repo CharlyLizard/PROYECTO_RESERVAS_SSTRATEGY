@@ -61,6 +61,9 @@ export class ReservasDataService {
   }
   private currentStep = 0;
 
+  // Datos de la cita
+  private appointmentData: any = {};
+
    // Métodos para manejar los pasos
    nextStep() {
     this.currentStep++;
@@ -75,4 +78,5 @@ export class ReservasDataService {
   getCurrentStep() {
     return this.currentStep;
   }
+
 }

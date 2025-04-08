@@ -27,5 +27,13 @@
         SIGUIENTE
       </button>
     }
+    @if (currentStep === 2) {
+      <button
+        (click)="confirm()"
+        class="bg-green-700 text-white py-2 px-6 rounded-lg hover:bg-green-800 flex items-center space-x-2">
+        <mat-icon>check_circle</mat-icon>
+        <span>CONFIRMAR</span>
+      </button>
+    }
   </div>
 </main>
