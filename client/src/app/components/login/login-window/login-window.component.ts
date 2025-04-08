@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router'; // Importa el servicio Router
 
 @Component({
   selector: 'app-login-window',
-  imports: [RouterLink],
   templateUrl: './login-window.component.html',
 })
 export class LoginWindowComponent {
+  constructor(private router: Router) {} // Inyecta el servicio Router en el constructor
 
+  login(): void {
+    // Redirige a la ruta /admin
+    this.router.navigate(['/admin']);
+  }
 }
