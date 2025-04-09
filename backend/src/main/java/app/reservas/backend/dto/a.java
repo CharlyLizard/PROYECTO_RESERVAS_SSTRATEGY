@@ -1,4 +1,4 @@
-package app.reservas.backend.config;
+package app.reservas.backend.dto;
 
 public class a {
 }
