@@ -2,7 +2,7 @@ package app.reservas.backend.dto;
 
 public class AppointmentDTO {
 
-    private Long clientId;
+    private ClientDTO client;
     private String date;
     private String time;
     private String timezone;
@@ -10,13 +10,7 @@ public class AppointmentDTO {
     private String notes;
 
     // Getters y setters
-    public Long getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
-    }
+    
 
     public String getDate() {
         return date;
@@ -56,5 +50,13 @@ public class AppointmentDTO {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public ClientDTO getClient() {
+        return client;
+    }
+
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
 }

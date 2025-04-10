@@ -1,21 +1,12 @@
-package app.reservas.backend.entity;
+package app.reservas.backend.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "clients")
-public class Client {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ClientDTO {
     private Long id;
-
     private String name;
     private String email;
     private String phone;
     private String address;
     private String city;
-    @Column(name = "postal_code")
     private String postalCode;
 
     // Getters y setters

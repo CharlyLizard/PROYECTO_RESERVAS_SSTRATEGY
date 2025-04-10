@@ -1,7 +1,6 @@
 package app.reservas.backend.controller;
 
 import app.reservas.backend.dto.AppointmentDTO;
-import app.reservas.backend.entity.Appointment;
 import app.reservas.backend.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +15,17 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
+    // Obtener todas las citas
     @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointments() {
-        List<Appointment> appointments = appointmentService.getAllAppointments();
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
+        List<AppointmentDTO> appointments = appointmentService.getAllAppointments();
         return ResponseEntity.ok(appointments);
     }
 
+    // Crear una nueva cita
     @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
-        Appointment appointment = appointmentService.createAppointment(appointmentDTO);
-        return ResponseEntity.ok(appointment);
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+        AppointmentDTO savedAppointment = appointmentService.saveAppointment(appointmentDTO);
+        return ResponseEntity.ok(savedAppointment);
     }
 }

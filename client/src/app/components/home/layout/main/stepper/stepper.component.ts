@@ -78,13 +78,13 @@ export class StepperComponent {
         name: formData.nombre,
         email: formData.email,
         phone: formData.telefono,
-        address: formData.domicilio || '', // Opcional
-        city: formData.ciudad || '', // Opcional
-        postalCode: formData.codigoPostal || '', // Opcional
+        address: formData.domicilio || '',
+        city: formData.ciudad || '',
+        postalCode: formData.codigoPostal || '',
       },
-      date: appointmentData.date ? appointmentData.date.toISOString() : '', // Convertir Date a string
+      date: appointmentData.date ? appointmentData.date.toISOString() : '',
       time: appointmentData.hour || '',
-      timezone: appointmentData.timezone || '', // Zona horaria
+      timezone: appointmentData.timezone || '',
       service: '', // Servicio solicitado
       notes: formData.notas || '', // Notas adicionales
     };
