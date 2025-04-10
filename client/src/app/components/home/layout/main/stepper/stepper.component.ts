@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, effect, ViewChild } from '@angular/core';
 import { CommonModule, NgSwitch } from '@angular/common';
 import { FirstWindowComponent } from "../FirstWindow/first-window.component";
 import { HeaderComponent } from "../../Header/header.component";
@@ -6,6 +6,7 @@ import { SecondWindowComponent } from "../second-window/second-window.component"
 import { ReservasDataService } from '../../../../../services/reservas-data.service';
 import { ThirdWindowComponent } from '../third-window/third-window.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ApiService } from '../../../../../services/api/api.service';
 
 
 @Component({
@@ -19,7 +20,18 @@ export class StepperComponent {
 
   @ViewChild(SecondWindowComponent) secondWindowComponent!: SecondWindowComponent;
 
-  constructor(private reservasService: ReservasDataService) {}
+  constructor(private reservasService: ReservasDataService, private ApiService: ApiService) {
+
+    // Efecto para reaccionar a los cambios en el signal de respuesta
+    effect(() => {
+      const response = this.ApiService.reservationResponse();
+      if (response) {
+        console.log('Respuesta del servidor:', response);
+        // Aquí puedes manejar la respuesta, como mostrar un mensaje al usuario
+      }
+    });
+
+  }
 
   // Avanzar al siguiente paso
   nextStep(): void {
@@ -54,14 +66,14 @@ export class StepperComponent {
 
   confirm(): void {
     const formData = this.reservasService.getContactInfo();
-
-    // Obtener los datos de la cita desde el servicio ReservasDataService
     const appointmentData = this.reservasService.getReservationDetails();
 
-    // Mostrar los datos en la consola
-    console.log('Datos del formulario:', formData);
-    console.log('Datos de la cita:', appointmentData);
+    const payload = {
+      formData,
+      appointmentData,
+    };
 
-    // Aquí puedes realizar acciones adicionales, como enviar los datos a un servidor
+    // Enviar los datos al servidor
+    this.ApiService.sendReservationData(payload);
   }
 }
