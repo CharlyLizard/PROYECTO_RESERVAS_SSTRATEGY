@@ -1,5 +1,5 @@
 export interface Client {
-  id: number; // ID único del cliente
+  id?: number; // ID único del cliente
   name: string; // Nombre completo
   email: string; // Correo electrónico
   phone: string; // Teléfono de contacto

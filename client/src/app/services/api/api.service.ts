@@ -16,7 +16,7 @@ export class ApiService {
   async sendReservationData(data: Appointment): Promise<void> {
     try {
       const response = await firstValueFrom(
-        this.http.post<Appointment>(`${this.baseUrl}/reservations`, data)
+        this.http.post<Appointment>(`${this.baseUrl}/appointments`, data)
       );
       this.reservationResponse.set(response ?? null);
     } catch (err) {

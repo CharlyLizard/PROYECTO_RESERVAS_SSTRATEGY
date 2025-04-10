@@ -74,9 +74,7 @@ export class StepperComponent {
 
     // Construir el objeto Appointment con todos los datos
     const appointment: Appointment = {
-      id: 0, // ID generado por el backend (puedes dejarlo como 0 o null)
       client: {
-        id: 0, // ID generado por el backend
         name: formData.nombre,
         email: formData.email,
         phone: formData.telefono,
