@@ -22,12 +22,20 @@ export class StepperComponent {
 
   constructor(private reservasService: ReservasDataService, private ApiService: ApiService) {
 
-    // Efecto para reaccionar a los cambios en el signal de respuesta
+    // Efecto para reaccionar a los cambios en los signals
     effect(() => {
+      if (this.ApiService.isLoading()) {
+        console.log('Cargando...');
+      }
+
       const response = this.ApiService.reservationResponse();
       if (response) {
         console.log('Respuesta del servidor:', response);
-        // Aquí puedes manejar la respuesta, como mostrar un mensaje al usuario
+      }
+
+      const error = this.ApiService.error();
+      if (error) {
+        console.error('Error:', error);
       }
     });
 
