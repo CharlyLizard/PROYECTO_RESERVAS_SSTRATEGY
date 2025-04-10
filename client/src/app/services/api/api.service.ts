@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Appointment } from '../../models/appointment/appointment.model';
+import { firstValueFrom } from 'rxjs'; // Importa firstValueFrom
 
 @Injectable({
   providedIn: 'root',
@@ -7,28 +9,18 @@ import { Injectable, signal } from '@angular/core';
 export class ApiService {
   private baseUrl = 'http://localhost:8080/api';
 
-  // Signals para manejar el estado de la petición
-  reservationResponse = signal<any | null>(null);
-  isLoading = signal<boolean>(false);
-  error = signal<string | null>(null);
+  reservationResponse = signal<Appointment | null>(null);
 
   constructor(private http: HttpClient) {}
 
-  // Método para enviar datos al servidor usando signals
-  async sendReservationData(data: any): Promise<void> {
-    this.isLoading.set(true); // Indica que la petición está en curso
-    this.error.set(null); // Limpia errores previos
-
+  async sendReservationData(data: Appointment): Promise<void> {
     try {
-      const response = await this.http
-        .post(`${this.baseUrl}/reservations`, data)
-        .toPromise(); // Convierte el observable en una promesa
-      this.reservationResponse.set(response); // Actualiza el signal con la respuesta
-    } catch (err: any) {
+      const response = await firstValueFrom(
+        this.http.post<Appointment>(`${this.baseUrl}/reservations`, data)
+      );
+      this.reservationResponse.set(response ?? null);
+    } catch (err) {
       console.error('Error al enviar los datos:', err);
-      this.error.set(err.message || 'Error desconocido'); // Maneja el error
-    } finally {
-      this.isLoading.set(false); // Finaliza el estado de carga
     }
   }
 }

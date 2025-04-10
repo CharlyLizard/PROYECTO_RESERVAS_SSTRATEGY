@@ -7,6 +7,7 @@ import { ReservasDataService } from '../../../../../services/reservas-data.servi
 import { ThirdWindowComponent } from '../third-window/third-window.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../../../../services/api/api.service';
+import { Appointment } from '../../../../../models/appointment/appointment.model';
 
 
 @Component({
@@ -24,19 +25,14 @@ export class StepperComponent {
 
     // Efecto para reaccionar a los cambios en los signals
     effect(() => {
-      if (this.ApiService.isLoading()) {
-        console.log('Cargando...');
-      }
+
 
       const response = this.ApiService.reservationResponse();
       if (response) {
         console.log('Respuesta del servidor:', response);
       }
 
-      const error = this.ApiService.error();
-      if (error) {
-        console.error('Error:', error);
-      }
+
     });
 
   }
@@ -73,15 +69,29 @@ export class StepperComponent {
   }
 
   confirm(): void {
-    const formData = this.reservasService.getContactInfo();
-    const appointmentData = this.reservasService.getReservationDetails();
+    const formData = this.reservasService.getContactInfo(); // Datos del formulario
+    const appointmentData = this.reservasService.getReservationDetails(); // Datos de la cita
 
-    const payload = {
-      formData,
-      appointmentData,
+    // Construir el objeto Appointment con todos los datos
+    const appointment: Appointment = {
+      id: 0, // ID generado por el backend (puedes dejarlo como 0 o null)
+      client: {
+        id: 0, // ID generado por el backend
+        name: formData.nombre,
+        email: formData.email,
+        phone: formData.telefono,
+        address: formData.domicilio || '', // Opcional
+        city: formData.ciudad || '', // Opcional
+        postalCode: formData.codigoPostal || '', // Opcional
+      },
+      date: appointmentData.date ? appointmentData.date.toISOString() : '', // Convertir Date a string
+      time: appointmentData.hour || '',
+      timezone: appointmentData.timezone || '', // Zona horaria
+      service: '', // Servicio solicitado
+      notes: formData.notas || '', // Notas adicionales
     };
 
     // Enviar los datos al servidor
-    this.ApiService.sendReservationData(payload);
+    this.ApiService.sendReservationData(appointment);
   }
 }
