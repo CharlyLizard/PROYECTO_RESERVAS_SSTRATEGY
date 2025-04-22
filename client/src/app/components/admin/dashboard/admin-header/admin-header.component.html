@@ -3,33 +3,59 @@
     <mat-icon>check_circle</mat-icon>
     <h1 class="text-lg font-semibold">EasyAppointments</h1>
   </div>
-  <nav class="flex items-center space-x-6">
-    <a href="#" class="text-white hover:underline">Calendario</a>
-    <a href="#" class="text-white hover:underline">Clientes</a>
+  <nav class="flex items-center space-x-2">
+    <a href="#" class="text-white hover:underline flex items-center px-3">
+      <mat-icon class="mr-1 text-sm">calendar_today</mat-icon>
+      Calendario
+    </a>
+    <a href="#" class="text-white hover:underline flex items-center px-3">
+      <mat-icon class="mr-1 text-sm">people</mat-icon>
+      Clientes
+    </a>
 
     <!-- Servicios Dropdown -->
-    <button mat-button [matMenuTriggerFor]="serviciosMenu" class="text-white !text-white">
-      Servicios <mat-icon class="text-white">arrow_drop_down</mat-icon>
+    <button mat-button [matMenuTriggerFor]="serviciosMenu" class="text-white !text-white flex items-center px-1 min-w-0">
+      <mat-icon class="mr-1 text-sm">business_center</mat-icon>
+      Servicios
+      <mat-icon class="text-white text-sm">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #serviciosMenu="matMenu">
-      <button mat-menu-item routerLink="/admin/servicios">Servicios</button>
-      <button mat-menu-item routerLink="/admin/categorias">Categorías</button>
+      <button mat-menu-item routerLink="/admin/servicios">
+        <mat-icon>work</mat-icon>
+        <span>Servicios</span>
+      </button>
+      <button mat-menu-item routerLink="/admin/categorias">
+        <mat-icon>category</mat-icon>
+        <span>Categorías</span>
+      </button>
     </mat-menu>
 
     <!-- Usuarios Dropdown -->
-    <button mat-button [matMenuTriggerFor]="usuariosMenu" class="text-white !text-white">
-      Usuarios <mat-icon class="text-white">arrow_drop_down</mat-icon>
+    <button mat-button [matMenuTriggerFor]="usuariosMenu" class="text-white !text-white flex items-center px-1 min-w-0">
+      <mat-icon class="mr-1 text-sm">group</mat-icon>
+      Usuarios
+      <mat-icon class="text-white text-sm">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #usuariosMenu="matMenu">
-      <button mat-menu-item routerLink="/admin/proveedores">Proveedores</button>
-      <button mat-menu-item routerLink="/admin/secretarios">Secretarios/as</button>
-      <button mat-menu-item routerLink="/admin/administradores">Administradores</button>
+      <button mat-menu-item routerLink="/admin/proveedores">
+        <mat-icon>support_agent</mat-icon>
+        <span>Proveedores</span>
+      </button>
+      <button mat-menu-item routerLink="/admin/secretarios">
+        <mat-icon>assignment_ind</mat-icon>
+        <span>Secretarios/as</span>
+      </button>
+      <button mat-menu-item routerLink="/admin/administradores">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Administradores</span>
+      </button>
     </mat-menu>
 
     <!-- Usuario Dropdown -->
-    <button mat-button [matMenuTriggerFor]="perfilMenu" class="text-white !text-white">
+    <button mat-button [matMenuTriggerFor]="perfilMenu" class="text-white !text-white flex items-center px-1 min-w-0">
+      <mat-icon class="mr-1 text-sm">account_circle</mat-icon>
       Nombre usuario
-      <mat-icon class="text-white">account_circle</mat-icon>
+      <mat-icon class="text-white text-sm">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #perfilMenu="matMenu">
       <button mat-menu-item routerLink="/admin/configuracion">
