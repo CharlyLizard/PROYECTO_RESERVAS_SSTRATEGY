@@ -1,8 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
+
 @Component({
   selector: 'zona-horaria',
-  imports: [MatSelectModule],
+  imports: [MatSelectModule,CommonModule],
   templateUrl: './zona-horaria.component.html'
 })
 export class ZonaHorariaComponent {
@@ -11,8 +13,32 @@ export class ZonaHorariaComponent {
 
   selectedTimezone: string | null = null;
 
+  // Zonas horarias agrupadas por continentes
+  timezonesByContinent = [
+    {
+      continent: 'Europa',
+      timezones: [
+        { name: 'Madrid', offset: '+1:00' },
+        { name: 'Londres', offset: '0:00' }
+      ]
+    },
+    {
+      continent: 'América',
+      timezones: [
+        { name: 'New York', offset: '-5:00' },
+        { name: 'Los Ángeles', offset: '-8:00' }
+      ]
+    },
+    {
+      continent: 'Asia',
+      timezones: [
+        { name: 'Tokyo', offset: '+9:00' },
+        { name: 'Beijing', offset: '+8:00' }
+      ]
+    }
+  ];
+
   ngOnInit() {
-    // Inicializar con el valor guardado si existe
     if (this.initialTimezone) {
       this.selectedTimezone = this.initialTimezone;
     }

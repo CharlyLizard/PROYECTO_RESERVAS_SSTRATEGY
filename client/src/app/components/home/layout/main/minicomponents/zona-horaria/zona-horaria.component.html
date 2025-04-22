@@ -5,8 +5,12 @@
     (selectionChange)="onTimezoneSelected($event.value)"
     [value]="selectedTimezone"
   >
-    <mat-option value="Madrid">Madrid (+1:00)</mat-option>
-    <mat-option value="New York">New York (-5:00)</mat-option>
-    <mat-option value="Tokyo">Tokyo (+9:00)</mat-option>
+    <!-- Iterar sobre los continentes usando *ngFor -->
+    <mat-optgroup [label]="group.continent" *ngFor="let group of timezonesByContinent">
+      <!-- Iterar sobre las zonas horarias dentro de cada continente usando *ngFor -->
+      <mat-option [value]="timezone.name" *ngFor="let timezone of group.timezones">
+        {{ timezone.name }} ({{ timezone.offset }})
+      </mat-option>
+    </mat-optgroup>
   </mat-select>
 </div>
