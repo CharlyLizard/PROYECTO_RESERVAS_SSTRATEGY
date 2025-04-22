@@ -3,19 +3,28 @@
 <div class="p-4">
   <!-- Botones de acción -->
   <div class="mb-4 flex items-center space-x-2">
-    <input matInput placeholder="Buscar servicios..." class="py-1">
+    <input matInput placeholder="Buscar servicios..." class="py-1" />
     <mat-icon matPrefix class="text-gray-500">search</mat-icon>
 
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+    >
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+    >
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
-      <mat-icon >delete</mat-icon>
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+    >
+      <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
   </div>
@@ -29,12 +38,15 @@
         <div
           *ngFor="let servicio of servicios"
           class="p-4 border-b cursor-pointer transition-colors duration-200"
-          [class.bg-pink-50]="servicioSeleccionado?.id === servicio.id"
-          [class.border-pink-500]="servicioSeleccionado?.id === servicio.id"
+          [class.bg-green-50]="servicioSeleccionado?.id === servicio.id"
+          [class.border-green-500]="servicioSeleccionado?.id === servicio.id"
           (click)="selectService(servicio)"
         >
           <h3 class="font-medium text-gray-800">{{ servicio.nombre }}</h3>
-          <p class="text-sm text-gray-600">{{ servicio.duracion }} min - {{ servicio.precio | currency: servicio.moneda }}</p>
+          <p class="text-sm text-gray-600">
+            {{ servicio.duracion }} min -
+            {{ servicio.precio | currency : servicio.moneda }}
+          </p>
         </div>
       </div>
     </div>
@@ -49,33 +61,53 @@
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Duración (en minutos)</mat-label>
-          <input matInput type="number" [(ngModel)]="servicioSeleccionado.duracion" />
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="servicioSeleccionado.duracion"
+          />
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Precio</mat-label>
-          <input matInput type="number" [(ngModel)]="servicioSeleccionado.precio" />
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="servicioSeleccionado.precio"
+          />
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Moneda</mat-label>
           <mat-select [(ngModel)]="servicioSeleccionado.moneda">
-            <mat-option *ngFor="let moneda of monedas" [value]="moneda">{{ moneda }}</mat-option>
+            <mat-option *ngFor="let moneda of monedas" [value]="moneda">{{
+              moneda
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Categoría</mat-label>
           <mat-select [(ngModel)]="servicioSeleccionado.categoria">
-            <mat-option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</mat-option>
+            <mat-option
+              *ngFor="let categoria of categorias"
+              [value]="categoria"
+              >{{ categoria }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Tipos disponibles</mat-label>
           <mat-select [(ngModel)]="servicioSeleccionado.tipo">
-            <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</mat-option>
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{
+              tipo
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Número de Asistentes</mat-label>
-          <input matInput type="number" [(ngModel)]="servicioSeleccionado.asistentes" />
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="servicioSeleccionado.asistentes"
+          />
         </mat-form-field>
         <mat-form-field class="w-full">
           <mat-label>Ubicación</mat-label>
@@ -88,22 +120,30 @@
               *ngFor="let color of colores"
               class="w-6 h-6 rounded-full border-2"
               [ngStyle]="{ 'background-color': color }"
-              [class.border-pink-500]="servicioSeleccionado.color === color"
+              [class.border-green-500]="servicioSeleccionado.color === color"
               (click)="servicioSeleccionado.color = color"
             ></button>
           </div>
         </div>
         <mat-form-field class="w-full">
           <mat-label>Descripción</mat-label>
-          <textarea matInput rows="3" [(ngModel)]="servicioSeleccionado.descripcion"></textarea>
+          <textarea
+            matInput
+            rows="3"
+            [(ngModel)]="servicioSeleccionado.descripcion"
+          ></textarea>
         </mat-form-field>
-        <mat-slide-toggle [(ngModel)]="servicioSeleccionado.ocultar">Ocultar del Público</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="servicioSeleccionado.ocultar"
+          >Ocultar del Público</mat-slide-toggle
+        >
       </div>
     </div>
 
     <!-- Mensaje cuando no hay selección -->
     <ng-template #noSelection>
-      <p class="text-gray-500 text-center">Selecciona un servicio para ver los detalles.</p>
+      <p class="text-gray-500 text-center">
+        Selecciona un servicio para ver los detalles.
+      </p>
     </ng-template>
   </div>
 </div>
