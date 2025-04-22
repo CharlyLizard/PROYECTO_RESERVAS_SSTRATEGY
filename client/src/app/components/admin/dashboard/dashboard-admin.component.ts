@@ -19,7 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
     AdminCalendarComponent,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    AdminHeaderComponent
   ]
 })
 export class DashboardAdminComponent {

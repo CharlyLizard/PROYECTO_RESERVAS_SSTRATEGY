@@ -6,8 +6,49 @@
   <nav class="flex items-center space-x-6">
     <a href="#" class="text-white hover:underline">Calendario</a>
     <a href="#" class="text-white hover:underline">Clientes</a>
-    <a href="#" class="text-white hover:underline">Servicios</a>
-    <a href="#" class="text-white hover:underline">Usuarios</a>
-    <a href="#" class="text-white hover:underline">Alumno Prácticas</a>
+
+    <!-- Servicios Dropdown -->
+    <button mat-button [matMenuTriggerFor]="serviciosMenu" class="text-white !text-white">
+      Servicios <mat-icon class="text-white">arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #serviciosMenu="matMenu">
+      <button mat-menu-item routerLink="/admin/servicios">Servicios</button>
+      <button mat-menu-item routerLink="/admin/categorias">Categorías</button>
+    </mat-menu>
+
+    <!-- Usuarios Dropdown -->
+    <button mat-button [matMenuTriggerFor]="usuariosMenu" class="text-white !text-white">
+      Usuarios <mat-icon class="text-white">arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #usuariosMenu="matMenu">
+      <button mat-menu-item routerLink="/admin/proveedores">Proveedores</button>
+      <button mat-menu-item routerLink="/admin/secretarios">Secretarios/as</button>
+      <button mat-menu-item routerLink="/admin/administradores">Administradores</button>
+    </mat-menu>
+
+    <!-- Usuario Dropdown -->
+    <button mat-button [matMenuTriggerFor]="perfilMenu" class="text-white !text-white">
+      Nombre usuario
+      <mat-icon class="text-white">account_circle</mat-icon>
+    </button>
+    <mat-menu #perfilMenu="matMenu">
+      <button mat-menu-item routerLink="/admin/configuracion">
+        <mat-icon>settings</mat-icon>
+        <span>Configuración</span>
+      </button>
+      <button mat-menu-item routerLink="/admin/cuenta">
+        <mat-icon>person</mat-icon>
+        <span>Cuenta</span>
+      </button>
+      <button mat-menu-item routerLink="/admin/acerca-de">
+        <mat-icon>info</mat-icon>
+        <span>Acerca de</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="cerrarSesion()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
   </nav>
 </header>
