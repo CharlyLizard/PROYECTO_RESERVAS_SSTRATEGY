@@ -4,6 +4,7 @@ import { DashboardAdminComponent } from './components/admin/dashboard/dashboard-
 import { LoginWindowComponent } from './components/login/login-window/login-window.component';
 import { RecoveryWindowComponent } from './components/login/recovery-window/recovery-window.component';
 import { ClientsComponent } from './components/admin/clients/cliente.component';
+import { ServiciosComponent } from './components/admin/servicios/servicios.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Ruta principal
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginWindowComponent },
   { path: 'recovery', component: RecoveryWindowComponent },
   {path: 'admin/clients',component: ClientsComponent},
+  {path: 'admin/services',component: ServiciosComponent},
   { path: '**', redirectTo: '' } // Redirección para rutas no encontradas
 ];
