@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.mat-mdc-form-field {
+  margin-bottom: 0;
+}
+
+.mat-mdc-raised-button.bg-green-600 {
+  background-color: rgb(22 163 74);
+  color: white;
+}

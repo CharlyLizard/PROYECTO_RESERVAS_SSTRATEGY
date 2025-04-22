@@ -5,6 +5,7 @@ import { LoginWindowComponent } from './components/login/login-window/login-wind
 import { RecoveryWindowComponent } from './components/login/recovery-window/recovery-window.component';
 import { ClientsComponent } from './components/admin/clients/cliente.component';
 import { ServiciosComponent } from './components/admin/servicios/servicios.component';
+import { CategoriasComponent} from './components/admin/categorias/categorias.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Ruta principal
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'recovery', component: RecoveryWindowComponent },
   {path: 'admin/clients',component: ClientsComponent},
   {path: 'admin/services',component: ServiciosComponent},
+  {path: 'admin/categories',component: CategoriasComponent }, // Ruta para el componente de categorías
   { path: '**', redirectTo: '' } // Redirección para rutas no encontradas
 ];

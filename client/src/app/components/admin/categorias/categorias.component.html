@@ -1,0 +1,59 @@
+<app-admin-header></app-admin-header>
+
+<div class="p-4">
+  <div class="mb-4 flex items-center space-x-2">
+    <input matInput placeholder="Buscar categorías..." class="py-1">
+    <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+      <mat-icon>add</mat-icon>
+      AGREGAR
+    </button>
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada">
+      <mat-icon>edit</mat-icon>
+      EDITAR
+    </button>
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada">
+      <mat-icon>delete</mat-icon>
+      ELIMINAR
+    </button>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6">
+    <!-- Lista de categorías -->
+    <div class="col-span-3">
+      <h2 class="text-lg font-medium mb-4 text-gray-700">CATEGORÍAS</h2>
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div
+          *ngFor="let categoria of categorias"
+          class="p-4 border-b cursor-pointer transition-colors duration-200"
+          [class.bg-green-50]="categoriaSeleccionada?.id === categoria.id"
+          [class.border-green-500]="categoriaSeleccionada?.id === categoria.id"
+          (click)="selectCategoria(categoria)"
+        >
+          <h3 class="font-medium text-gray-800">{{ categoria.nombre }}</h3>
+          <p class="text-sm text-gray-600">{{ categoria.descripcion }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles de la categoría -->
+    <div class="col-span-9" *ngIf="categoriaSeleccionada; else noSelection">
+      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+      <div class="bg-white rounded-lg shadow p-6 space-y-4">
+        <mat-form-field class="w-full">
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="categoriaSeleccionada.nombre"/>
+        </mat-form-field>
+        <mat-form-field class="w-full">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="categoriaSeleccionada.descripcion"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <ng-template #noSelection>
+      <p class="text-gray-500 text-center">Selecciona una categoría para ver los detalles.</p>
+    </ng-template>
+  </div>
+</div>
