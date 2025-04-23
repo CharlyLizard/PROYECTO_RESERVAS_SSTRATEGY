@@ -17,7 +17,7 @@ export class AdminCalendarComponent {
   constructor() {
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      initialView: 'dayGridWeek', // Default view
+      initialView: 'dayGridWeek',
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
@@ -35,10 +35,10 @@ export class AdminCalendarComponent {
           end: '2025-04-07T15:00:00'
         }
       ],
-      editable: true, // Allow event dragging and resizing
-      selectable: true, // Allow date selection
-      select: this.handleDateSelect.bind(this), // Handle date selection
-      eventClick: this.handleEventClick.bind(this) // Handle event click
+      editable: true,
+      selectable: true,
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this)
     };
   }
 
@@ -46,7 +46,7 @@ export class AdminCalendarComponent {
     const title = prompt('Ingrese el título del evento:');
     const calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // Clear selection
+    calendarApi.unselect();
 
     if (title) {
       calendarApi.addEvent({

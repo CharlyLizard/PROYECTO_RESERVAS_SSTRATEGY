@@ -69,8 +69,8 @@ export class StepperComponent {
   }
 
   confirm(): void {
-    const formData = this.reservasService.getContactInfo(); // Datos del formulario
-    const appointmentData = this.reservasService.getReservationDetails(); // Datos de la cita
+    const formData = this.reservasService.getContactInfo();
+    const appointmentData = this.reservasService.getReservationDetails();
 
     // Construir el objeto Appointment con todos los datos
     const appointment: Appointment = {
@@ -85,8 +85,8 @@ export class StepperComponent {
       date: appointmentData.date ? appointmentData.date.toISOString() : '',
       time: appointmentData.hour || '',
       timezone: appointmentData.timezone || '',
-      service: '', // Servicio solicitado
-      notes: formData.notas || '', // Notas adicionales
+      service: '',
+      notes: formData.notas || '',
     };
 
     // Enviar los datos al servidor

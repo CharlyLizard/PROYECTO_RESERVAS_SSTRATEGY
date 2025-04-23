@@ -82,7 +82,6 @@ export class ServiciosComponent implements OnInit {
   }
 
   editService(): void {
-    // Aquí puedes implementar la lógica de edición si es necesario
   }
 
   deleteService(): void {

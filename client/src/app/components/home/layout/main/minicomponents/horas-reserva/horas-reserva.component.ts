@@ -18,7 +18,6 @@ export class HorasReservaComponent {
   }
 
   ngOnInit() {
-    // Inicializar con la hora guardada si existe
     if (this.initialHour) {
       this.selectedHour = this.initialHour;
     }
@@ -44,7 +43,6 @@ export class HorasReservaComponent {
     this.hourChange.emit(hour);
   }
 
-  // Método para verificar si una hora está seleccionada
   isSelected(hour: string): boolean {
     return hour === this.selectedHour;
   }

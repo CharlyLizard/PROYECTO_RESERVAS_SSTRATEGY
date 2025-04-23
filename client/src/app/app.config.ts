@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideNativeDateAdapter } from '@angular/material/core'; // ✅ Agregar esto
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -9,7 +9,7 @@ export const appConfig: ApplicationConfig = {
   [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideNativeDateAdapter(), // ✅ Agregar este proveedor
+    provideNativeDateAdapter(),
     provideHttpClient(),
   ],
 };

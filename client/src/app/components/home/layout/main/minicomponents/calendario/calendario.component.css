@@ -17,14 +17,12 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Título del mes y año */
 .mat-calendar-header {
   background-color: var(--primary-color);
   color: white;
   font-weight: bold;
 }
 
-/* Botones de navegación (previo y siguiente) */
 .mat-calendar-header-button {
   color: white;
   background-color: var(--primary-color);
@@ -37,38 +35,32 @@
   background-color: var(--dark-green);
 }
 
-/* Día seleccionado */
 .mat-calendar-body-selected {
   background-color: var(--accent-green) !important;
   color: white !important;
   border-radius: 50%;
 }
 
-/* Días deshabilitados */
 .mat-calendar-body-disabled {
   background-color: var(--light-teal) !important;
   color: var(--light-background);
 }
 
-/* Día hover (cuando el mouse pasa sobre un día) */
 .mat-calendar-body-active:hover {
   background-color: var(--light-blue);
   color: white;
 }
 
-/* Estilo de los días del mes */
 .mat-calendar-body-cell {
   color: var(--primary-color);
 }
 
-/* Estilo de los días actuales (hoy) */
 .mat-calendar-body-current {
   background-color: var(--teal) !important;
   color: white;
   border-radius: 50%;
 }
 
-/* Estilo de las fechas no seleccionadas */
 .mat-calendar-body-cell-disabled {
   background-color: var(--light-background);
   color: var(--dark-green);

@@ -42,8 +42,6 @@ export class ReservasDataService {
       contactInfo: this.contactInfo,
     };
   }
-  // Método para verificar si todos los datos del primer paso están completos
-
 
   // Método para limpiar todos los datos
   clearData() {

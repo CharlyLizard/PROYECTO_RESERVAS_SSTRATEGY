@@ -9,18 +9,25 @@ import { CategoriasComponent} from './components/admin/categorias/categorias.com
 import { ProveedoresComponent } from './components/admin/proveedores/proveedores.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent }, // Ruta principal
-  { path: 'admin', component: DashboardAdminComponent }, // Ruta para admin dashboard
-  { path: 'admin/appointments', component: DashboardAdminComponent }, // Dashboard con citas
-  { path: 'admin/customers', component: DashboardAdminComponent }, // Dashboard con clientes
-  { path: 'admin/employees', component: DashboardAdminComponent }, // Dashboard con empleados
-  { path: 'admin/reports', component: DashboardAdminComponent }, // Dashboard con reportes
-  { path: 'admin/settings', component: DashboardAdminComponent }, // Dashboard con configuración
-  { path: 'login', component: LoginWindowComponent },
-  { path: 'recovery', component: RecoveryWindowComponent },
+  //Ruta home
+  { path: '', component: HomeComponent },
+
+  //Ruta admin, con todas sus funcionalidades
+  { path: 'admin', component: DashboardAdminComponent },
+  { path: 'admin/appointments', component: DashboardAdminComponent },
+  { path: 'admin/customers', component: DashboardAdminComponent },
+  { path: 'admin/employees', component: DashboardAdminComponent },
+  { path: 'admin/reports', component: DashboardAdminComponent },
+  { path: 'admin/settings', component: DashboardAdminComponent },
   {path: 'admin/clients',component: ClientsComponent},
   {path: 'admin/services',component: ServiciosComponent},
   {path: 'admin/categories',component: CategoriasComponent },
   {path: 'admin/providers',component: ProveedoresComponent },
-  { path: '**', redirectTo: '' } // Redirección para rutas no encontradas
+
+  //Ruta login
+  { path: 'login', component: LoginWindowComponent },
+  { path: 'recovery', component: RecoveryWindowComponent },
+
+  //Redireccion
+  { path: '**', redirectTo: '' }
 ];

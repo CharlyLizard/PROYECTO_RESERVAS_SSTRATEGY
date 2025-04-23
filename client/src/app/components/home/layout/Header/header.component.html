@@ -1,11 +1,9 @@
 <header class="bg-green-700 text-white p-4 flex items-center justify-between rounded-t-2xl">
-  <!-- Logo -->
   <div class="flex items-center space-x-2">
     <mat-icon>check_circle</mat-icon>
     <h1 class="text-lg font-semibold">SStrategy</h1>
   </div>
 
-  <!-- Stepper en el Header -->
   <div class="flex space-x-4">
     @for (item of steps; track $index; let i = $index) {
       <div
@@ -17,7 +15,6 @@
       >
         {{ i + 1 }}
 
-        <!-- Tooltip (nube de información) -->
         <span class="absolute left-1/2 -translate-x-1/2 top-10 bg-black text-white text-xs p-1 rounded-md opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           {{ item }}
         </span>

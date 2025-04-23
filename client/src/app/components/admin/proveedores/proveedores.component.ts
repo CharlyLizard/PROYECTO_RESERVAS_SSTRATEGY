@@ -43,7 +43,6 @@ export class ProveedoresComponent {
         }
       ]
     }
-    // Puedes agregar más proveedores aquí
   ];
 
   selectProvider(provider: any) {

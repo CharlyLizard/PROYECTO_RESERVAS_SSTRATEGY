@@ -23,7 +23,6 @@ import { HorasReservaComponent } from '../minicomponents/horas-reserva/horas-res
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent {
-  // Utilizamos las propiedades del servicio directamente
   get selectedDate(): Date | null {
     return this.ReservasSvc.selectedDate;
   }
@@ -39,7 +38,6 @@ export class FirstWindowComponent {
   constructor(private ReservasSvc: ReservasDataService) {}
 
   ngOnInit() {
-    // No necesitamos inicializar nada aquí, ya que los datos se recuperan del servicio
   }
 
   onDateSelected(date: Date | null) {

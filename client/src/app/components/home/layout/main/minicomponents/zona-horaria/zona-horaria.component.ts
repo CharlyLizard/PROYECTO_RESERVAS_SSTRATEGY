@@ -13,7 +13,6 @@ export class ZonaHorariaComponent {
 
   selectedTimezone: string | null = null;
 
-  // Zonas horarias agrupadas por continentes
   timezonesByContinent = [
     {
       continent: 'Europa',

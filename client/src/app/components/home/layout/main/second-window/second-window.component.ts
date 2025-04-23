@@ -34,16 +34,14 @@ export class SecondWindowComponent {
       codigoPostal: [''],
       notas: [''],
     });
-    // Cargar datos existentes si los hay
     const contactInfo = this.reservasService.getContactInfo();
     if (contactInfo && Object.keys(contactInfo).length > 0) {
       this.formData = { ...contactInfo };
     }
   }
 
-  // Método para validar el formulario
   isFormValid(): boolean {
-    this.validationErrors = {}; // Limpiar errores previos
+    this.validationErrors = {};
 
     if (!this.formData.nombre.trim()) {
       this.validationErrors['nombre'] = 'El nombre es obligatorio.';

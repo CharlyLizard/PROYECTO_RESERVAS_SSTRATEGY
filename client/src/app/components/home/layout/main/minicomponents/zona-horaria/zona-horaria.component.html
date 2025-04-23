@@ -5,9 +5,7 @@
     (selectionChange)="onTimezoneSelected($event.value)"
     [value]="selectedTimezone"
   >
-    <!-- Iterar sobre los continentes usando *ngFor -->
     <mat-optgroup [label]="group.continent" *ngFor="let group of timezonesByContinent">
-      <!-- Iterar sobre las zonas horarias dentro de cada continente usando *ngFor -->
       <mat-option [value]="timezone.name" *ngFor="let timezone of group.timezones">
         {{ timezone.name }} ({{ timezone.offset }})
       </mat-option>
