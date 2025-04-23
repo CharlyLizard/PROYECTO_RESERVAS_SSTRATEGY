@@ -1,7 +1,6 @@
 <app-admin-header></app-admin-header>
 
 <div class="p-4">
-  <!-- Search and Action Buttons -->
   <div class="mb-4 flex items-center space-x-2">
     <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
       <mat-icon matPrefix class="text-gray-500">search</mat-icon>
@@ -23,7 +22,6 @@
   </div>
 
   <div class="grid grid-cols-12 gap-6">
-    <!-- Administradores List -->
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">ADMINISTRADORES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -40,7 +38,6 @@
       </div>
     </div>
 
-    <!-- Administrador Details -->
     <div class="col-span-9" *ngIf="administradorSeleccionado; else noSelection">
       <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
       <div class="bg-white rounded-lg shadow p-6 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">

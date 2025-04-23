@@ -5,7 +5,7 @@
 }
 
 h1 {
-  color: #215f50; /* Dark green from your palette */
+  color: #215f50;
 }
 
 a {
@@ -13,5 +13,5 @@ a {
 }
 
 a:hover {
-  color: #439b84; /* Primary green from your palette */
+  color: #439b84;
 }

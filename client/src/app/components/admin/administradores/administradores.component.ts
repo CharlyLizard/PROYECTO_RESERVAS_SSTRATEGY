@@ -4,8 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
-import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
 
 @Component({
