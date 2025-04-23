@@ -7,7 +7,6 @@ import { ClientsComponent } from './components/admin/clients/cliente.component';
 import { ServiciosComponent } from './components/admin/servicios/servicios.component';
 import { CategoriasComponent} from './components/admin/categorias/categorias.component';
 import { ProveedoresComponent } from './components/admin/proveedores/proveedores.component';
-import { SecretariosComponent } from './components/admin/secretarios/secretarios.component';
 
 export const routes: Routes = [
   //Ruta home
@@ -24,5 +23,11 @@ export const routes: Routes = [
   {path: 'admin/services',component: ServiciosComponent},
   {path: 'admin/categories',component: CategoriasComponent },
   {path: 'admin/providers',component: ProveedoresComponent },
-  { path: '**', redirectTo: '' } // Redirección para rutas no encontradas
+
+  //Ruta login
+  { path: 'login', component: LoginWindowComponent },
+  { path: 'recovery', component: RecoveryWindowComponent },
+
+  //Redireccion
+  { path: '**', redirectTo: '' }
 ];
