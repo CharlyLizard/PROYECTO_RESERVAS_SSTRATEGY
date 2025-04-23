@@ -8,6 +8,7 @@ import { ServiciosComponent } from './components/admin/servicios/servicios.compo
 import { CategoriasComponent} from './components/admin/categorias/categorias.component';
 import { ProveedoresComponent } from './components/admin/proveedores/proveedores.component';
 import { SecretariosComponent } from './components/admin/secretarios/secretarios.component';
+import { AdministradoresComponent } from './components/admin/administradores/administradores.component';
 
 export const routes: Routes = [
   //Ruta home
@@ -25,6 +26,8 @@ export const routes: Routes = [
   {path: 'admin/categories',component: CategoriasComponent },
   {path: 'admin/providers',component: ProveedoresComponent },
   {path: 'admin/secretary',component: SecretariosComponent },
+  { path: 'admin/administradores', component: AdministradoresComponent },
+
 
   //Ruta login
   { path: 'login', component: LoginWindowComponent },
