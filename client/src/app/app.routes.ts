@@ -9,6 +9,8 @@ import { CategoriasComponent} from './components/admin/categorias/categorias.com
 import { ProveedoresComponent } from './components/admin/proveedores/proveedores.component';
 import { SecretariosComponent } from './components/admin/secretarios/secretarios.component';
 import { AdministradoresComponent } from './components/admin/administradores/administradores.component';
+import { CuentaComponent } from './components/admin/cuenta/cuenta.component';
+import { AcercaDeComponent } from './components/admin/acerca-de/acerca-de.component';
 
 export const routes: Routes = [
   //Ruta home
@@ -27,6 +29,9 @@ export const routes: Routes = [
   {path: 'admin/providers',component: ProveedoresComponent },
   {path: 'admin/secretary',component: SecretariosComponent },
   { path: 'admin/administradores', component: AdministradoresComponent },
+  { path: 'admin/cuenta', component: CuentaComponent },
+  { path: 'admin/acerca-de', component: AcercaDeComponent },
+
 
 
   //Ruta login

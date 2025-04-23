@@ -1,0 +1,200 @@
+<app-admin-header></app-admin-header>
+
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-4xl bg-white rounded-lg shadow p-6 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Nombre -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Nombre *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.nombre"
+        placeholder="Nombre"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Nombre de usuario -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Nombre de usuario *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.nombreUsuario"
+        placeholder="Nombre de usuario"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Apellido -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Apellido *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.apellido"
+        placeholder="Apellido"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Contraseña -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Contraseña *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.contrasena"
+        type="password"
+        placeholder="Contraseña"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Dirección de E-mail -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Dirección de E-mail *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.email"
+        placeholder="Dirección de E-mail"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Reingrese su contraseña -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Reingrese su contraseña *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.reingreseContrasena"
+        type="password"
+        placeholder="Reingrese su contraseña"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Número de teléfono -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Número de teléfono *</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.telefono"
+        placeholder="Número de teléfono"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Calendario -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Calendario *</label>
+      <mat-select [(value)]="cuenta.calendario" class="w-full text-sm">
+        <mat-option value="Predeterminado">Predeterminado</mat-option>
+        <mat-option value="Personalizado">Personalizado</mat-option>
+      </mat-select>
+    </div>
+
+    <!-- Idioma -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Idioma *</label>
+      <mat-select [(value)]="cuenta.idioma" class="w-full text-sm">
+        <mat-option value="Spanish">Spanish</mat-option>
+        <mat-option value="English">English</mat-option>
+      </mat-select>
+    </div>
+
+    <!-- Zona horaria -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Zona horaria</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.zonaHoraria"
+        placeholder="Zona horaria"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Número de teléfono móvil -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Número de teléfono móvil</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.telefonoMovil"
+        placeholder="Número de teléfono móvil"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Domicilio -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Domicilio</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.domicilio"
+        placeholder="Domicilio"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Ciudad -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Ciudad</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.ciudad"
+        placeholder="Ciudad"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Estado -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Estado</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.estado"
+        placeholder="Estado"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Código postal -->
+    <div>
+      <label class="text-gray-500 text-xs font-medium">Código postal</label>
+      <input
+        matInput
+        [(ngModel)]="cuenta.codigoPostal"
+        placeholder="Código postal"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Notas -->
+    <div class="md:col-span-2">
+      <label class="text-gray-500 text-xs font-medium">Notas</label>
+      <textarea
+        matInput
+        [(ngModel)]="cuenta.notas"
+        placeholder="Notas"
+        class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        rows="2"
+      ></textarea>
+    </div>
+
+    <!-- Opciones -->
+    <div class="md:col-span-2">
+      <label class="text-gray-500 text-xs font-medium">Opciones</label>
+      <mat-slide-toggle [(ngModel)]="cuenta.recibirNotificaciones">
+        Recibir notificaciones
+      </mat-slide-toggle>
+    </div>
+
+    <!-- Botón Guardar -->
+    <div class="md:col-span-2 flex justify-end">
+      <button
+        mat-raised-button
+        class="bg-green-600 text-white hover:bg-green-700 px-4 py-1 rounded-lg text-sm"
+        (click)="guardarCuenta()"
+      >
+        <mat-icon>save</mat-icon>
+        GUARDAR
+      </button>
+    </div>
+  </div>
+</div>

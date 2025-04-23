@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+h1 {
+  color: #215f50; /* Dark green from your palette */
+}
+
+a {
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #439b84; /* Primary green from your palette */
+}
