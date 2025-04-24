@@ -1,1 +1,54 @@
-<p>settings works!</p>
+<app-admin-header></app-admin-header>
+<div class="flex min-h-screen bg-gray-50">
+  <!-- Menú lateral -->
+  <aside class="w-64 bg-white border-r border-gray-200 p-6">
+    <nav class="flex flex-col gap-2">
+      <button
+        class="text-left px-4 py-2 rounded hover:bg-gray-100 transition"
+        [ngClass]="{'bg-green-100 text-green-700 font-semibold': selected === 'general'}"
+        (click)="selected = 'general'"
+      >
+        Configuración general
+      </button>
+      <button
+        class="text-left px-4 py-2 rounded hover:bg-gray-100 transition"
+        [ngClass]="{'bg-green-100 text-green-700 font-semibold': selected === 'citas'}"
+        (click)="selected = 'citas'"
+      >
+        Configuración de las citas
+      </button>
+      <button
+        class="text-left px-4 py-2 rounded hover:bg-gray-100 transition"
+        [ngClass]="{'bg-green-100 text-green-700 font-semibold': selected === 'logica'}"
+        (click)="selected = 'logica'"
+      >
+        Lógica de negocio
+      </button>
+      <button
+        class="text-left px-4 py-2 rounded hover:bg-gray-100 transition"
+        [ngClass]="{'bg-green-100 text-green-700 font-semibold': selected === 'legal'}"
+        (click)="selected = 'legal'"
+      >
+        Contenidos legales
+      </button>
+      <button
+        class="text-left px-4 py-2 rounded hover:bg-gray-100 transition"
+        [ngClass]="{'bg-green-100 text-green-700 font-semibold': selected === 'integraciones'}"
+        (click)="selected = 'integraciones'"
+      >
+        Integraciones
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Área de contenido -->
+  <main class="flex-1 p-10">
+    <ng-container [ngSwitch]="selected">
+      <app-config-general *ngSwitchCase="'general'"></app-config-general>
+      <app-config-citas *ngSwitchCase="'citas'"></app-config-citas>
+      <app-logica-negocio *ngSwitchCase="'logica'"></app-logica-negocio>
+      <app-contenido-legal *ngSwitchCase="'legal'"></app-contenido-legal>
+      <app-integraciones *ngSwitchCase="'integraciones'"></app-integraciones>
+    </ng-container>
+  </main>
+</div>

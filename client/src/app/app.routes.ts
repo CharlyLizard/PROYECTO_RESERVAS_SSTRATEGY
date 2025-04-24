@@ -11,6 +11,7 @@ import { SecretariosComponent } from './components/admin/secretarios/secretarios
 import { AdministradoresComponent } from './components/admin/administradores/administradores.component';
 import { CuentaComponent } from './components/admin/cuenta/cuenta.component';
 import { AcercaDeComponent } from './components/admin/acerca-de/acerca-de.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 export const routes: Routes = [
   //Ruta home
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'admin/administradores', component: AdministradoresComponent },
   { path: 'admin/cuenta', component: CuentaComponent },
   { path: 'admin/acerca-de', component: AcercaDeComponent },
+  { path: 'admin/configuracion', component: SettingsComponent },
 
 
 

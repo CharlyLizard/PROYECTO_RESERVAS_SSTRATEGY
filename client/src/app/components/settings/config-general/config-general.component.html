@@ -1,1 +1,97 @@
-<p>config-general works!</p>
+<div class="max-w-2xl mx-auto bg-white rounded shadow p-8 mt-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold tracking-widest text-gray-700 uppercase">Configuración general</h2>
+    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 transition">
+      <span class="material-icons text-base">save</span>
+      Guardar
+    </button>
+  </div>
+
+  <form class="space-y-6">
+    <!-- EMPRESA -->
+    <div>
+      <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">Empresa</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre de la empresa <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Nombre de la empresa" />
+          <p class="text-xs text-gray-400 mt-1">El nombre de la empresa aparecerá en todo el sistema (obligatorio).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Dirección de E-mail de la empresa <span class="text-red-500">*</span></label>
+          <input type="email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="ejemplo@empresa.com" />
+          <p class="text-xs text-gray-400 mt-1">Esta será la dirección de E-mail de la empresa. Será utilizada como la dirección para enviar E-mails del sistema y recibir respuestas (obligatorio).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Enlace de la empresa <span class="text-red-500">*</span></label>
+          <input type="url" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="http://empresa.com" />
+          <p class="text-xs text-gray-400 mt-1">El enlace de la empresa debe dirigir al sitio web oficial de la empresa (obligatorio).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Logotipo de la empresa</label>
+          <input type="file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" />
+          <p class="text-xs text-gray-400 mt-1">El logotipo de la empresa se mostrará en muchos lugares de la aplicación, incluyendo la página de reservas y las notificaciones en correos electrónicos (archivos de imagen, máx. 2MB).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Color corporativo</label>
+          <input type="color" class="w-16 h-8 border border-gray-300 rounded" />
+          <p class="text-xs text-gray-400 mt-1">El color corporativo se usará en múltiples sitios de toda la aplicación, así que elige el que más se adecúe a tu marca.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Tema</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200">
+            <option>Default</option>
+            <option>Oscuro</option>
+            <option>Claro</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">El color corporativo se usará en múltiples sitios de toda la aplicación, así que elige el que más se adecúe a tu marca.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UBICACIÓN -->
+    <div>
+      <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">Ubicación</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Formato de Fecha</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200">
+            <option>DMY</option>
+            <option>MDY</option>
+            <option>YMD</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Cambia el formato de fecha para mostrar (D - Día, M - Mes, Y - Año).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">time format</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200">
+            <option>HHMM AM/PM</option>
+            <option>24H</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">time_format_hint</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Primer día de la semana</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200">
+            <option>Domingo</option>
+            <option>Lunes</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Define el primer día de la semana en el calendario.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Idioma Predeterminado</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200">
+            <option>English</option>
+            <option>Español</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Establece el valor de idioma predeterminado que se utilizará para nuevos registros.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Zona Horaria Predeterminada</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="UTC" />
+          <p class="text-xs text-gray-400 mt-1">Establece el valor de zona horaria predeterminada que se utilizará para nuevos registros.</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

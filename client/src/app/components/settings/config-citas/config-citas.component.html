@@ -1,1 +1,170 @@
-<p>config-citas works!</p>
+<div class="max-w-3xl mx-auto bg-white rounded shadow p-8 mt-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold tracking-widest text-gray-700 uppercase">Configuración de las citas</h2>
+    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 transition">
+      <span class="material-icons text-base">save</span>
+      Guardar
+    </button>
+  </div>
+
+  <!-- CAMPOS -->
+  <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">Campos</h3>
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre *</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Domicilio</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Apellido *</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Ciudad</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Dirección de E-mail *</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Código postal</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Número de teléfono *</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Notas</label>
+      <textarea disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50"></textarea>
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPOS PERSONALIZADOS -->
+  <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">Campos personalizados</h3>
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Campo personalizado #1</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Campo personalizado #2</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Campo personalizado #3</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Campo personalizado #4</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Campo personalizado #5</label>
+      <input disabled class="w-full border border-dashed border-gray-300 rounded px-3 py-2 bg-gray-50" />
+      <div class="flex gap-4 mt-1 text-xs">
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Mostrar</label>
+        <label class="flex items-center gap-1"><input type="checkbox" disabled class="accent-green-500" />Requerido</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPCIONES -->
+  <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">Opciones</h3>
+  <div class="border border-gray-200 rounded p-4 bg-gray-50 space-y-3">
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-green-700">
+        <input type="checkbox" checked disabled class="accent-green-500" />
+        Notificaciones de Clientes
+      </label>
+      <p class="text-xs text-gray-400 ml-6">Enviar notificaciones automáticas a los clientes sobre sus citas por e-mail o whatsapp, según configuración.</p>
+    </div>
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-gray-700">
+        <input type="checkbox" disabled class="accent-green-500" />
+        Limitar el acceso a los clientes
+      </label>
+      <p class="text-xs text-gray-400 ml-6">Solo usuarios autenticados podrán reservar citas. Los clientes sin login no podrán reservar.</p>
+    </div>
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-gray-700">
+        <input type="checkbox" disabled class="accent-green-500" />
+        CAPTCHA
+      </label>
+      <p class="text-xs text-gray-400 ml-6">Solicitar a los clientes el uso de un código CAPTCHA antes de confirmar la cita.</p>
+    </div>
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-gray-700">
+        <input type="checkbox" disabled class="accent-green-500" />
+        Cualquier Proveedor
+      </label>
+      <p class="text-xs text-gray-400 ml-6">Permitir que los clientes reserven con cualquier proveedor disponible.</p>
+    </div>
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-gray-700">
+        <input type="checkbox" disabled class="accent-green-500" />
+        Datos de la cita en sesión
+      </label>
+      <p class="text-xs text-gray-400 ml-6">Guardar información parcial de la cita en la sesión del usuario.</p>
+    </div>
+    <div>
+      <label class="flex items-center gap-2 font-semibold text-gray-700">
+        <input type="checkbox" disabled class="accent-green-500" />
+        Deshabilitar reservas
+      </label>
+      <p class="text-xs text-gray-400 ml-6">No permitir reservas de citas temporalmente.</p>
+    </div>
+  </div>
+</div>
