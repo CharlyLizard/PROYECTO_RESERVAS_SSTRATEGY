@@ -1,1 +1,54 @@
-<p>contenido-legal works!</p>
+<div class="max-w-4xl mx-auto bg-white rounded shadow p-8 mt-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold tracking-widest text-gray-700 uppercase">Contenidos Legales</h2>
+    <button
+      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 transition"
+      (click)="guardarContenido()"
+    >
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </div>
+
+  <!-- Aviso de Cookies -->
+  <div class="mb-8">
+    <h3 class="text-sm font-bold text-gray-700 uppercase mb-2">Aviso de Cookies</h3>
+    <label class="flex items-center gap-2 font-semibold text-gray-700">
+      <input type="checkbox" [(ngModel)]="contenido.avisoCookies.mostrar" class="accent-green-500" />
+      Mostrar Aviso de Cookies
+    </label>
+    <textarea
+      [(ngModel)]="contenido.avisoCookies.texto"
+      rows="4"
+      class="w-full border border-gray-300 rounded px-3 py-2 mt-2 text-sm"
+    ></textarea>
+  </div>
+
+  <!-- Términos y Condiciones -->
+  <div class="mb-8">
+    <h3 class="text-sm font-bold text-gray-700 uppercase mb-2">Términos y Condiciones</h3>
+    <label class="flex items-center gap-2 font-semibold text-gray-700">
+      <input type="checkbox" [(ngModel)]="contenido.terminosCondiciones.mostrar" class="accent-green-500" />
+      Mostrar Términos y Condiciones
+    </label>
+    <textarea
+      [(ngModel)]="contenido.terminosCondiciones.texto"
+      rows="4"
+      class="w-full border border-gray-300 rounded px-3 py-2 mt-2 text-sm"
+    ></textarea>
+  </div>
+
+  <!-- Política de Privacidad -->
+  <div>
+    <h3 class="text-sm font-bold text-gray-700 uppercase mb-2">Política de Privacidad</h3>
+    <label class="flex items-center gap-2 font-semibold text-gray-700">
+      <input type="checkbox" [(ngModel)]="contenido.politicaPrivacidad.mostrar" class="accent-green-500" />
+      Mostrar Política de Privacidad
+    </label>
+    <textarea
+      [(ngModel)]="contenido.politicaPrivacidad.texto"
+      rows="4"
+      class="w-full border border-gray-300 rounded px-3 py-2 mt-2 text-sm"
+    ></textarea>
+  </div>
+</div>

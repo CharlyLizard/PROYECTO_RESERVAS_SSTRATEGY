@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+}
+
+button {
+  cursor: pointer;
+}

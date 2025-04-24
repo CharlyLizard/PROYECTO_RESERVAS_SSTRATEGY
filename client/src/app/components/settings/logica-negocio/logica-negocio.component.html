@@ -1,1 +1,77 @@
-<p>logica-negocio works!</p>
+<div class="max-w-4xl mx-auto bg-white rounded shadow p-8 mt-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold tracking-widest text-gray-700 uppercase">Lógica del Negocio</h2>
+    <button
+      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 transition"
+      (click)="guardarConfiguracion()"
+    >
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </div>
+
+  <!-- Horario Laboral -->
+  <h3 class="text-sm font-bold text-gray-700 uppercase mb-4">Horario Laboral</h3>
+  <p class="text-sm text-gray-600 mb-4">
+    Define el horario laboral para la empresa o agenda global. Este horario será aplicado a todos los proveedores, a menos que se configure un horario específico para cada proveedor.
+  </p>
+  <table class="w-full border border-gray-300 rounded mb-6">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="text-left px-4 py-2">Día</th>
+        <th class="text-left px-4 py-2">Inicio</th>
+        <th class="text-left px-4 py-2">Final</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let horario of horarioLaboral">
+        <td class="px-4 py-2">{{ horario.dia }}</td>
+        <td class="px-4 py-2"><input [(ngModel)]="horario.inicio" class="border border-gray-300 rounded px-2 py-1 w-full" /></td>
+        <td class="px-4 py-2"><input [(ngModel)]="horario.final" class="border border-gray-300 rounded px-2 py-1 w-full" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">Aplicar a todos los proveedores</button>
+
+  <!-- Periodos de Descanso -->
+  <h3 class="text-sm font-bold text-gray-700 uppercase mt-8 mb-4">Periodos de Descanso</h3>
+  <table class="w-full border border-gray-300 rounded mb-6">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="text-left px-4 py-2">Día</th>
+        <th class="text-left px-4 py-2">Inicio</th>
+        <th class="text-left px-4 py-2">Final</th>
+        <th class="text-left px-4 py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let periodo of periodosDescanso; let i = index">
+        <td class="px-4 py-2"><input [(ngModel)]="periodo.dia" class="border border-gray-300 rounded px-2 py-1 w-full" /></td>
+        <td class="px-4 py-2"><input [(ngModel)]="periodo.inicio" class="border border-gray-300 rounded px-2 py-1 w-full" /></td>
+        <td class="px-4 py-2"><input [(ngModel)]="periodo.final" class="border border-gray-300 rounded px-2 py-1 w-full" /></td>
+        <td class="px-4 py-2">
+          <button class="text-red-500 hover:text-red-700" (click)="eliminarPeriodoDescanso(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition" (click)="agregarPeriodoDescanso()">
+    Agregar Periodo de Descanso
+  </button>
+
+  <!-- Estados de Citas -->
+  <h3 class="text-sm font-bold text-gray-700 uppercase mt-8 mb-4">Opciones de Estado de Citas</h3>
+  <div class="space-y-4">
+    <div *ngFor="let estado of estadosCitas; let i = index" class="flex items-center gap-4">
+      <input [(ngModel)]="estadosCitas[i]" class="border border-gray-300 rounded px-2 py-1 w-full" />
+      <button class="text-red-500 hover:text-red-700" (click)="eliminarEstadoCita(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition mt-4" (click)="agregarEstadoCita()">
+    Agregar Estado
+  </button>
+</div>
