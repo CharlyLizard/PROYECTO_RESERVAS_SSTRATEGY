@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Appointment } from '../../models/appointment/appointment.model';
 import { firstValueFrom } from 'rxjs';
-
+import { Servicio } from '../../models/servicios/servicio';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,6 +25,6 @@ export class ApiService {
   }
 
   getServicioSeleccionado() {
-    return this.http.get<any[]>(`${this.baseUrl}/servicios/seleccionados`);
+    return this.http.get<Servicio[]>(`${this.baseUrl}/servicios/seleccionados`);
   }
 }
