@@ -17,8 +17,10 @@ export class ThirdWindowComponent implements OnInit {
   ngOnInit() {
     this.reservationDetails = this.reservasService.getReservationDetails();
     this.ApiService.getServicioSeleccionado().subscribe(servicios => {
-      // Si solo hay uno seleccionado, tomamos el primero
       this.servicioSeleccionado = servicios && servicios.length > 0 ? servicios[0] : null;
+      if (this.servicioSeleccionado) {
+        this.reservasService.setServicioSeleccionado(this.servicioSeleccionado);
+      }
     });
   }
 }

@@ -20,6 +20,10 @@ public class Appointment {
     private String date;
     private String time;
     private String timezone;
-    private String service;
+
+    @ManyToOne
+    @JoinColumn(name = "service", nullable = false)
+    private Servicio service;
+
     private String notes;
 }

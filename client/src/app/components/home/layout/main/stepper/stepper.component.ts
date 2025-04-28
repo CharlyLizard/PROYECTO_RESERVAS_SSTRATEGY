@@ -8,7 +8,7 @@ import { ThirdWindowComponent } from '../third-window/third-window.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../../../../services/api/api.service';
 import { Appointment } from '../../../../../models/appointment/appointment.model';
-
+import { Servicio } from '../../../../../models/servicios/servicio';
 
 @Component({
   selector: 'app-stepper',
@@ -71,8 +71,13 @@ export class StepperComponent {
   confirm(): void {
     const formData = this.reservasService.getContactInfo();
     const appointmentData = this.reservasService.getReservationDetails();
+    const servicioSeleccionado = this.reservasService.getServicioSeleccionado();
 
-    // Construir el objeto Appointment con todos los datos
+    if (!servicioSeleccionado) {
+      alert('Debes seleccionar un servicio antes de confirmar la cita.');
+      return;
+    }
+
     const appointment: Appointment = {
       client: {
         name: formData.nombre,
@@ -85,11 +90,10 @@ export class StepperComponent {
       date: appointmentData.date ? appointmentData.date.toISOString() : '',
       time: appointmentData.hour || '',
       timezone: appointmentData.timezone || '',
-      service: '',
+      service: servicioSeleccionado.id,
       notes: formData.notas || '',
     };
 
-    // Enviar los datos al servidor
     this.ApiService.sendReservationData(appointment);
   }
 }

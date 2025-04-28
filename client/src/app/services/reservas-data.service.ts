@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Servicio } from '../models/servicios/servicio';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class ReservasDataService {
   selectedTimezone: string | null = null;
 
   private contactInfo: any = {};
+  private servicioSeleccionado: Servicio | null = null;
 
   constructor() {}
 
@@ -41,6 +43,13 @@ export class ReservasDataService {
       timezone: this.selectedTimezone,
       contactInfo: this.contactInfo,
     };
+  }
+  setServicioSeleccionado(servicio: Servicio) {
+    this.servicioSeleccionado = servicio;
+  }
+
+  getServicioSeleccionado(): Servicio | null {
+    return this.servicioSeleccionado;
   }
 
   // Método para limpiar todos los datos

@@ -4,8 +4,11 @@ import app.reservas.backend.dto.AppointmentDTO;
 import app.reservas.backend.dto.ClientDTO;
 import app.reservas.backend.entity.Appointment;
 import app.reservas.backend.entity.Client;
+import app.reservas.backend.entity.Servicio;
 import app.reservas.backend.repository.AppointmentRepository;
 import app.reservas.backend.repository.ClientRepository;
+import app.reservas.backend.repository.ServicioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,9 @@ public class AppointmentService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private ServicioRepository servicioRepository;
 
     // Obtener todas las citas como DTOs
     public List<AppointmentDTO> getAllAppointments() {
@@ -43,7 +49,10 @@ public class AppointmentService {
         appointment.setDate(appointmentDTO.getDate());
         appointment.setTime(appointmentDTO.getTime());
         appointment.setTimezone(appointmentDTO.getTimezone());
-        appointment.setService(appointmentDTO.getService());
+        // Buscar el servicio por id
+        Servicio servicio = servicioRepository.findById(appointmentDTO.getService())
+            .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+        appointment.setService(servicio);
         appointment.setNotes(appointmentDTO.getNotes());
 
         // Guardar la cita en la base de datos
@@ -60,7 +69,7 @@ public class AppointmentService {
         dto.setDate(appointment.getDate());
         dto.setTime(appointment.getTime());
         dto.setTimezone(appointment.getTimezone());
-        dto.setService(appointment.getService());
+        dto.setService(appointment.getService().getId());
         dto.setNotes(appointment.getNotes());
         return dto;
     }

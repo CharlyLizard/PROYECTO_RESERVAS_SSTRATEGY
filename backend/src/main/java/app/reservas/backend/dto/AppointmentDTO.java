@@ -9,7 +9,7 @@ public class AppointmentDTO {
     private String date;
     private String time;
     private String timezone;
-    private String service;
+    private Long service;
     private String notes;
 
     
