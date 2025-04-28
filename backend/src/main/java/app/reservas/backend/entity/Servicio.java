@@ -43,5 +43,6 @@ public class Servicio {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 
+    @Column(name = "is_selected")
     private Boolean isSelected;
 }
