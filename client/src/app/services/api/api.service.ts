@@ -23,4 +23,8 @@ export class ApiService {
       console.error('Error al enviar los datos:', err);
     }
   }
+
+  getServicioSeleccionado() {
+    return this.http.get<any[]>(`${this.baseUrl}/servicios/seleccionados`);
+  }
 }
