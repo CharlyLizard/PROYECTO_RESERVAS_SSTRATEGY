@@ -1,72 +1,63 @@
 package app.reservas.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "proveedor")
+@Data
 public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 50)
     private String apellido;
 
-    @Column(name = "nombre_usuario", nullable = false, length = 50, unique = true)
+    @Column(name = "nombre_usuario")
     private String nombreUsuario;
 
-    @Column(nullable = false)
     private byte[] password;
 
-    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(length = 20)
     private String telefono;
 
-    @Column(name = "telefono_movil", length = 20)
+    @Column(name = "telefono_movil")
     private String telefonoMovil;
 
-    @Column(length = 255)
     private String domicilio;
 
-    @Column(length = 100)
     private String ciudad;
 
-    @Column(length = 100)
     private String estado;
 
-    @Column(name = "codigo_postal", length = 20)
+    @Column(name = "codigo_postal")
     private String codigoPostal;
 
-    @Column(columnDefinition = "TEXT")
     private String notas;
 
-    @Column(length = 50, nullable = false)
     private String calendario = "Predeterminado";
 
-    @Column(length = 50, nullable = false)
     private String idioma = "Spanish";
 
-    @Column(name = "zona_horaria", length = 50, nullable = false)
+    @Column(name = "zona_horaria")
     private String zonaHoraria = "UTC";
 
-    @Column(name = "recibir_notificaciones", nullable = false)
+    @Column(name = "recibir_notificaciones")
     private Boolean recibirNotificaciones = true;
 
-    @Column(name = "ocultar_publico", nullable = false)
+    @Column(name = "ocultar_publico")
     private Boolean ocultarPublico = false;
 
     @ManyToOne
-    @JoinColumn(name = "servicio_id", nullable = false)
+    @JoinColumn(name = "servicio_id")
     private Servicio servicio;
 
-    @Column(name = "fecha_creacion", nullable = false)
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 
-    // Getters and Setters
 }
