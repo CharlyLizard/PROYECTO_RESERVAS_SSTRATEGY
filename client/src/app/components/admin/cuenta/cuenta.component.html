@@ -9,6 +9,7 @@
         [(ngModel)]="cuenta.nombre"
         placeholder="Nombre"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -19,6 +20,7 @@
         [(ngModel)]="cuenta.nombreUsuario"
         placeholder="Nombre de usuario"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -29,6 +31,7 @@
         [(ngModel)]="cuenta.apellido"
         placeholder="Apellido"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -40,6 +43,7 @@
         type="password"
         placeholder="Contraseña"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -50,6 +54,7 @@
         [(ngModel)]="cuenta.email"
         placeholder="Dirección de E-mail"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -61,6 +66,7 @@
         type="password"
         placeholder="Reingrese su contraseña"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -71,6 +77,7 @@
         [(ngModel)]="cuenta.telefono"
         placeholder="Número de teléfono"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -97,6 +104,7 @@
         [(ngModel)]="cuenta.zonaHoraria"
         placeholder="Zona horaria"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -107,6 +115,7 @@
         [(ngModel)]="cuenta.telefonoMovil"
         placeholder="Número de teléfono móvil"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -117,6 +126,7 @@
         [(ngModel)]="cuenta.domicilio"
         placeholder="Domicilio"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -127,6 +137,7 @@
         [(ngModel)]="cuenta.ciudad"
         placeholder="Ciudad"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -137,6 +148,7 @@
         [(ngModel)]="cuenta.estado"
         placeholder="Estado"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -147,6 +159,7 @@
         [(ngModel)]="cuenta.codigoPostal"
         placeholder="Código postal"
         class="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        (ngModelChange)="onInputChange()"
       />
     </div>
 
@@ -173,6 +186,7 @@
         mat-raised-button
         class="bg-green-600 text-white hover:bg-green-700 px-4 py-1 rounded-lg text-sm"
         (click)="guardarCuenta()"
+        [disabled]="!cambiosPendientes"
       >
         <mat-icon>save</mat-icon>
         GUARDAR

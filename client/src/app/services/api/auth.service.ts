@@ -46,4 +46,8 @@ export class AuthService {
   getAdminData() {
     return this.adminData.getValue();
   }
+
+  actualizarAdmin(admin: any) {
+    return this.http.put<any>('http://localhost:8080/auth/admin', admin);
+  }
 }

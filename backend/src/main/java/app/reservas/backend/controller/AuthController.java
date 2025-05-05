@@ -81,4 +81,38 @@ public class AuthController {
         System.out.println("Login correcto. Enviando datos y tokens.");
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/admin")
+    public ResponseEntity<?> actualizarAdmin(@RequestBody AdminDTO adminDto) {
+        System.out.println("Petición de actualización de admin: " + adminDto);
+
+        Admin admin = adminRepository.findById(adminDto.getId()).orElse(null);
+        if (admin == null) {
+            return ResponseEntity.status(404).body("Administrador no encontrado");
+        }
+
+        // Actualiza los campos (excepto la contraseña, a menos que la quieras actualizar aquí)
+        admin.setNombre(adminDto.getNombre());
+        admin.setApellido(adminDto.getApellido());
+        admin.setNombreUsuario(adminDto.getNombreUsuario());
+        admin.setEmail(adminDto.getEmail());
+        admin.setTelefono(adminDto.getTelefono());
+        admin.setTelefonoMovil(adminDto.getTelefonoMovil());
+        admin.setDomicilio(adminDto.getDomicilio());
+        admin.setCiudad(adminDto.getCiudad());
+        admin.setEstado(adminDto.getEstado());
+        admin.setCodigoPostal(adminDto.getCodigoPostal());
+        admin.setNotas(adminDto.getNotas());
+        admin.setCalendario(adminDto.getCalendario());
+        admin.setIdioma(adminDto.getIdioma());
+        admin.setZonaHoraria(adminDto.getZonaHoraria());
+        admin.setRecibirNotificaciones(adminDto.getRecibirNotificaciones());
+
+        // Si quieres permitir actualizar la contraseña, añade lógica aquí
+
+        adminRepository.save(admin);
+
+        // Devuelve el admin actualizado (puedes mapearlo a AdminDTO si quieres)
+        return ResponseEntity.ok(adminDto);
+    }
 }
