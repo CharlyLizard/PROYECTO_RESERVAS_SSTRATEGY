@@ -12,27 +12,29 @@ import { AdministradoresComponent } from './components/admin/administradores/adm
 import { CuentaComponent } from './components/admin/cuenta/cuenta.component';
 import { AcercaDeComponent } from './components/admin/acerca-de/acerca-de.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { AuthGuard } from './Guards/auth.guards';
 
 export const routes: Routes = [
   //Ruta home
   { path: '', component: HomeComponent },
 
   //Ruta admin, con todas sus funcionalidades
-  { path: 'admin', component: DashboardAdminComponent },
-  { path: 'admin/appointments', component: DashboardAdminComponent },
-  { path: 'admin/customers', component: DashboardAdminComponent },
-  { path: 'admin/employees', component: DashboardAdminComponent },
-  { path: 'admin/reports', component: DashboardAdminComponent },
-  { path: 'admin/settings', component: DashboardAdminComponent },
-  {path: 'admin/clients',component: ClientsComponent},
-  {path: 'admin/services',component: ServiciosComponent},
-  {path: 'admin/categories',component: CategoriasComponent },
-  {path: 'admin/providers',component: ProveedoresComponent },
-  {path: 'admin/secretary',component: SecretariosComponent },
-  { path: 'admin/administradores', component: AdministradoresComponent },
-  { path: 'admin/cuenta', component: CuentaComponent },
-  { path: 'admin/acerca-de', component: AcercaDeComponent },
-  { path: 'admin/configuracion', component: SettingsComponent },
+  // Rutas protegidas por AuthGuard
+  { path: 'admin', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/appointments', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/customers', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/employees', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/reports', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/settings', component: DashboardAdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/clients', component: ClientsComponent, canActivate: [AuthGuard] },
+  { path: 'admin/services', component: ServiciosComponent, canActivate: [AuthGuard] },
+  { path: 'admin/categories', component: CategoriasComponent, canActivate: [AuthGuard] },
+  { path: 'admin/providers', component: ProveedoresComponent, canActivate: [AuthGuard] },
+  { path: 'admin/secretary', component: SecretariosComponent, canActivate: [AuthGuard] },
+  { path: 'admin/administradores', component: AdministradoresComponent, canActivate: [AuthGuard] },
+  { path: 'admin/cuenta', component: CuentaComponent, canActivate: [AuthGuard] },
+  { path: 'admin/acerca-de', component: AcercaDeComponent, canActivate: [AuthGuard] },
+  { path: 'admin/configuracion', component: SettingsComponent, canActivate: [AuthGuard] },
 
 
 
