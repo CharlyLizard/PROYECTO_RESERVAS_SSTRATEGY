@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
-
+import { AuthService } from '../../../../services/api/auth.service';
 @Component({
   selector: 'app-admin-header',
   templateUrl: './admin-header.component.html',
@@ -22,9 +22,21 @@ import { RouterModule } from '@angular/router';
   ]
 })
 export class AdminHeaderComponent {
-  constructor(private router: Router) {}
+  adminName: string = '';
+
+  constructor(private router: Router, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    // Obtener el nombre del administrador
+    this.authService.adminData$.subscribe((data: any) => {
+      if (data) {
+        this.adminName = data.nombreUsuario;
+      }
+    });
+  }
 
   cerrarSesion() {
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

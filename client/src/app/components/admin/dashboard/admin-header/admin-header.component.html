@@ -51,7 +51,7 @@
 
     <button mat-button [matMenuTriggerFor]="perfilMenu" class="text-white  !text-white flex items-center px-1 min-w-0">
       <mat-icon class="mr-1 text-sm">account_circle</mat-icon>
-      Nombre usuario
+      <span class="text-white">{{ adminName }}</span>
       <mat-icon class="text-white text-sm">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #perfilMenu="matMenu">

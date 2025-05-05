@@ -19,7 +19,8 @@ export class LoginWindowComponent {
 
   login() {
     this.authService.login(this.username, this.password).subscribe({
-      next: () => {
+      next: (response) => {
+        this.authService.setAdminData(response.admin); // Actualizar los datos del administrador
         this.router.navigate(['/admin']);
       },
       error: () => {
