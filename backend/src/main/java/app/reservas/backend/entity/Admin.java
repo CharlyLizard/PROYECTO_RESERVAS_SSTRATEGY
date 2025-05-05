@@ -20,7 +20,8 @@ public class Admin {
     @Column(name = "nombre_usuario")
     private String nombreUsuario;
 
-    private byte[] password;
+    @Column(name = "password")
+    private String password;
 
     private String email;
 

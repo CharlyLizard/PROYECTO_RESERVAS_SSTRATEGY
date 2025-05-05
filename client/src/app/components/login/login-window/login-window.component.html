@@ -1,47 +1,76 @@
-<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-  <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">SECCIÓN DE GESTIÓN INTERNA</h2>
+<div
+  class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200"
+>
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">
+    SECCIÓN DE GESTIÓN INTERNA
+  </h2>
   <p class="text-sm text-center text-gray-600 mb-6">
-    ¡Bienvenido! Usted deberá iniciar sesión para ver las páginas de gestión interna.
+    ¡Bienvenido! Usted deberá iniciar sesión para ver las páginas de gestión
+    interna.
   </p>
 
   <form>
     <div class="mb-4">
-      <label for="username" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+      <label for="username" class="block text-sm font-medium text-gray-700"
+        >Nombre de usuario</label
+      >
       <input
         type="text"
         id="username"
+        name="username"
+        [(ngModel)]="username"
         placeholder="Ingrese su nombre de usuario aquí..."
         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-700"
       />
     </div>
 
     <div class="mb-4">
-      <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+      <label for="password" class="block text-sm font-medium text-gray-700"
+        >Contraseña</label
+      >
       <input
         type="password"
         id="password"
+        [(ngModel)]="password"
+        name="password"
         placeholder="Ingrese su contraseña aquí..."
         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-700"
       />
     </div>
 
     <div class="mb-4 text-right">
-      <a routerLink="/recovery" class="text-sm text-green-600 hover:underline">¿Olvidó su contraseña?</a>
+      <a routerLink="/recovery" class="text-sm text-green-600 hover:underline"
+        >¿Olvidó su contraseña?</a
+      >
     </div>
 
-        <button
+    <div *ngIf="error" class="text-red-600 text-sm mt-2">{{ error }}</div>
+
+    <button
       type="button"
       class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2"
       (click)="login()"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h14M12 5l7 7-7 7"
+        />
       </svg>
       <span>INICIAR SESIÓN</span>
     </button>
   </form>
 
   <p class="text-center text-sm text-gray-500 mt-6">
-    Powered by <a href="#" class="text-green-600 hover:underline">EasyAppointments</a>
+    Powered by
+    <a href="#" class="text-green-600 hover:underline">EasyAppointments</a>
   </p>
 </div>

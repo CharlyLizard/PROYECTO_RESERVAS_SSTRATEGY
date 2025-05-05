@@ -1,19 +1,9 @@
 package app.reservas.backend.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import app.reservas.backend.Security.JwtService;
@@ -22,7 +12,6 @@ import app.reservas.backend.dto.LoginRequest;
 import app.reservas.backend.dto.LoginResponse;
 import app.reservas.backend.entity.Admin;
 import app.reservas.backend.repository.AdminRepository;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -35,8 +24,22 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        System.out.println("---- LOGIN ADMIN ----");
+        System.out.println("Usuario recibido: " + request.getUsername());
+        System.out.println("Contraseña recibida: " + request.getPassword());
+
         Admin admin = adminRepository.findByNombreUsuario(request.getUsername());
-        if (admin == null || !passwordEncoder.matches(request.getPassword(), new String(admin.getPassword()))) {
+        if (admin == null) {
+            System.out.println("No existe el usuario: " + request.getUsername());
+            return ResponseEntity.status(401).body("Credenciales incorrectas");
+        }
+
+        System.out.println("Hash en BD: " + admin.getPassword());
+        //System.out.println(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("admin123"));
+        boolean passwordMatch = passwordEncoder.matches(request.getPassword(), admin.getPassword());
+        System.out.println("¿Contraseña coincide?: " + passwordMatch);
+
+        if (!passwordMatch) {
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
 
@@ -60,13 +63,14 @@ public class AuthController {
         dto.setRecibirNotificaciones(admin.getRecibirNotificaciones());
 
         // Generar tokens usando UserDetails
-        UserDetails userDetails = User.withUsername(admin.getNombreUsuario())
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+            .withUsername(admin.getNombreUsuario())
             .password("") // No es necesario para el token
-            .authorities("ROLE_ADMIN") // Puedes ajustar el rol si lo necesitas
+            .authorities("ROLE_ADMIN")
             .build();
 
         String accessToken = jwtService.generateToken(userDetails);
-        String refreshToken = jwtService.generateToken(userDetails); // O crea un método específico si quieres expiración distinta
+        String refreshToken = jwtService.generateToken(userDetails); // O usa generateRefreshToken si lo tienes
 
         // Construir respuesta
         LoginResponse response = new LoginResponse();
@@ -74,8 +78,7 @@ public class AuthController {
         response.setAccessToken(accessToken);
         response.setRefreshToken(refreshToken);
 
+        System.out.println("Login correcto. Enviando datos y tokens.");
         return ResponseEntity.ok(response);
     }
-
 }
-
