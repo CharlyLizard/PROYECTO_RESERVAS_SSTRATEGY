@@ -1,38 +1,57 @@
 package app.reservas.backend.controller;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.reservas.backend.dto.AdminDTO;
-import app.reservas.backend.dto.LoginRequest;
-import app.reservas.backend.entity.Admin;
-import app.reservas.backend.repository.AdminRepository;
+import app.reservas.backend.Security.JwtService;
+import app.reservas.backend.dto.AuthRequest;
+import app.reservas.backend.dto.AuthResponse;
+import app.reservas.backend.repository.UserRepository;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    private AdminRepository adminRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    /*
+        POST /auth/login
+
+        Recibe un usuario y contraseña.
+        Autentica al usuario.
+        Genera un JWT y lo devuelve en la respuesta.
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Admin admin = adminRepository.findByNombreUsuario(loginRequest.getUsername());
-        if (admin != null && passwordEncoder.matches(loginRequest.getPassword(), new String(admin.getPassword()))) {
-            AdminDTO dto = new AdminDTO();
-            // Copia los campos necesarios
-            dto.setId(admin.getId());
-            dto.setNombre(admin.getNombre());
-            // ...el resto de campos...
-            return ResponseEntity.ok(dto);
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtService.generateToken((UserDetails) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new AuthResponse(token));
     }
+
 }
+
