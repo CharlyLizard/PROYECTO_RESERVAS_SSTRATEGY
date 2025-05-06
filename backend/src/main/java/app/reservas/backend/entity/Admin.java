@@ -2,13 +2,18 @@ package app.reservas.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "admin")
 @Data
-public class Admin {
+public class Admin implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,5 +58,36 @@ public class Admin {
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
+    // Implementación de UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Siempre retorna el rol ADMIN
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
+    @Override
+    public String getUsername() {
+        return nombreUsuario;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }
