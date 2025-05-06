@@ -5,15 +5,15 @@
     <input matInput placeholder="Buscar categorías..." class="py-1">
     <mat-icon matPrefix class="text-gray-500">search</mat-icon>
 
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="abrirModalAgregar()">
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada" (click)="abrirModalEditar()">
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!categoriaSeleccionada" (click)="abrirModalEliminar()">
       <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
@@ -39,14 +39,23 @@
     <div class="col-span-9" *ngIf="categoriaSeleccionada; else noSelection">
       <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
       <div class="bg-white rounded-lg shadow p-6 space-y-4">
-        <mat-form-field class="w-full">
-          <mat-label>Nombre</mat-label>
-          <input matInput [(ngModel)]="categoriaSeleccionada.nombre"/>
-        </mat-form-field>
-        <mat-form-field class="w-full">
-          <mat-label>Descripción</mat-label>
-          <textarea matInput rows="3" [(ngModel)]="categoriaSeleccionada.descripcion"></textarea>
-        </mat-form-field>
+        <div>
+          <label class="text-gray-500 text-sm font-medium">Nombre</label>
+          <input
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="categoriaSeleccionada.nombre"
+            readonly
+          />
+        </div>
+        <div>
+          <label class="text-gray-500 text-sm font-medium">Descripción</label>
+          <textarea
+            class="border rounded px-2 py-1 w-full"
+            rows="3"
+            [(ngModel)]="categoriaSeleccionada.descripcion"
+            readonly
+          ></textarea>
+        </div>
       </div>
     </div>
 
@@ -55,3 +64,12 @@
     </ng-template>
   </div>
 </div>
+
+<app-modal-categorias
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [categoria]="modalCategoria"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-categorias>
