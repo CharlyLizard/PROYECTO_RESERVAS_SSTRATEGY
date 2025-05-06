@@ -4,6 +4,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
+import { Servicio } from '../../../models/servicios/servicio';
+import { ServiciosService } from '../../../services/api/servicios.service';
+import { CategoriasService } from '../../../services/api/categorias.service';
 
 @Component({
   selector: 'app-servicios',
@@ -19,75 +22,57 @@ import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.com
   ]
 })
 export class ServiciosComponent implements OnInit {
-  servicios = [
-    {
-      id: 1,
-      nombre: 'Servicio 1',
-      duracion: 30,
-      precio: 100,
-      moneda: 'USD',
-      categoria: 'Categoría 1',
-      tipo: 'Flexible',
-      asistentes: 1,
-      ubicacion: 'Oficina',
-      color: '#f87171',
-      ocultar: false,
-      descripcion: 'Descripción del servicio 1',
-    },
-    {
-      id: 2,
-      nombre: 'Servicio 2',
-      duracion: 60,
-      precio: 200,
-      moneda: 'EUR',
-      categoria: 'Categoría 2',
-      tipo: 'Fijo',
-      asistentes: 5,
-      ubicacion: 'Remoto',
-      color: '#34d399',
-      ocultar: true,
-      descripcion: 'Descripción del servicio 2',
-    },
-  ];
+  servicios: Servicio[] = [];
+  categorias: any[] = [];
 
-  servicioSeleccionado: any = null;
+  servicioSeleccionado: Servicio | null = null;
 
-  ngOnInit(): void {
-    if (this.servicios.length > 0) {
-      this.servicioSeleccionado = this.servicios[0];
-    }
+  constructor(
+    private serviciosService: ServiciosService,
+    private categoriasService: CategoriasService
+  ) {}
+  ngOnInit() {
+    // Cargar categorías
+    this.categoriasService.getCategorias().subscribe(categorias => {
+      this.categorias = categorias;
+    });
+
+    // Cargar servicios
+    this.serviciosService.getServicios().subscribe(servicios => {
+      this.servicios = servicios;
+    });
   }
 
-  selectService(servicio: any): void {
+  getNombreCategoria(categoriaId: number): string {
+    const categoria = this.categorias.find(cat => cat.id === categoriaId);
+    return categoria ? categoria.nombre : 'Categoría no encontrada';
+  }
+
+  cargarServicios(): void {
+    this.serviciosService.getServicios().subscribe({
+      next: (data) => {
+        this.servicios = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los servicios:', err);
+      },
+    });
+  }
+
+  selectService(servicio: Servicio): void {
     this.servicioSeleccionado = servicio;
   }
 
-  addService(): void {
-    const nuevoServicio = {
-      id: this.servicios.length + 1,
-      nombre: 'Nuevo Servicio',
-      duracion: 0,
-      precio: 0,
-      moneda: 'USD',
-      categoria: '',
-      tipo: '',
-      asistentes: 1,
-      ubicacion: '',
-      color: '#f87171',
-      ocultar: false,
-      descripcion: '',
-    };
-    this.servicios.push(nuevoServicio);
-    this.selectService(nuevoServicio);
-  }
+
 
   editService(): void {
   }
 
-  deleteService(): void {
-    if (this.servicioSeleccionado) {
-      this.servicios = this.servicios.filter(s => s.id !== this.servicioSeleccionado.id);
-      this.servicioSeleccionado = this.servicios.length > 0 ? this.servicios[0] : null;
-    }
+  deleteService():void{
+
   }
+  addService():void{
+
+  }
+
 }

@@ -16,4 +16,8 @@ public class ServicioService {
     public List<Servicio> getServiciosSeleccionados() {
         return servicioRepository.findByIsSelectedTrue();
     }
+
+    public List<Servicio> getAllServicios() {
+        return servicioRepository.findAll();
+    }
 }

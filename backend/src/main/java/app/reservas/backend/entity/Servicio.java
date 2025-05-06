@@ -23,8 +23,10 @@ public class Servicio {
 
     private String moneda = "USD";
 
-    private String categoria;
-
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private CategoriaServicio categoria;
+    
     @Column(name = "tipos_disponibles")
     private String tiposDisponibles = "Flexible";
 

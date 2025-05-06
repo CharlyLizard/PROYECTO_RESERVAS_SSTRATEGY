@@ -1,6 +1,7 @@
 <app-admin-header></app-admin-header>
 
 <div class="p-4">
+  <!-- Barra de acciones -->
   <div class="mb-4 flex items-center space-x-2">
     <input matInput placeholder="Buscar servicios..." class="py-1" />
     <mat-icon matPrefix class="text-gray-500">search</mat-icon>
@@ -20,74 +21,81 @@
   </div>
 
   <div class="grid grid-cols-12 gap-6">
+    <!-- Lista de servicios -->
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIOS</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div
-          *ngFor="let servicio of servicios"
-          class="p-4 border-b cursor-pointer transition-colors duration-200"
-          [class.bg-green-50]="servicioSeleccionado?.id === servicio.id"
-          [class.border-green-500]="servicioSeleccionado?.id === servicio.id"
-          (click)="selectService(servicio)"
-        >
-          <h3 class="font-medium text-gray-800">{{ servicio.nombre }}</h3>
-          <p class="text-sm text-gray-600">
-            {{ servicio.duracion }} min - {{ servicio.precio | currency:servicio.moneda }}
-          </p>
-        </div>
+        @for (servicio of servicios; track servicio.id) {
+          <div
+            class="p-4 border-b cursor-pointer transition-colors duration-200"
+            [class.bg-green-50]="servicioSeleccionado?.id === servicio.id"
+            [class.border-green-500]="servicioSeleccionado?.id === servicio.id"
+            (click)="selectService(servicio)"
+          >
+            <h3 class="font-medium text-gray-800">{{ servicio.nombre }}</h3>
+            <p class="text-sm text-gray-600">
+              {{ servicio.duracionMinutos }} min - {{ servicio.precio | currency:servicio.moneda }}
+            </p>
+          </div>
+        } @empty {
+          <div class="p-4 text-gray-500 text-center">
+            No hay servicios disponibles
+          </div>
+        }
       </div>
     </div>
 
-    <div class="col-span-9" *ngIf="servicioSeleccionado; else noSelection">
-      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
-      <div class="bg-white rounded-lg shadow p-6 space-y-4">
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Nombre</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.nombre}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Duración</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.duracion}} min</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Precio</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.precio}} {{servicioSeleccionado.moneda}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Categoría</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.categoria}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Tipo</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.tipo}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Asistentes</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.asistentes}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Ubicación</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.ubicacion}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Color</h3>
-          <span class="inline-block w-6 h-6 rounded-full border" [ngStyle]="{'background-color': servicioSeleccionado.color}"></span>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Descripción</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.descripcion}}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Ocultar del público</h3>
-          <p class="text-gray-800">{{servicioSeleccionado.ocultar ? 'Sí' : 'No'}}</p>
+    <!-- Detalles del servicio -->
+    @if (servicioSeleccionado) {
+      <div class="col-span-9">
+        <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+        <div class="bg-white rounded-lg shadow p-6 space-y-4">
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Nombre</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.nombre}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Duración</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.duracionMinutos}} min</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Precio</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.precio | currency:servicioSeleccionado.moneda}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Categoría</h3>
+            <p class="text-gray-800">{{getNombreCategoria(servicioSeleccionado.categoriaId)}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Tipo</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.tiposDisponibles}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Asistentes</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.numeroAsistentes}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Ubicación</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.ubicacion}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Color</h3>
+            <span class="inline-block w-6 h-6 rounded-full border" [style.background-color]="servicioSeleccionado.color"></span>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Descripción</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.descripcion}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Ocultar del público</h3>
+            <p class="text-gray-800">{{servicioSeleccionado.ocultarPublico ? 'Sí' : 'No'}}</p>
+          </div>
         </div>
       </div>
-    </div>
-
-    <ng-template #noSelection>
+    } @else {
       <p class="text-gray-500 text-center col-span-9">
         Selecciona un servicio para ver los detalles.
       </p>
-    </ng-template>
+    }
   </div>
 </div>
