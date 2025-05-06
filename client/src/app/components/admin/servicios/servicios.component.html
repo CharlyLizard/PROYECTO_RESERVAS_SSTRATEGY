@@ -99,3 +99,13 @@
     }
   </div>
 </div>
+
+<app-modal-servicios
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [servicio]="modalServicio"
+  [categorias]="categorias"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-servicios>

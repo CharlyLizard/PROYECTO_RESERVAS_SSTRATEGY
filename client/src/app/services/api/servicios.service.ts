@@ -27,4 +27,14 @@ export class ServiciosService {
     });
     return this.http.get<any[]>(this.categoriasUrl, { headers });
   }
+
+  gestionarServicio(accion: 'add' | 'edit' | 'delete', servicio: any) {
+    const token = localStorage.getItem('accessToken');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.post<any>(
+      'http://localhost:8080/api/servicios/gestionar',
+      { accion, servicio },
+      { headers }
+    );
+  }
 }

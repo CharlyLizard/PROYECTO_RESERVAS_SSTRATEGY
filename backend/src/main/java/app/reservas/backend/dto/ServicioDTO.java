@@ -18,6 +18,7 @@ public class ServicioDTO {
     private String ubicacion;
     private String color;
     private Boolean ocultarPublico;
+    private String fechaCreacion;
     private String descripcion;
     private Boolean isSelected;
 }
