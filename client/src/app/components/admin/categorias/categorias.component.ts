@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
 
+import { CategoriasService } from '../../../services/api/categorias.service';
+
 @Component({
   selector: 'app-categorias',
   templateUrl: './categorias.component.html',
@@ -24,18 +26,18 @@ import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.com
   ],
 })
 export class CategoriasComponent implements OnInit {
-  categorias = [
-    { id: 1, nombre: 'Categoría 1', descripcion: 'Descripción de la categoría 1' },
-    { id: 2, nombre: 'Categoría 2', descripcion: 'Descripción de la categoría 2' },
-    { id: 3, nombre: 'Categoría 3', descripcion: 'Descripción de la categoría 3' },
-  ];
-
+  categorias: any[] = [];
   categoriaSeleccionada: any = null;
 
+  constructor(private categoriasService: CategoriasService) {}
+
   ngOnInit(): void {
-    if (this.categorias.length > 0) {
-      this.categoriaSeleccionada = { ...this.categorias[0] };
-    }
+    this.categoriasService.getCategorias().subscribe(categorias => {
+      this.categorias = categorias;
+      if (this.categorias.length > 0) {
+        this.categoriaSeleccionada = { ...this.categorias[0] };
+      }
+    });
   }
 
   selectCategoria(categoria: any): void {

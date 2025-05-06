@@ -20,10 +20,13 @@ export class LoginWindowComponent {
   login() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
-        this.authService.setAdminData(response.admin); // Actualizar los datos del administrador
+        console.log('Login response:', response); // LOG 1
+        this.authService.setAdminData(response.admin);
+        localStorage.setItem('accessToken', response.accessToken); // Asegúrate de guardar el token
         this.router.navigate(['/admin']);
       },
-      error: () => {
+      error: (err) => {
+        console.error('Login error:', err); // LOG 2
         this.error = 'Usuario o contraseña incorrectos';
       }
     });

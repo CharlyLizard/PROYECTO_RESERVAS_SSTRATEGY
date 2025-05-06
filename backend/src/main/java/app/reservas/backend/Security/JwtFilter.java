@@ -35,6 +35,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         System.out.println("*************************** FILTRO JWT ACTIVADO **************************");
         System.out.println("Solicitud recibida en: "+request.getRequestURI());
+        System.out.println("JWT Filter - URI: " + request.getRequestURI()); // LOG 7
+        System.out.println("JWT Filter - Authorization header: " + request.getHeader("Authorization")); // LOG 8
         System.out.println("***************************************************************************");
 
         System.out.println("********************** CABECERAS ***************************");
@@ -71,6 +73,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 System.out.println("************ ROLES AUTENTICADOS ************");
                 authorities.forEach(auth -> System.out.println(auth.getAuthority()));
+                // Después de extraer roles:
+                authorities.forEach(auth -> System.out.println("JWT Filter - Rol: " + auth.getAuthority())); // LOG 9
                 System.out.println("********************************************");
 
                 UsernamePasswordAuthenticationToken authToken =

@@ -55,5 +55,7 @@ export class ClientsComponent {
 
   selectClient(client: any) {
     this.selectedClient = client;
+    console.log('Token en localStorage:', localStorage.getItem('accessToken')); // LOG 3
   }
+
 }

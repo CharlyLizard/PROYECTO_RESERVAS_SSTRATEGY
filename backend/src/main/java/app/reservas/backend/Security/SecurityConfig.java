@@ -44,8 +44,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API sin estado
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/error", "/auth/**").permitAll() // Rutas públicas
+                        .requestMatchers("/categorias/**").hasRole("ADMIN") // Solo ADMIN puede acceder a /categorias
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas protegidas para administradores
-                        .requestMatchers("/client/**").hasRole("USER") // Rutas protegidas para usuarios
+                        //.requestMatchers("/client/**").hasRole("USER") // Rutas protegidas para usuarios
                         .anyRequest().authenticated() // Todas las demás requieren autenticación
                 )
                 .authenticationProvider(authenticationProvider()) // Configurar el proveedor de autenticación

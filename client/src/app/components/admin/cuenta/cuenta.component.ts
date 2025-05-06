@@ -47,6 +47,7 @@ export class CuentaComponent implements OnInit {
     this.cambiosPendientes = JSON.stringify(this.cuenta) !== JSON.stringify(this.cuentaOriginal);
   }
 
+  
   guardarCuenta() {
     // Aquí haces la petición al backend para actualizar los datos
     this.authService.actualizarAdmin(this.cuenta).subscribe({
