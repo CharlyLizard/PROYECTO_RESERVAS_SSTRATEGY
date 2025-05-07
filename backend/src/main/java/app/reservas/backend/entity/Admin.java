@@ -46,22 +46,20 @@ public class Admin implements UserDetails {
 
     private String notas;
 
-    private String calendario = "Predeterminado";
+    private String calendario;
 
-    private String idioma = "Spanish";
+    private String idioma;
 
     @Column(name = "zona_horaria")
-    private String zonaHoraria = "UTC";
+    private String zonaHoraria;
 
     @Column(name = "recibir_notificaciones")
-    private Boolean recibirNotificaciones = true;
+    private Boolean recibirNotificaciones;
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
-    // Implementación de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Siempre retorna el rol ADMIN
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 

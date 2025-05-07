@@ -21,24 +21,24 @@ public class Servicio {
 
     private BigDecimal precio = BigDecimal.ZERO;
 
-    private String moneda = "USD";
+    private String moneda ;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private CategoriaServicio categoria;
     
     @Column(name = "tipos_disponibles")
-    private String tiposDisponibles = "Flexible";
+    private String tiposDisponibles;
 
     @Column(name = "numero_asistentes")
-    private Integer numeroAsistentes = 1;
+    private Integer numeroAsistentes;
 
     private String ubicacion;
 
-    private String color = "#FFFFFF";
+    private String color;
 
     @Column(name = "ocultar_publico")
-    private Boolean ocultarPublico = false;
+    private Boolean ocultarPublico;
 
     private String descripcion;
 

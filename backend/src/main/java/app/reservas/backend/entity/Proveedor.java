@@ -40,18 +40,18 @@ public class Proveedor {
 
     private String notas;
 
-    private String calendario = "Predeterminado";
+    private String calendario;
 
-    private String idioma = "Spanish";
+    private String idioma;
 
     @Column(name = "zona_horaria")
-    private String zonaHoraria = "UTC";
+    private String zonaHoraria ;
 
     @Column(name = "recibir_notificaciones")
-    private Boolean recibirNotificaciones = true;
+    private Boolean recibirNotificaciones;
 
     @Column(name = "ocultar_publico")
-    private Boolean ocultarPublico = false;
+    private Boolean ocultarPublico;
 
     @ManyToOne
     @JoinColumn(name = "servicio_id")

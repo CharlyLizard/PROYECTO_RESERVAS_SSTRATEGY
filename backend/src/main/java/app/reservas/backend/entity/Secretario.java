@@ -40,15 +40,15 @@ public class Secretario {
 
     private String notas;
 
-    private String calendario = "Predeterminado";
+    private String calendario;
 
-    private String idioma = "English";
+    private String idioma ;
 
     @Column(name = "zona_horaria")
-    private String zonaHoraria = "UTC";
+    private String zonaHoraria;
 
     @Column(name = "recibir_notificaciones")
-    private Boolean recibirNotificaciones = true;
+    private Boolean recibirNotificaciones ;
 
     @ManyToOne
     @JoinColumn(name = "proveedor_id")

@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientService {
 
+    private final ClientRepository clientRepository;
+
     @Autowired
-    private ClientRepository clientRepository;
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     // Buscar un cliente por email o crear uno nuevo
     public Client findOrCreateClient(ClientDTO clientDTO) {

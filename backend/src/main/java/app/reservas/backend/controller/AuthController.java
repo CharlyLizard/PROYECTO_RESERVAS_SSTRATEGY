@@ -1,6 +1,7 @@
 package app.reservas.backend.controller;
 
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -15,30 +16,28 @@ import app.reservas.backend.repository.AdminRepository;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final AdminRepository adminRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    public AuthController(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
+        this.adminRepository = adminRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    // ENDPOINT DE LOGUEO
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        System.out.println("---- LOGIN ADMIN ----");
-        System.out.println("Usuario recibido: " + request.getUsername());
-        System.out.println("Contraseña recibida: " + request.getPassword());
 
         Admin admin = adminRepository.findByNombreUsuario(request.getUsername());
         if (admin == null) {
-            System.out.println("No existe el usuario: " + request.getUsername());
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
-
-        System.out.println("Hash en BD: " + admin.getPassword());
-        //System.out.println(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("admin123"));
         boolean passwordMatch = passwordEncoder.matches(request.getPassword(), admin.getPassword());
-        System.out.println("¿Contraseña coincide?: " + passwordMatch);
-
         if (!passwordMatch) {
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
@@ -65,12 +64,12 @@ public class AuthController {
         // Generar tokens usando UserDetails
         UserDetails userDetails = org.springframework.security.core.userdetails.User
             .withUsername(admin.getNombreUsuario())
-            .password("") // No es necesario para el token
+            .password("")
             .authorities("ROLE_ADMIN")
             .build();
 
         String accessToken = jwtService.generateToken(userDetails);
-        String refreshToken = jwtService.generateToken(userDetails); // O usa generateRefreshToken si lo tienes
+        String refreshToken = jwtService.generateToken(userDetails);
 
         // Construir respuesta
         LoginResponse response = new LoginResponse();
@@ -78,20 +77,17 @@ public class AuthController {
         response.setAccessToken(accessToken);
         response.setRefreshToken(refreshToken);
 
-        System.out.println("Login correcto. Enviando datos y tokens.");
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/admin")
     public ResponseEntity<?> actualizarAdmin(@RequestBody AdminDTO adminDto) {
-        System.out.println("Petición de actualización de admin: " + adminDto);
-
         Admin admin = adminRepository.findById(adminDto.getId()).orElse(null);
         if (admin == null) {
             return ResponseEntity.status(404).body("Administrador no encontrado");
         }
 
-        // Actualiza los campos (excepto la contraseña, a menos que la quieras actualizar aquí)
+        // Actualiza los campos
         admin.setNombre(adminDto.getNombre());
         admin.setApellido(adminDto.getApellido());
         admin.setNombreUsuario(adminDto.getNombreUsuario());
@@ -108,11 +104,7 @@ public class AuthController {
         admin.setZonaHoraria(adminDto.getZonaHoraria());
         admin.setRecibirNotificaciones(adminDto.getRecibirNotificaciones());
 
-        // Si quieres permitir actualizar la contraseña, añade lógica aquí
-
         adminRepository.save(admin);
-
-        // Devuelve el admin actualizado (puedes mapearlo a AdminDTO si quieres)
         return ResponseEntity.ok(adminDto);
     }
 }

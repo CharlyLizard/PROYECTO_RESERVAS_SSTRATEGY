@@ -10,11 +10,10 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     private String date;
@@ -22,7 +21,7 @@ public class Appointment {
     private String timezone;
 
     @ManyToOne
-    @JoinColumn(name = "service", nullable = false)
+    @JoinColumn(name = "service")
     private Servicio service;
 
     private String notes;

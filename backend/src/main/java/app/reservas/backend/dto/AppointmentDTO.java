@@ -4,13 +4,10 @@ import lombok.Data;
 
 @Data
 public class AppointmentDTO {
-
     private ClientDTO client;
     private String date;
     private String time;
     private String timezone;
     private Long service;
     private String notes;
-
-    
 }

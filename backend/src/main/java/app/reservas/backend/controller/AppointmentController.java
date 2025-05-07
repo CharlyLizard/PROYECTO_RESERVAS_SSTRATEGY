@@ -12,8 +12,12 @@ import java.util.List;
 @RequestMapping("/api/appointments")
 public class AppointmentController {
 
+    private final AppointmentService appointmentService;
+
     @Autowired
-    private AppointmentService appointmentService;
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     // Obtener todas las citas
     @GetMapping

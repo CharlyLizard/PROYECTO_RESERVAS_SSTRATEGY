@@ -18,14 +18,18 @@ import java.util.stream.Collectors;
 @Service
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final ClientRepository clientRepository;
+    private final ServicioRepository servicioRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private ServicioRepository servicioRepository;
+    public AppointmentService(AppointmentRepository appointmentRepository,
+                              ClientRepository clientRepository,
+                              ServicioRepository servicioRepository) {
+        this.appointmentRepository = appointmentRepository;
+        this.clientRepository = clientRepository;
+        this.servicioRepository = servicioRepository;
+    }
 
     // Obtener todas las citas como DTOs
     public List<AppointmentDTO> getAllAppointments() {
@@ -35,10 +39,8 @@ public class AppointmentService {
 
     // Guardar una cita desde un DTO
     public AppointmentDTO saveAppointment(AppointmentDTO appointmentDTO) {
-        // Manejar el cliente
         Client client = clientRepository.findByEmail(appointmentDTO.getClient().getEmail());
         if (client == null) {
-            // Crear un nuevo cliente si no existe
             client = convertToEntity(appointmentDTO.getClient());
             client = clientRepository.save(client);
         }
@@ -49,16 +51,13 @@ public class AppointmentService {
         appointment.setDate(appointmentDTO.getDate());
         appointment.setTime(appointmentDTO.getTime());
         appointment.setTimezone(appointmentDTO.getTimezone());
-        // Buscar el servicio por id
         Servicio servicio = servicioRepository.findById(appointmentDTO.getService())
             .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
         appointment.setService(servicio);
         appointment.setNotes(appointmentDTO.getNotes());
 
-        // Guardar la cita en la base de datos
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
-        // Convertir la entidad guardada de vuelta a un DTO
         return convertToDTO(savedAppointment);
     }
 
