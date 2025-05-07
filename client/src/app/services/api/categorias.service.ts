@@ -1,6 +1,8 @@
+// filepath: client/src/app/services/api/categorias.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Categoria } from '../../models/orm/categoria.model'; // Corregida la ruta de importación
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +12,21 @@ export class CategoriasService {
 
   constructor(private http: HttpClient) {}
 
-  getCategorias(): Observable<any[]> {
+  getCategorias(): Observable<Categoria[]> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-    console.log('Llamando a /categorias con headers:', headers); // LOG para depuración
-    return this.http.get<any[]>(this.apiUrl, { headers });
+    return this.http.get<Categoria[]>(this.apiUrl, { headers });
   }
 
-  gestionarCategoria(accion: 'add' | 'edit' | 'delete', categoria: any) {
+  gestionarCategoria(accion: 'add' | 'edit' | 'delete', categoria: Categoria): Observable<{categorias: Categoria[], categoria?: Categoria}> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-    return this.http.post<any>(
-      'http://localhost:8080/categorias/gestionar',
+    return this.http.post<{categorias: Categoria[], categoria?: Categoria}>(
+      `${this.apiUrl}/gestionar`,
       { accion, categoria },
       { headers }
     );

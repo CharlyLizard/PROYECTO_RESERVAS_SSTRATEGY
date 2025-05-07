@@ -4,7 +4,7 @@ export interface Servicio {
   duracionMinutos: number;
   precio: number;
   moneda: string;
-  categoriaId: number;
+  categoriaId: number | null;
   categoriaNombre: string;
 
   tiposDisponibles: string;

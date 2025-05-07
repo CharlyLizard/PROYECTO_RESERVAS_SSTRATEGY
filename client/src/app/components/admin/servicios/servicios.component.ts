@@ -8,6 +8,7 @@ import { Servicio } from '../../../models/servicios/servicio';
 import { ServiciosService } from '../../../services/api/servicios.service';
 import { CategoriasService } from '../../../services/api/categorias.service';
 import { ModalServiciosComponent } from './modal-servicios/modal-servicios.component';
+import { Categoria } from '../../../models/orm/categoria.model'; // Para el array de categorías
 
 @Component({
   selector: 'app-servicios',
@@ -25,13 +26,12 @@ import { ModalServiciosComponent } from './modal-servicios/modal-servicios.compo
 })
 export class ServiciosComponent implements OnInit {
   servicios: Servicio[] = [];
-  categorias: any[] = [];
+  categorias: Categoria[] = []; // Usa el tipo Categoria
   servicioSeleccionado: Servicio | null = null;
 
-  // Modal
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';
-  modalServicio: any = {};
+  modalServicio: Partial<Servicio> = {}; // Usa Partial<Servicio> para el objeto del modal
 
   constructor(
     private serviciosService: ServiciosService,
@@ -39,7 +39,7 @@ export class ServiciosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.categoriasService.getCategorias().subscribe(categorias => {
+    this.categoriasService.getCategorias().subscribe((categorias: Categoria[]) => { // Tipa la respuesta
       this.categorias = categorias;
     });
     this.cargarServicios();
@@ -47,7 +47,7 @@ export class ServiciosComponent implements OnInit {
 
   cargarServicios(): void {
     this.serviciosService.getServicios().subscribe({
-      next: (data) => {
+      next: (data: Servicio[]) => { // Tipa la respuesta
         this.servicios = data;
       },
       error: (err) => {
@@ -56,18 +56,19 @@ export class ServiciosComponent implements OnInit {
     });
   }
 
-  getNombreCategoria(categoriaId: number): string {
+  getNombreCategoria(categoriaId: number | null): string { // Permite null
+    if (categoriaId === null) return 'Sin categoría';
     const categoria = this.categorias.find(cat => cat.id === categoriaId);
     return categoria ? categoria.nombre : 'Sin categoría';
   }
 
-  selectService(servicio: Servicio): void {
+  selectService(servicio: Servicio): void { // Tipa el parámetro
     this.servicioSeleccionado = servicio;
   }
 
   addService(): void {
     this.modalModo = 'add';
-    this.modalServicio = {
+    this.modalServicio = { // Inicializa con campos de Servicio
       nombre: '',
       descripcion: '',
       categoriaId: null,
@@ -104,20 +105,25 @@ export class ServiciosComponent implements OnInit {
     this.modalVisible = false;
   }
 
-  guardarModal(servicio: any): void {
+  guardarModal(servicio: Servicio): void { // Tipa el parámetro
     let accion: 'add' | 'edit' | 'delete' = this.modalModo;
-    this.serviciosService.gestionarServicio(accion, servicio).subscribe((resp: any) => {
-      this.servicios = resp.servicios;
-      this.servicioSeleccionado = this.servicios.find(s => s.id === resp.servicio?.id) || null;
-      this.cerrarModal();
-    });
+     if (this.modalModo === 'add' || this.modalModo === 'edit') {
+        this.serviciosService.gestionarServicio(this.modalModo, servicio).subscribe((resp: { servicios: Servicio[], servicio?: Servicio }) => { // Tipa la respuesta
+        this.servicios = resp.servicios;
+        const servicioActualizado = resp.servicios.find(s => s.id === (resp.servicio?.id || servicio.id));
+        this.selectService(servicioActualizado || this.servicios[0]);
+        this.cerrarModal();
+      });
+    }
   }
 
   eliminarModal(): void {
-    this.serviciosService.gestionarServicio('delete', this.modalServicio).subscribe((resp: any) => {
-      this.servicios = resp.servicios;
-      this.servicioSeleccionado = this.servicios.length > 0 ? this.servicios[0] : null;
-      this.cerrarModal();
-    });
+    if (this.modalServicio.id) { // Asegúrate que hay un ID para eliminar
+        this.serviciosService.gestionarServicio('delete', this.modalServicio as Servicio).subscribe((resp: { servicios: Servicio[] }) => { // Tipa la respuesta
+        this.servicios = resp.servicios;
+        this.servicioSeleccionado = this.servicios.length > 0 ? this.servicios[0] : null;
+        this.cerrarModal();
+      });
+    }
   }
 }

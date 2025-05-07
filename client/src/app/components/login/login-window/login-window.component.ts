@@ -18,7 +18,7 @@ export class LoginWindowComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    this.authService.login(this.username, this.password).subscribe({
+    this.authService.login({ username: this.username, password: this.password }).subscribe({ // Corregido: pasar un objeto
       next: (response) => {
         console.log('Login response:', response); // LOG 1
         this.authService.setAdminData(response.admin);

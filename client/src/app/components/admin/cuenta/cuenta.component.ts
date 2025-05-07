@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
 import { AuthService } from '../../../services/api/auth.service';
+import { Admin } from '../../../models/admin/admin.model';
 
 @Component({
   selector: 'app-cuenta',
@@ -27,16 +28,19 @@ import { AuthService } from '../../../services/api/auth.service';
 })
 // ...existing imports...
 export class CuentaComponent implements OnInit {
-  cuenta: any = {};
-  cuentaOriginal: any = {};
+  cuenta: Admin = {} as Admin; // Usa el tipo Admin e inicializa
+  cuentaOriginal: Admin = {} as Admin; // Usa el tipo Admin e inicializa
   cambiosPendientes = false;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.adminData$.subscribe((admin: any) => {
+    this.authService.adminData$.subscribe((admin: Admin | null) => { // Tipa el parámetro admin
       if (admin) {
         this.cuenta = { ...admin };
+        // Asegúrate de que los campos opcionales que no vengan del backend se inicialicen si es necesario para el formulario
+        this.cuenta.contrasena = '';
+        this.cuenta.reingreseContrasena = '';
         this.cuentaOriginal = { ...admin };
         this.cambiosPendientes = false;
       }
@@ -44,15 +48,28 @@ export class CuentaComponent implements OnInit {
   }
 
   onInputChange() {
-    this.cambiosPendientes = JSON.stringify(this.cuenta) !== JSON.stringify(this.cuentaOriginal);
+    // Compara solo los campos que se guardan, o maneja contrasena/reingreseContrasena por separado si no se envían
+    const { contrasena, reingreseContrasena, ...cuentaToCompare } = this.cuenta;
+    const { contrasena: originalContrasena, reingreseContrasena: originalReingreseContrasena, ...originalToCompare } = this.cuentaOriginal;
+    this.cambiosPendientes = JSON.stringify(cuentaToCompare) !== JSON.stringify(originalToCompare);
   }
 
-  
   guardarCuenta() {
-    // Aquí haces la petición al backend para actualizar los datos
-    this.authService.actualizarAdmin(this.cuenta).subscribe({
-      next: (adminActualizado) => {
+    // Prepara el objeto a enviar, excluyendo campos que no van al backend (como reingreseContrasena)
+    const { reingreseContrasena, ...cuentaParaGuardar } = this.cuenta;
+
+    // Si la contraseña no se ha modificado (está vacía), no la envíes o envíala como null
+    // dependiendo de cómo lo maneje tu backend para no cambiarla.
+    if (!cuentaParaGuardar.contrasena) {
+        delete cuentaParaGuardar.contrasena;
+    }
+
+    this.authService.actualizarAdmin(cuentaParaGuardar).subscribe({
+      next: (adminActualizado: Admin) => { // Tipa la respuesta
         this.cuentaOriginal = { ...adminActualizado };
+        // Reinicia los campos de contraseña en el formulario si es necesario
+        this.cuenta.contrasena = '';
+        this.cuenta.reingreseContrasena = '';
         this.cambiosPendientes = false;
         // Opcional: mostrar mensaje de éxito
       },
