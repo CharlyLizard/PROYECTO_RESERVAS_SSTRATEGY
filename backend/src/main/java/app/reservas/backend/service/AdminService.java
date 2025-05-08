@@ -51,12 +51,14 @@ public class AdminService {
             admin.setZonaHoraria((String) adminMap.get("zonaHoraria"));
             admin.setRecibirNotificaciones(adminMap.get("recibirNotificaciones") != null ? Boolean.valueOf(adminMap.get("recibirNotificaciones").toString()) : false);
 
-            // Hashear la contraseña solo si viene en el payload
-            if (adminMap.get("password") != null && !((String)adminMap.get("password")).isEmpty()) {
+            if (adminMap.get("password") != null && !((String) adminMap.get("password")).isEmpty()) {
+                // Si se proporciona una nueva contraseña, encriptarla
                 admin.setPassword(passwordEncoder.encode((String) adminMap.get("password")));
-            } else if (accion.equals("edit") && admin.getId() != null) {
-                // Mantener la contraseña anterior si no se envía una nueva
-                admin.setPassword(adminRepository.findById(admin.getId()).map(Admin::getPassword).orElse(null));
+            } else if (admin.getId() != null) {
+                // Mantener la contraseña existente si no se proporciona una nueva
+                admin.setPassword(adminRepository.findById(admin.getId())
+                        .map(Admin::getPassword)
+                        .orElse(null));
             }
         }
 

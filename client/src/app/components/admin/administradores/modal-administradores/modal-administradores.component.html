@@ -19,13 +19,34 @@
             <label class="block text-gray-700 font-medium mb-1">Nombre de usuario *</label>
             <input class="border rounded px-2 py-1 w-full" [(ngModel)]="admin.nombreUsuario" name="nombreUsuario" required />
           </div>
-          <div>
+          <!-- <div>
             <label class="block text-gray-700 font-medium mb-1">Contraseña *</label>
             <input type="password" class="border rounded px-2 py-1 w-full" [(ngModel)]="admin.contrasena" name="contrasena" required />
           </div>
           <div>
             <label class="block text-gray-700 font-medium mb-1">Reingrese su contraseña *</label>
             <input type="password" class="border rounded px-2 py-1 w-full" [(ngModel)]="admin.reingreseContrasena" name="reingreseContrasena" required />
+          </div> -->
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Contraseña</label>
+            <input
+              type="password"
+              class="border rounded px-2 py-1 w-full"
+              [(ngModel)]="admin.contrasena"
+              name="contrasena"
+              placeholder="Dejar vacío para no cambiar"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Reingrese su contraseña</label>
+            <input
+              type="password"
+              class="border rounded px-2 py-1 w-full"
+              [(ngModel)]="admin.reingreseContrasena"
+              name="reingreseContrasena"
+              placeholder="Dejar vacío para no cambiar"
+            />
           </div>
           <div>
             <label class="block text-gray-700 font-medium mb-1">Dirección de E-mail *</label>

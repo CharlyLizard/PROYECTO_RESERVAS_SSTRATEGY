@@ -90,6 +90,7 @@ export class AdministradoresComponent implements OnInit {
   editAdministrador() {
     if (this.administradorSeleccionado) {
       this.modalModo = 'edit';
+      // Inicializar los campos de contraseña como vacíos
       this.modalAdmin = { ...this.administradorSeleccionado, contrasena: '', reingreseContrasena: '' };
       this.modalVisible = true;
     }
@@ -109,24 +110,30 @@ export class AdministradoresComponent implements OnInit {
 
   guardarModal(admin: Admin): void {
     const adminToSend: any = { ...admin };
-    if (adminToSend.contrasena) {
+
+    // Solo incluir la contraseña si no está vacía
+    if (adminToSend.contrasena && adminToSend.contrasena.trim() !== '') {
       adminToSend.password = adminToSend.contrasena;
+    } else {
+      delete adminToSend.password; // Asegurarse de que no se envíe un campo vacío
     }
+
+    // Eliminar los campos de contraseña del formulario
     delete adminToSend.contrasena;
     delete adminToSend.reingreseContrasena;
 
-  this.adminService.gestionarAdmin(this.modalModo, adminToSend).subscribe({
-    next: (resp: { administradores: Admin[], admin?: Admin }) => {
-      this.administradores = resp.administradores;
-      const adminActualizado = resp.administradores.find(a => a.id === (resp.admin?.id || admin.id));
-      this.administradorSeleccionado = adminActualizado || this.administradores[0] || null;
-      this.cerrarModal();
-    },
-    error: (err) => {
-      console.error('Error al guardar administrador:', err);
-      this.cerrarModal();
-    }
-  });
+    this.adminService.gestionarAdmin(this.modalModo, adminToSend).subscribe({
+      next: (resp: { administradores: Admin[], admin?: Admin }) => {
+        this.administradores = resp.administradores;
+        const adminActualizado = resp.administradores.find(a => a.id === (resp.admin?.id || admin.id));
+        this.administradorSeleccionado = adminActualizado || this.administradores[0] || null;
+        this.cerrarModal();
+      },
+      error: (err) => {
+        console.error('Error al guardar administrador:', err);
+        this.cerrarModal();
+      }
+    });
   }
 
   eliminarModal(): void {
