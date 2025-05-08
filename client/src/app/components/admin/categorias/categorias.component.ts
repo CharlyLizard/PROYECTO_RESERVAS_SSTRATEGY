@@ -28,6 +28,8 @@ import { Categoria } from '../../../models/orm/categoria.model'; // Importa el m
 })
 export class CategoriasComponent implements OnInit {
   categorias: Categoria[] = []; // Usa el tipo Categoria
+  categoriasFiltradas: Categoria[] = [];
+  textoBusqueda: string = ''; // Texto ingresado en la barra de búsqueda
   categoriaSeleccionada: Categoria | null = null; // Usa el tipo Categoria
 
   modalVisible = false;
@@ -39,10 +41,19 @@ export class CategoriasComponent implements OnInit {
   ngOnInit(): void {
     this.categoriasService.getCategorias().subscribe((categorias: Categoria[]) => { // Tipa la respuesta
       this.categorias = categorias;
-      if (this.categorias.length > 0) {
-        this.categoriaSeleccionada = { ...this.categorias[0] };
-      }
+      this.categoriasFiltradas = categorias; // Inicialmente, mostrar todas las categorías
     });
+  }
+
+  filtrarCategorias(): void {
+    const texto = this.textoBusqueda.toLowerCase().trim();
+    if (texto === '') {
+      this.categoriasFiltradas = this.categorias; // Mostrar todas las categorías si no hay texto
+    } else {
+      this.categoriasFiltradas = this.categorias.filter((categoria) =>
+        categoria.nombre.toLowerCase().includes(texto)
+      );
+    }
   }
 
   selectCategoria(categoria: Categoria): void { // Tipa el parámetro

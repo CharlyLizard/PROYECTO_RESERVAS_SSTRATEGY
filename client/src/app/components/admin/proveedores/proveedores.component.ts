@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-proveedores',
@@ -15,11 +16,14 @@ import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.com
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    AdminHeaderComponent
+    AdminHeaderComponent,
+    FormsModule
   ]
 })
 export class ProveedoresComponent {
   selectedProvider: any = null;
+  proveedoresFiltrados: any[] = [];
+  textoBusqueda: string = '';
 
   providers = [
     {
@@ -44,6 +48,23 @@ export class ProveedoresComponent {
       ]
     }
   ];
+
+  ngOnInit() {
+    this.proveedoresFiltrados = this.providers;
+  }
+
+  filtrarProveedores(): void {
+    const texto = this.textoBusqueda.toLowerCase().trim();
+    if (texto === '') {
+      this.proveedoresFiltrados = this.providers;
+    } else {
+      this.proveedoresFiltrados = this.providers.filter((proveedor) =>
+        proveedor.name.toLowerCase().includes(texto) ||
+        proveedor.lastName.toLowerCase().includes(texto) ||
+        proveedor.email.toLowerCase().includes(texto)
+      );
+    }
+  }
 
   selectProvider(provider: any) {
     this.selectedProvider = provider;

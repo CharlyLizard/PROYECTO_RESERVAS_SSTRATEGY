@@ -9,7 +9,7 @@ import { ServiciosService } from '../../../services/api/servicios.service';
 import { CategoriasService } from '../../../services/api/categorias.service';
 import { ModalServiciosComponent } from './modal-servicios/modal-servicios.component';
 import { Categoria } from '../../../models/orm/categoria.model'; // Para el array de categorías
-
+import {FormsModule} from '@angular/forms'; // Importa FormsModule para usar [(ngModel)]
 @Component({
   selector: 'app-servicios',
   templateUrl: './servicios.component.html',
@@ -21,12 +21,16 @@ import { Categoria } from '../../../models/orm/categoria.model'; // Para el arra
     MatButtonModule,
     MatInputModule,
     AdminHeaderComponent,
-    ModalServiciosComponent
+    ModalServiciosComponent,
+    FormsModule
+
   ]
 })
 export class ServiciosComponent implements OnInit {
   servicios: Servicio[] = [];
   categorias: Categoria[] = []; // Usa el tipo Categoria
+  serviciosFiltrados: Servicio[] = [];
+  textoBusqueda: string = ''; // Texto ingresado en la barra de búsqueda
   servicioSeleccionado: Servicio | null = null;
 
   modalVisible = false;
@@ -46,14 +50,22 @@ export class ServiciosComponent implements OnInit {
   }
 
   cargarServicios(): void {
-    this.serviciosService.getServicios().subscribe({
-      next: (data: Servicio[]) => { // Tipa la respuesta
-        this.servicios = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar los servicios:', err);
-      },
+    this.serviciosService.getServicios().subscribe((servicios) => {
+      this.servicios = servicios;
+      this.serviciosFiltrados = servicios; // Inicialmente, mostrar todos los servicios
     });
+  }
+
+  filtrarServicios(): void {
+    const texto = this.textoBusqueda.toLowerCase().trim();
+    if (texto === '') {
+      this.serviciosFiltrados = this.servicios; // Mostrar todos los servicios si no hay texto
+    } else {
+      this.serviciosFiltrados = this.servicios.filter((servicio) =>
+        servicio.nombre.toLowerCase().includes(texto) ||
+        (servicio.descripcion && servicio.descripcion.toLowerCase().includes(texto))
+      );
+    }
   }
 
   getNombreCategoria(categoriaId: number | null): string { // Permite null
@@ -83,6 +95,10 @@ export class ServiciosComponent implements OnInit {
       isSelected: false
     };
     this.modalVisible = true;
+  }
+
+  selectServicio(servicio: Servicio): void {
+    this.servicioSeleccionado = { ...servicio };
   }
 
   editService(): void {

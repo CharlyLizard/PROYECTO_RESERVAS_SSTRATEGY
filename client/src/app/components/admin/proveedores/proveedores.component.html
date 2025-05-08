@@ -2,18 +2,26 @@
 
 <div class="p-4">
   <div class="mb-4 flex items-center space-x-2">
-    <input matInput placeholder="Buscar proveedores..." class="py-1">
-    <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+    <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
+      <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+      <input
+        matInput
+        placeholder="Buscar proveedores..."
+        class="py-1"
+        [(ngModel)]="textoBusqueda"
+        (input)="filtrarProveedores()"
+      />
+    </mat-form-field>
 
     <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!selectedProvider">
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!selectedProvider">
       <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
@@ -23,7 +31,7 @@
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">PROVEEDORES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        @for (provider of providers; track provider.id) {
+        @for (provider of proveedoresFiltrados; track provider.id) {
           <div
             class="p-4 border-b cursor-pointer transition-colors duration-200"
             [class.bg-green-50]="selectedProvider?.id === provider.id"
@@ -32,6 +40,10 @@
           >
             <h3 class="font-medium text-gray-800">{{provider.name}} {{provider.lastName}}</h3>
             <p class="text-sm text-gray-600">{{provider.email}}, {{provider.phone}}</p>
+          </div>
+        } @empty {
+          <div class="p-4 text-gray-500 text-center">
+            No se encontraron proveedores.
           </div>
         }
       </div>
@@ -86,9 +98,17 @@
                 {{service.description}}
               </div>
             </div>
+          } @empty {
+            <div class="p-4 text-gray-500 text-center">
+              No hay servicios disponibles.
+            </div>
           }
         </div>
       </div>
+    } @else {
+      <p class="text-gray-500 text-center col-span-9">
+        Selecciona un proveedor para ver los detalles.
+      </p>
     }
   </div>
 </div>

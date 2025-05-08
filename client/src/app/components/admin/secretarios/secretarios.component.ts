@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-secretarios',
@@ -15,10 +16,15 @@ import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.com
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    AdminHeaderComponent
+    AdminHeaderComponent,
+    FormsModule
   ]
 })
 export class SecretariosComponent {
+  secretariosFiltrados: any[] = [];
+  secretarioSeleccionado: any = null;
+  textoBusqueda: string = '';
+
   secretarios = [
     {
       id: 1,
@@ -41,10 +47,25 @@ export class SecretariosComponent {
     // Puedes agregar más secretarios/as aquí
   ];
 
-  secretarioSeleccionado: any = null;
 
   selectSecretario(secretario: any) {
     this.secretarioSeleccionado = secretario;
+  }
+  ngOnInit() {
+    // Inicializar la lista filtrada con todos los secretarios al cargar el componente
+    this.secretariosFiltrados = this.secretarios;
+  }
+  filtrarSecretarios(): void {
+    const texto = this.textoBusqueda.toLowerCase().trim();
+    if (texto === '') {
+      this.secretariosFiltrados = this.secretarios;
+    } else {
+      this.secretariosFiltrados = this.secretarios.filter((secretario) =>
+        secretario.nombre.toLowerCase().includes(texto) ||
+        secretario.apellido.toLowerCase().includes(texto) ||
+        secretario.email.toLowerCase().includes(texto)
+      );
+    }
   }
 
   addSecretario() {

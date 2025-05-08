@@ -2,8 +2,17 @@
 
 <div class="p-4">
   <div class="mb-4 flex items-center space-x-2">
-    <input matInput placeholder="Buscar categorías..." class="py-1">
-    <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+    <!-- Barra de búsqueda -->
+    <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
+      <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+      <input
+        matInput
+        placeholder="Buscar categorías..."
+        class="py-1"
+        [(ngModel)]="textoBusqueda"
+        (input)="filtrarCategorias()"
+      />
+    </mat-form-field>
 
     <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="abrirModalAgregar()">
       <mat-icon>add</mat-icon>
@@ -23,47 +32,53 @@
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">CATEGORÍAS</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div
-          *ngFor="let categoria of categorias"
-          class="p-4 border-b cursor-pointer transition-colors duration-200"
-          [class.bg-green-50]="categoriaSeleccionada?.id === categoria.id"
-          [class.border-green-500]="categoriaSeleccionada?.id === categoria.id"
-          (click)="selectCategoria(categoria)"
-        >
-          <h3 class="font-medium text-gray-800">{{ categoria.nombre }}</h3>
-          <p class="text-sm text-gray-600">{{ categoria.descripcion }}</p>
-        </div>
+        @for (categoria of categoriasFiltradas; track categoria.id) {
+          <div
+            class="p-4 border-b cursor-pointer transition-colors duration-200"
+            [class.bg-green-50]="categoriaSeleccionada?.id === categoria.id"
+            [class.border-green-500]="categoriaSeleccionada?.id === categoria.id"
+            (click)="selectCategoria(categoria)"
+          >
+            <h3 class="font-medium text-gray-800">{{ categoria.nombre }}</h3>
+            <p class="text-sm text-gray-600">{{ categoria.descripcion }}</p>
+          </div>
+        } @empty {
+          <div class="p-4 text-gray-500 text-center">
+            No se encontraron categorías.
+          </div>
+        }
       </div>
     </div>
 
-    <div class="col-span-9" *ngIf="categoriaSeleccionada; else noSelection">
-      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
-      <div class="bg-white rounded-lg shadow p-6 space-y-4">
-        <div>
-          <label class="text-gray-500 text-sm font-medium">Nombre</label>
-          <input
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="categoriaSeleccionada.nombre"
-            readonly
-          />
-        </div>
-        <div>
-          <label class="text-gray-500 text-sm font-medium">Descripción</label>
-          <textarea
-            class="border rounded px-2 py-1 w-full"
-            rows="3"
-            [(ngModel)]="categoriaSeleccionada.descripcion"
-            readonly
-          ></textarea>
+    @if (categoriaSeleccionada) {
+      <div class="col-span-9">
+        <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+        <div class="bg-white rounded-lg shadow p-6 space-y-4">
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Nombre</label>
+            <input
+              class="border rounded px-2 py-1 w-full"
+              [(ngModel)]="categoriaSeleccionada.nombre"
+              readonly
+            />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Descripción</label>
+            <textarea
+              class="border rounded px-2 py-1 w-full"
+              rows="3"
+              [(ngModel)]="categoriaSeleccionada.descripcion"
+              readonly
+            ></textarea>
+          </div>
         </div>
       </div>
-    </div>
-
-    <ng-template #noSelection>
-      <p class="text-gray-500 text-center">Selecciona una categoría para ver los detalles.</p>
-    </ng-template>
+    } @else {
+      <p class="text-gray-500 text-center col-span-9">
+        Selecciona una categoría para ver los detalles.
+      </p>
+    }
   </div>
-</div>
 
 <app-modal-categorias
   [visible]="modalVisible"

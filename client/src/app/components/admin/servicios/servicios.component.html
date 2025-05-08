@@ -1,10 +1,18 @@
 <app-admin-header></app-admin-header>
 
 <div class="p-4">
-  <!-- Barra de acciones -->
   <div class="mb-4 flex items-center space-x-2">
-    <input matInput placeholder="Buscar servicios..." class="py-1" />
-    <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+    <!-- Barra de búsqueda -->
+    <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
+      <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+      <input
+        matInput
+        placeholder="Buscar servicios..."
+        class="py-1"
+        [(ngModel)]="textoBusqueda"
+        (input)="filtrarServicios()"
+      />
+    </mat-form-field>
 
     <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="addService()">
       <mat-icon>add</mat-icon>
@@ -25,26 +33,23 @@
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIOS</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        @for (servicio of servicios; track servicio.id) {
+        @for (servicio of serviciosFiltrados; track servicio.id) {
           <div
             class="p-4 border-b cursor-pointer transition-colors duration-200"
             [class.bg-green-50]="servicioSeleccionado?.id === servicio.id"
             [class.border-green-500]="servicioSeleccionado?.id === servicio.id"
-            (click)="selectService(servicio)"
+            (click)="selectServicio(servicio)"
           >
             <h3 class="font-medium text-gray-800">{{ servicio.nombre }}</h3>
-            <p class="text-sm text-gray-600">
-              {{ servicio.duracionMinutos }} min - {{ servicio.precio | currency:servicio.moneda }}
-            </p>
+            <p class="text-sm text-gray-600">{{ servicio.descripcion }}</p>
           </div>
         } @empty {
           <div class="p-4 text-gray-500 text-center">
-            No hay servicios disponibles
+            No se encontraron servicios.
           </div>
         }
       </div>
     </div>
-
     <!-- Detalles del servicio -->
     @if (servicioSeleccionado) {
       <div class="col-span-9">
