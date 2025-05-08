@@ -4,7 +4,7 @@
   <div class="mb-4 flex items-center space-x-2">
     <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
       <mat-icon matPrefix class="text-gray-500">search</mat-icon>
-      <input matInput placeholder="Buscar administradores..." class="py-1">
+      <input matInput placeholder="Buscar administradores..." class="py-1" [(ngModel)]="filtro">
     </mat-form-field>
 
     <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="addAdministrador()">
@@ -26,14 +26,17 @@
       <h2 class="text-lg font-medium mb-4 text-gray-700">ADMINISTRADORES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
         <div
-          *ngFor="let admin of administradores"
+          *ngFor="let admin of administradoresFiltrados"
           class="p-4 border-b cursor-pointer transition-colors duration-200"
           [class.bg-green-50]="administradorSeleccionado?.id === admin.id"
           [class.border-green-500]="administradorSeleccionado?.id === admin.id"
           (click)="selectAdministrador(admin)"
         >
           <h3 class="font-medium text-gray-800">{{ admin.nombre }} {{ admin.apellido }}</h3>
-          <p class="text-sm text-gray-600">{{ admin.email }}, {{ admin.telefono }}</p>
+          <p class="text-sm text-gray-600">{{ admin.email }}</p>
+        </div>
+        <div *ngIf="administradoresFiltrados.length === 0" class="p-4 text-gray-500 text-center">
+          No hay administradores disponibles
         </div>
       </div>
     </div>
@@ -52,14 +55,6 @@
         <div>
           <h3 class="text-gray-500 text-sm font-medium">Apellido</h3>
           <p class="text-gray-800">{{ administradorSeleccionado.apellido }}</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Contraseña</h3>
-          <p class="text-gray-800">********</p>
-        </div>
-        <div>
-          <h3 class="text-gray-500 text-sm font-medium">Reingrese su contraseña</h3>
-          <p class="text-gray-800">********</p>
         </div>
         <div>
           <h3 class="text-gray-500 text-sm font-medium">Dirección de E-mail</h3>
@@ -111,15 +106,14 @@
           <h3 class="text-gray-500 text-sm font-medium">Zona horaria</h3>
           <p class="text-gray-800">{{ administradorSeleccionado.zonaHoraria }}</p>
         </div>
-        <div class="md:col-span-2">
-          <h3 class="text-gray-500 text-sm font-medium">Opciones</h3>
-          <mat-slide-toggle [(ngModel)]="administradorSeleccionado.recibirNotificaciones">
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Recibir notificaciones</h3>
+          <mat-slide-toggle [(ngModel)]="administradorSeleccionado.recibirNotificaciones" disabled>
             Recibir notificaciones
           </mat-slide-toggle>
         </div>
       </div>
     </div>
-
     <ng-template #noSelection>
       <p class="text-gray-500 text-center col-span-9">
         Selecciona un administrador para ver los detalles.
@@ -127,3 +121,12 @@
     </ng-template>
   </div>
 </div>
+
+<app-modal-administradores
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [admin]="modalAdmin"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-administradores>
