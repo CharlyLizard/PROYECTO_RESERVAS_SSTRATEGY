@@ -9,48 +9,51 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-gray-700 font-medium mb-1">Nombre *</label>
-          <input
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedor.nombre"
-            name="nombre"
-            required
-          />
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.nombre" name="nombre" required />
         </div>
         <div>
           <label class="block text-gray-700 font-medium mb-1">Apellido *</label>
-          <input
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedor.apellido"
-            name="apellido"
-            required
-          />
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.apellido" name="apellido" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Nombre de usuario</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.nombreUsuario" name="nombreUsuario" />
         </div>
         <div>
           <label class="block text-gray-700 font-medium mb-1">Correo Electrónico *</label>
-          <input
-            type="email"
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedor.email"
-            name="email"
-            required
-          />
+          <input type="email" class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.email" name="email" required />
         </div>
         <div>
           <label class="block text-gray-700 font-medium mb-1">Teléfono</label>
-          <input
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedor.telefono"
-            name="telefono"
-          />
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.telefono" name="telefono" />
         </div>
         <div>
+          <label class="block text-gray-700 font-medium mb-1">Teléfono móvil</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.telefonoMovil" name="telefonoMovil" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Domicilio</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.domicilio" name="domicilio" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Ciudad</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.ciudad" name="ciudad" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Estado</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.estado" name="estado" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Código postal</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.codigoPostal" name="codigoPostal" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-gray-700 font-medium mb-1">Notas</label>
+          <textarea class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.notas" name="notas" rows="2"></textarea>
+        </div>
+        <div class="md:col-span-2">
           <label class="block text-gray-700 font-medium mb-1">Servicio Asociado *</label>
-          <select
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedor.servicio.id"
-            name="servicioId"
-            required
-          >
+          <select class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.servicio" name="servicio" required>
             <option [ngValue]="null">Seleccione un servicio</option>
             <option *ngFor="let servicio of servicios" [ngValue]="servicio.id">
               {{ servicio.nombre }}
@@ -82,6 +85,5 @@
         </button>
       </div>
     </div>
-
   </div>
 </div>

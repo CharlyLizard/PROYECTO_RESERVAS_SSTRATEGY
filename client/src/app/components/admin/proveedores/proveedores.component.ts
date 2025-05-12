@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input'; // Ensure MatFormFieldModule is imported if you use mat-form-field in HTML
+import { MatInputModule } from '@angular/material/input';
 import { Proveedor } from '../../../models/proveedor/proveedor.model';
 import { Servicio } from '../../../models/servicios/servicio';
-import { ProveedoresService, GestionarProveedorResponse } from '../../../services/api/proveedores.service';
+import { ProveedoresService } from '../../../services/api/proveedores.service';
 import { ServiciosService } from '../../../services/api/servicios.service';
 import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
 import { ModalProveedoresComponent } from './modal-proveedores/modal-proveedores.component';
+import { GestionarProveedorResponse } from '../../../models/proveedor/GestionarProveedorResponse';
 
 @Component({
   selector: 'app-proveedores',
@@ -23,8 +24,8 @@ import { ModalProveedoresComponent } from './modal-proveedores/modal-proveedores
     MatButtonModule,
     MatInputModule,
     AdminHeaderComponent,
-    ModalProveedoresComponent
-  ]
+    ModalProveedoresComponent,
+  ],
 })
 export class ProveedoresComponent implements OnInit {
   proveedores: Proveedor[] = [];
@@ -35,7 +36,7 @@ export class ProveedoresComponent implements OnInit {
 
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';
-  modalProveedor: Partial<Proveedor> = { servicio: { id: null } }; // Initialized for modal
+  modalProveedor: Partial<Proveedor> = { servicio: { id: null } };
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -52,13 +53,10 @@ export class ProveedoresComponent implements OnInit {
       next: (proveedores) => {
         this.proveedores = proveedores;
         this.proveedoresFiltrados = proveedores;
-        if (this.proveedores.length > 0) {
-          this.proveedorSeleccionado = this.proveedores[0];
-        } else {
-          this.proveedorSeleccionado = null;
-        }
+        this.proveedorSeleccionado =
+          this.proveedores.length > 0 ? this.proveedores[0] : null;
       },
-      error: (err) => console.error('Error al cargar proveedores:', err)
+      error: (err) => console.error('Error al cargar proveedores:', err),
     });
   }
 
@@ -67,7 +65,7 @@ export class ProveedoresComponent implements OnInit {
       next: (servicios) => {
         this.servicios = servicios;
       },
-      error: (err) => console.error('Error al cargar servicios:', err)
+      error: (err) => console.error('Error al cargar servicios:', err),
     });
   }
 
@@ -77,15 +75,19 @@ export class ProveedoresComponent implements OnInit {
       this.proveedoresFiltrados = this.proveedores;
     } else {
       this.proveedoresFiltrados = this.proveedores.filter((proveedor) => {
-        const nombreMatch = proveedor.nombre.toLowerCase().includes(texto);
-        const apellidoMatch = proveedor.apellido.toLowerCase().includes(texto);
-        const emailMatch = proveedor.email.toLowerCase().includes(texto);
+        const nombreMatch = proveedor.nombre?.toLowerCase().includes(texto);
+        const apellidoMatch = proveedor.apellido?.toLowerCase().includes(texto);
+        const emailMatch = proveedor.email?.toLowerCase().includes(texto);
 
         let servicioMatch = false;
         if (proveedor.servicio && proveedor.servicio.id !== null) {
-          const servicioAsociado = this.servicios.find(s => s.id === proveedor.servicio.id);
+          const servicioAsociado = this.servicios.find(
+            (s) => s.id === proveedor.servicio.id
+          );
           if (servicioAsociado && servicioAsociado.nombre) {
-            servicioMatch = servicioAsociado.nombre.toLowerCase().includes(texto);
+            servicioMatch = servicioAsociado.nombre
+              .toLowerCase()
+              .includes(texto);
           }
         }
         return nombreMatch || apellidoMatch || emailMatch || servicioMatch;
@@ -99,12 +101,19 @@ export class ProveedoresComponent implements OnInit {
 
   addProveedor(): void {
     this.modalModo = 'add';
-    this.modalProveedor = { // Initialize with all required fields for a new Proveedor
+    this.modalProveedor = {
       nombre: '',
       apellido: '',
+      nombreUsuario: '',
       email: '',
       telefono: '',
-      servicio: { id: null }
+      telefonoMovil: '',
+      domicilio: '',
+      ciudad: '',
+      estado: '',
+      codigoPostal: '',
+      notas: '',
+      servicio: { id: null },
     };
     this.modalVisible = true;
   }
@@ -112,10 +121,9 @@ export class ProveedoresComponent implements OnInit {
   editProveedor(): void {
     if (this.proveedorSeleccionado) {
       this.modalModo = 'edit';
-      // Ensure all properties, including 'servicio', are correctly copied
       this.modalProveedor = {
         ...this.proveedorSeleccionado,
-        servicio: { ...this.proveedorSeleccionado.servicio } // Deep copy servicio object
+        servicio: { ...this.proveedorSeleccionado.servicio },
       };
       this.modalVisible = true;
     }
@@ -130,69 +138,85 @@ export class ProveedoresComponent implements OnInit {
   }
 
   guardarModal(proveedorDesdeModal: Proveedor): void {
-    this.proveedoresService.gestionarProveedor(this.modalModo, proveedorDesdeModal).subscribe({
-      next: (resp: GestionarProveedorResponse) => {
-        this.proveedores = resp.proveedores;
-        this.proveedoresFiltrados = resp.proveedores;
+    this.proveedoresService
+      .gestionarProveedor(this.modalModo, proveedorDesdeModal)
+      .subscribe({
+        next: (resp: GestionarProveedorResponse) => {
+          this.proveedores = resp.proveedores;
+          this.proveedoresFiltrados = resp.proveedores;
 
-        let proveedorParaSeleccionar: Proveedor | null = null;
-        // If backend returns the specific added/edited proveedor, find it in the updated list
-        if (resp.proveedor && resp.proveedor.id) {
-          proveedorParaSeleccionar = resp.proveedores.find(p => p.id === resp.proveedor!.id) || null;
-        } else if (this.modalModo === 'edit' && proveedorDesdeModal.id) {
-          // Fallback for edit if resp.proveedor is not returned but we have the ID from modal
-          proveedorParaSeleccionar = resp.proveedores.find(p => p.id === proveedorDesdeModal.id) || null;
-        } else if (this.modalModo === 'add') {
-            // Attempt to find the newly added provider by unique fields if not returned directly
-            // This part might need adjustment based on how unique new providers are before an ID is assigned by backend
-            const addedProvider = resp.proveedores.find(p =>
+          let proveedorParaSeleccionar: Proveedor | null = null;
+          if (resp.proveedor && resp.proveedor.id) {
+            proveedorParaSeleccionar =
+              resp.proveedores.find((p) => p.id === resp.proveedor!.id) || null;
+          } else if (this.modalModo === 'edit' && proveedorDesdeModal.id) {
+            proveedorParaSeleccionar =
+              resp.proveedores.find((p) => p.id === proveedorDesdeModal.id) ||
+              null;
+          } else if (this.modalModo === 'add') {
+            const addedProvider = resp.proveedores.find(
+              (p) =>
                 p.email === proveedorDesdeModal.email &&
                 p.nombre === proveedorDesdeModal.nombre &&
                 p.apellido === proveedorDesdeModal.apellido
             );
-            if(addedProvider) proveedorParaSeleccionar = addedProvider;
-        }
+            if (addedProvider) proveedorParaSeleccionar = addedProvider;
+          }
 
-
-        if (proveedorParaSeleccionar) {
-          this.proveedorSeleccionado = proveedorParaSeleccionar;
-        } else if (resp.proveedores.length > 0) {
-          // Default to first item if no specific one found
-          this.proveedorSeleccionado = resp.proveedores[0];
-        } else {
-          this.proveedorSeleccionado = null;
-        }
-        this.cerrarModal();
-      },
-      error: (err) => {
-        console.error(`Error al ${this.modalModo} proveedor:`, err);
-        this.cerrarModal();
-      }
-    });
+          if (proveedorParaSeleccionar) {
+            this.proveedorSeleccionado = proveedorParaSeleccionar;
+          } else if (resp.proveedores.length > 0) {
+            this.proveedorSeleccionado = resp.proveedores[0];
+          } else {
+            this.proveedorSeleccionado = null;
+          }
+          this.cerrarModal();
+        },
+        error: (err) => {
+          console.error(`Error al ${this.modalModo} proveedor:`, err);
+          this.cerrarModal();
+        },
+      });
   }
 
   eliminarModal(): void {
     if (this.modalProveedor.id) {
-      this.proveedoresService.gestionarProveedor('delete', this.modalProveedor as Proveedor).subscribe({
-        next: (resp: GestionarProveedorResponse) => { // Response might not include 'proveedor' for delete
-          this.proveedores = resp.proveedores;
-          this.proveedoresFiltrados = resp.proveedores;
-          this.proveedorSeleccionado = this.proveedores.length > 0 ? this.proveedores[0] : null;
-          this.cerrarModal();
-        },
-        error: (err) => {
-          console.error('Error al eliminar proveedor:', err);
-          this.cerrarModal();
-        }
-      });
+      this.proveedoresService
+        .gestionarProveedor('delete', this.modalProveedor as Proveedor)
+        .subscribe({
+          next: (resp: GestionarProveedorResponse) => {
+            this.proveedores = resp.proveedores;
+            this.proveedoresFiltrados = resp.proveedores;
+            this.proveedorSeleccionado =
+              this.proveedores.length > 0 ? this.proveedores[0] : null;
+            this.cerrarModal();
+          },
+          error: (err) => {
+            console.error('Error al eliminar proveedor:', err);
+            this.cerrarModal();
+          },
+        });
     } else {
-        console.error('No se puede eliminar proveedor sin ID.');
-        this.cerrarModal();
+      console.error('No se puede eliminar proveedor sin ID.');
+      this.cerrarModal();
     }
   }
 
   cerrarModal(): void {
     this.modalVisible = false;
-    this.modalProveedor = { servicio: { id: null } }; // Reset for next time
+    this.modalProveedor = { servicio: { id: null } };
+  }
+  getServicioAsignado(): Servicio | null {
+    if (!this.proveedorSeleccionado?.servicio?.id) return null;
+    return (
+      this.servicios.find(
+        (s) => s.id === this.proveedorSeleccionado!.servicio.id
+      ) || null
+    );
+  }
+
+  getColorServicioAsignado(): string {
+    const servicio = this.getServicioAsignado();
+    return servicio?.color || '#439b84';
   }
 }

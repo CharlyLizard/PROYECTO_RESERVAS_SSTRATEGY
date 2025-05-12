@@ -20,7 +20,7 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Proveedor> getAllProveedores() {
         return proveedorService.getAllProveedores();
     }

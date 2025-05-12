@@ -52,6 +52,21 @@ public class ProveedorService {
                 Long servicioId = Long.valueOf(proveedorMap.get("servicioId").toString());
                 Servicio servicio = servicioRepository.findById(servicioId).orElse(null);
                 proveedor.setServicio(servicio);
+            } else if (proveedorMap.get("servicio") != null) {
+                Object servicioObj = proveedorMap.get("servicio");
+                Long servicioId = null;
+                if (servicioObj instanceof Map) {
+                    Map<?, ?> servicioMap = (Map<?, ?>) servicioObj;
+                    if (servicioMap.get("id") != null) {
+                        servicioId = Long.valueOf(servicioMap.get("id").toString());
+                    }
+                } else if (servicioObj instanceof Integer || servicioObj instanceof Long) {
+                    servicioId = Long.valueOf(servicioObj.toString());
+                }
+                if (servicioId != null) {
+                    Servicio servicio = servicioRepository.findById(servicioId).orElse(null);
+                    proveedor.setServicio(servicio);
+                }
             }
         }
 

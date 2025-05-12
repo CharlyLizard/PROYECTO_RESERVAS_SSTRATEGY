@@ -13,15 +13,29 @@
       />
     </mat-form-field>
 
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="addProveedor()">
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+      (click)="addProveedor()"
+    >
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!proveedorSeleccionado" (click)="editProveedor()">
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+      [disabled]="!proveedorSeleccionado"
+      (click)="editProveedor()"
+    >
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!proveedorSeleccionado" (click)="deleteProveedor()">
+    <button
+      mat-raised-button
+      class="bg-green-600 text-white hover:bg-green-700"
+      [disabled]="!proveedorSeleccionado"
+      (click)="deleteProveedor()"
+    >
       <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
@@ -38,45 +52,122 @@
           [class.border-green-500]="proveedorSeleccionado?.id === proveedor.id"
           (click)="selectProveedor(proveedor)"
         >
-          <h3 class="font-medium text-gray-800">{{ proveedor.nombre }} {{ proveedor.apellido }}</h3>
+          <h3 class="font-medium text-gray-800">
+            {{ proveedor.nombre }} {{ proveedor.apellido }}
+          </h3>
           <p class="text-sm text-gray-600">{{ proveedor.email }}</p>
         </div>
-        <div *ngIf="proveedoresFiltrados.length === 0" class="p-4 text-gray-500 text-center">
+        <div
+          *ngIf="proveedoresFiltrados.length === 0"
+          class="p-4 text-gray-500 text-center"
+        >
           No se encontraron proveedores.
         </div>
       </div>
     </div>
 
-    <div class="col-span-9" *ngIf="proveedorSeleccionado; else noSelection">
-      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
-      <div class="bg-white rounded-lg shadow p-6 space-y-4">
-        <div>
-          <label class="text-gray-500 text-sm font-medium">Nombre</label>
-          <input
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedorSeleccionado.nombre"
-            readonly
-          />
-        </div>
-        <div>
-          <label class="text-gray-500 text-sm font-medium">Servicio Asociado</label>
-          <select
-            class="border rounded px-2 py-1 w-full"
-            [(ngModel)]="proveedorSeleccionado.servicio.id"
-            [disabled]="true"
-          >
-            <option *ngFor="let servicio of servicios" [value]="servicio.id">
-              {{ servicio.nombre }}
-            </option>
-          </select>
+    <ng-container *ngIf="proveedorSeleccionado; else noSelection">
+      <div class="col-span-6">
+        <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+        <div class="bg-white rounded-lg shadow p-6 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Nombre</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.nombre" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Apellido</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.apellido" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Nombre de usuario</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.nombreUsuario" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Correo Electrónico</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.email" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Teléfono</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.telefono" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Teléfono móvil</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.telefonoMovil" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Domicilio</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.domicilio" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Ciudad</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.ciudad" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Estado</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.estado" readonly />
+          </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Código postal</label>
+            <input class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedorSeleccionado.codigoPostal" readonly />
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-gray-500 text-sm font-medium">Notas</label>
+            <textarea class="border rounded px-2 py-1 w-full" rows="2" [(ngModel)]="proveedorSeleccionado.notas" readonly></textarea>
+          </div>
         </div>
       </div>
+
+      <div class="col-span-3 flex flex-col">
+  <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIO ASIGNADO</h2>
+  <ng-container *ngIf="getServicioAsignado(); else noServicio">
+    <div
+      class="rounded-lg border border-green-400 bg-white p-4 mb-4"
+      [ngStyle]="{
+        'box-shadow': '0 1px 2px 0 rgba(60, 180, 80, 0.05)',
+        'border-color': getColorServicioAsignado()
+      }"
+    >
+      <span class="font-semibold text-green-700 text-base block mb-1">
+        {{ getServicioAsignado()?.nombre || 'Sin servicio' }}
+      </span>
+      <span class="text-gray-700 text-sm block mb-1">
+        <strong>Duración:</strong> {{ getServicioAsignado()?.duracionMinutos }} min
+      </span>
+      <span class="text-gray-700 text-sm block mb-1">
+        <strong>Precio:</strong> {{ getServicioAsignado()?.precio | currency:getServicioAsignado()?.moneda }}
+      </span>
+      <span class="text-gray-700 text-sm block mb-1">
+        <strong>Categoría:</strong> {{ getServicioAsignado()?.categoriaNombre || '-' }}
+      </span>
+      <span class="text-gray-700 text-sm block">
+        <strong>Descripción:</strong> {{ getServicioAsignado()?.descripcion || '-' }}
+      </span>
     </div>
+  </ng-container>
+  <ng-template #noServicio>
+    <div class="rounded-lg border border-gray-200 bg-white p-4 text-gray-500 text-center">
+      Sin servicio asignado
+    </div>
+  </ng-template>
+</div>
+    </ng-container>
 
     <ng-template #noSelection>
-      <p class="text-gray-500 text-center col-span-9">
-        Selecciona un proveedor para ver los detalles.
-      </p>
+      <div class="col-span-9">
+        <p class="text-gray-500 text-center">
+          Selecciona un proveedor para ver los detalles.
+        </p>
+      </div>
     </ng-template>
   </div>
 </div>
+
+<app-modal-proveedores
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [proveedor]="modalProveedor"
+  [servicios]="servicios"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-proveedores>
