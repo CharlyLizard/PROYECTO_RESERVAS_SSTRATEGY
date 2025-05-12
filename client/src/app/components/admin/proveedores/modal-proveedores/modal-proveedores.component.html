@@ -1,0 +1,87 @@
+<div *ngIf="visible" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+    <h2 class="text-lg font-bold mb-4">
+      {{ modo === 'add' ? 'Agregar Proveedor' : (modo === 'edit' ? 'Editar Proveedor' : 'Eliminar Proveedor') }}
+    </h2>
+
+    <!-- Form for Add/Edit Modes -->
+    <form *ngIf="modo === 'add' || modo === 'edit'" (ngSubmit)="onSave()" autocomplete="off">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Nombre *</label>
+          <input
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedor.nombre"
+            name="nombre"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Apellido *</label>
+          <input
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedor.apellido"
+            name="apellido"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Correo Electrónico *</label>
+          <input
+            type="email"
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedor.email"
+            name="email"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Teléfono</label>
+          <input
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedor.telefono"
+            name="telefono"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Servicio Asociado *</label>
+          <select
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedor.servicio.id"
+            name="servicioId"
+            required
+          >
+            <option [ngValue]="null">Seleccione un servicio</option>
+            <option *ngFor="let servicio of servicios" [ngValue]="servicio.id">
+              {{ servicio.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button type="button" class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">
+          Cancelar
+        </button>
+        <button type="submit" class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
+          {{ modo === 'add' ? 'Agregar' : 'Guardar Cambios' }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Confirmation for Delete Mode -->
+    <div *ngIf="modo === 'delete'">
+      <p class="mb-6">
+        ¿Seguro que deseas eliminar al proveedor <b>{{ proveedor.nombre }} {{ proveedor.apellido }}</b>? Esta acción no se puede deshacer.
+      </p>
+      <div class="flex justify-end gap-2">
+        <button class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">
+          Cancelar
+        </button>
+        <button class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700" (click)="onDelete()">
+          Eliminar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

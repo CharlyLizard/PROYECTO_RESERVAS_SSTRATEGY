@@ -13,15 +13,15 @@
       />
     </mat-form-field>
 
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="addProveedor()">
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!selectedProvider">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!proveedorSeleccionado" (click)="editProveedor()">
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!selectedProvider">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!proveedorSeleccionado" (click)="deleteProveedor()">
       <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
@@ -31,84 +31,52 @@
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">PROVEEDORES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        @for (provider of proveedoresFiltrados; track provider.id) {
-          <div
-            class="p-4 border-b cursor-pointer transition-colors duration-200"
-            [class.bg-green-50]="selectedProvider?.id === provider.id"
-            [class.border-green-500]="selectedProvider?.id === provider.id"
-            (click)="selectProvider(provider)"
-          >
-            <h3 class="font-medium text-gray-800">{{provider.name}} {{provider.lastName}}</h3>
-            <p class="text-sm text-gray-600">{{provider.email}}, {{provider.phone}}</p>
-          </div>
-        } @empty {
-          <div class="p-4 text-gray-500 text-center">
-            No se encontraron proveedores.
-          </div>
-        }
+        <div
+          *ngFor="let proveedor of proveedoresFiltrados"
+          class="p-4 border-b cursor-pointer transition-colors duration-200"
+          [class.bg-green-50]="proveedorSeleccionado?.id === proveedor.id"
+          [class.border-green-500]="proveedorSeleccionado?.id === proveedor.id"
+          (click)="selectProveedor(proveedor)"
+        >
+          <h3 class="font-medium text-gray-800">{{ proveedor.nombre }} {{ proveedor.apellido }}</h3>
+          <p class="text-sm text-gray-600">{{ proveedor.email }}</p>
+        </div>
+        <div *ngIf="proveedoresFiltrados.length === 0" class="p-4 text-gray-500 text-center">
+          No se encontraron proveedores.
+        </div>
       </div>
     </div>
 
-    @if (selectedProvider) {
-      <div class="col-span-5">
-        <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
-        <div class="bg-white rounded-lg shadow p-6 space-y-4">
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Nombre</h3>
-            <p class="text-gray-800">{{selectedProvider.name}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Apellido</h3>
-            <p class="text-gray-800">{{selectedProvider.lastName}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Dirección de E-mail</h3>
-            <p class="text-gray-800">{{selectedProvider.email}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Número de teléfono</h3>
-            <p class="text-gray-800">{{selectedProvider.phone}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Domicilio</h3>
-            <p class="text-gray-800">{{selectedProvider.address}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Ciudad</h3>
-            <p class="text-gray-800">{{selectedProvider.city}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Código postal</h3>
-            <p class="text-gray-800">{{selectedProvider.postalCode}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Notas</h3>
-            <p class="text-gray-800">{{selectedProvider.notes || '-'}}</p>
-          </div>
+    <div class="col-span-9" *ngIf="proveedorSeleccionado; else noSelection">
+      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+      <div class="bg-white rounded-lg shadow p-6 space-y-4">
+        <div>
+          <label class="text-gray-500 text-sm font-medium">Nombre</label>
+          <input
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedorSeleccionado.nombre"
+            readonly
+          />
+        </div>
+        <div>
+          <label class="text-gray-500 text-sm font-medium">Servicio Asociado</label>
+          <select
+            class="border rounded px-2 py-1 w-full"
+            [(ngModel)]="proveedorSeleccionado.servicio.id"
+            [disabled]="true"
+          >
+            <option *ngFor="let servicio of servicios" [value]="servicio.id">
+              {{ servicio.nombre }}
+            </option>
+          </select>
         </div>
       </div>
+    </div>
 
-      <div class="col-span-4">
-        <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIOS</h2>
-        <div class="bg-white rounded-lg shadow p-6">
-          @for (service of selectedProvider.services; track service.name) {
-            <div class="mb-4 p-3 border rounded-lg hover:border-green-500 transition-colors duration-200">
-              <div class="text-green-600 font-medium">{{service.name}}</div>
-              <div class="text-sm text-gray-600">
-                {{service.description}}
-              </div>
-            </div>
-          } @empty {
-            <div class="p-4 text-gray-500 text-center">
-              No hay servicios disponibles.
-            </div>
-          }
-        </div>
-      </div>
-    } @else {
+    <ng-template #noSelection>
       <p class="text-gray-500 text-center col-span-9">
         Selecciona un proveedor para ver los detalles.
       </p>
-    }
+    </ng-template>
   </div>
 </div>
