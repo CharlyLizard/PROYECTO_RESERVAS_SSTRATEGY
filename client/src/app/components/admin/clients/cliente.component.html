@@ -109,3 +109,12 @@
         </div>
       </ng-template>
     </div>
+<!-- Modal para agregar, editar o eliminar clientes -->
+<app-modal-cliente
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [cliente]="modalCliente"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-cliente>
