@@ -1,21 +1,26 @@
 package app.reservas.backend.service;
 
+import app.reservas.backend.entity.Proveedor;
 import app.reservas.backend.entity.Secretario;
+import app.reservas.backend.repository.ProveedorRepository;
 import app.reservas.backend.repository.SecretarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class SecretarioService {
 
     private final SecretarioRepository secretarioRepository;
-
+    private final ProveedorRepository proveedorRepository;
     @Autowired
-    public SecretarioService(SecretarioRepository secretarioRepository) {
+    public SecretarioService(SecretarioRepository secretarioRepository, ProveedorRepository proveedorRepository) {
         this.secretarioRepository = secretarioRepository;
+        this.proveedorRepository = proveedorRepository;
     }
 
     public List<Secretario> getAllSecretarios() {
@@ -67,5 +72,40 @@ public class SecretarioService {
 
         List<Secretario> secretarios = secretarioRepository.findAll();
         return Map.of("secretarios", secretarios);
+    }
+
+    @Transactional
+    public Secretario asignarProveedorASecretario(Long secretarioId, Long proveedorId) {
+        Secretario secretario = secretarioRepository.findById(secretarioId)
+                .orElseThrow(() -> new RuntimeException("Secretario no encontrado con ID: " + secretarioId));
+
+        if (proveedorId == null) {
+            secretario.setProveedor(null);
+        } else {
+            Proveedor proveedor = proveedorRepository.findById(proveedorId)
+                    .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con ID: " + proveedorId));
+            
+            // Opcional: Si un proveedor solo puede tener un secretario, desasigna al anterior.
+            // Esta lógica asume que al asignar un secretario X a un proveedor P, si P ya tenía un secretario Y, Y queda libre.
+            Optional<Secretario> secretarioAnteriorOpt = secretarioRepository.findByProveedor_Id(proveedorId);
+            if(secretarioAnteriorOpt.isPresent()){
+                Secretario secretarioAnterior = secretarioAnteriorOpt.get();
+                if(!secretarioAnterior.getId().equals(secretarioId)){ // Si no es el mismo secretario
+                    secretarioAnterior.setProveedor(null);
+                    secretarioRepository.save(secretarioAnterior);
+                }
+            }
+            secretario.setProveedor(proveedor);
+        }
+        return secretarioRepository.save(secretario);
+    }
+
+    public List<Secretario> getSecretariosDisponiblesParaProveedorDropdown(Long proveedorIdActual) {
+        // Para el dropdown, queremos los no asignados + el que ya podría estar asignado a este proveedor
+        if (proveedorIdActual == null) { // Modo añadir proveedor
+            return secretarioRepository.findByProveedorIsNull();
+        }
+        // Modo editar proveedor
+        return secretarioRepository.findByProveedor_IdOrProveedorIsNull(proveedorIdActual);
     }
 }

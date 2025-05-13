@@ -29,4 +29,17 @@ public class SecretarioController {
     public ResponseEntity<?> gestionarSecretario(@RequestBody Map<String, Object> payload) {
         return ResponseEntity.ok(secretarioService.gestionarSecretario(payload));
     }
+    
+    @PutMapping("/{secretarioId}/asignar-proveedor")
+    public ResponseEntity<Secretario> asignarProveedor(
+            @PathVariable Long secretarioId,
+            @RequestParam(required = false) Long proveedorId) { // proveedorId puede ser null para desasignar
+        return ResponseEntity.ok(secretarioService.asignarProveedorASecretario(secretarioId, proveedorId));
+    }
+
+    // Endpoint para obtener la lista de secretarios para el dropdown del modal de proveedores
+    @GetMapping("/disponibles-para-dropdown")
+    public ResponseEntity<List<Secretario>> getSecretariosParaDropdownProveedores(@RequestParam(required = false) Long proveedorIdActual) {
+        return ResponseEntity.ok(secretarioService.getSecretariosDisponiblesParaProveedorDropdown(proveedorIdActual));
+    }
 }

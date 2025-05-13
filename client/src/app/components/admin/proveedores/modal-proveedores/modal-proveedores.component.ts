@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { Proveedor } from '../../../../models/proveedor/proveedor.model';
 import { Servicio } from '../../../../models/servicios/servicio';
+import { Secretario } from '../../../../models/secretario/secretario.model';
 
 @Component({
   selector: 'app-modal-proveedores',
@@ -15,90 +16,54 @@ export class ModalProveedoresComponent {
   @Input() visible = false;
   @Input() modo: 'add' | 'edit' | 'delete' = 'add';
   @Input() servicios: Servicio[] = [];
-
-  private _proveedorData: Partial<Proveedor> = {
-    id: undefined,
-    nombre: '',
-    apellido: '',
-    nombreUsuario: '',
-    email: '',
-    telefono: '',
-    telefonoMovil: '',
-    domicilio: '',
-    ciudad: '',
-    estado: '',
-    codigoPostal: '',
-    notas: '',
-    servicio: { id: null }
-  };
-
-  @Input()
-  set proveedor(value: Partial<Proveedor> | undefined) {
-    if (value) {
-      this._proveedorData = {
-        id: value.id,
-        nombre: value.nombre || '',
-        apellido: value.apellido || '',
-        nombreUsuario: value.nombreUsuario || '',
-        email: value.email || '',
-        telefono: value.telefono || '',
-        telefonoMovil: value.telefonoMovil || '',
-        domicilio: value.domicilio || '',
-        ciudad: value.ciudad || '',
-        estado: value.estado || '',
-        codigoPostal: value.codigoPostal || '',
-        notas: value.notas || '',
-        servicio: (value.servicio && value.servicio.id !== undefined)
-          ? { id: value.servicio.id }
-          : { id: null }
-      };
-    } else {
-      this._proveedorData = {
-        id: undefined,
-        nombre: '',
-        apellido: '',
-        nombreUsuario: '',
-        email: '',
-        telefono: '',
-        telefonoMovil: '',
-        domicilio: '',
-        ciudad: '',
-        estado: '',
-        codigoPostal: '',
-        notas: '',
-        servicio: { id: null }
-      };
-    }
-  }
-
-  get proveedor(): Partial<Proveedor> {
-    return this._proveedorData;
-  }
+  @Input() todosLosSecretarios: Secretario[] = [];
+  @Input() secretariosDisponiblesParaDropdown: Secretario[] = [];
+  @Input() proveedor: Partial<Proveedor> = this.getEmptyProveedor();
 
   @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<Proveedor>();
+  @Output() save = new EventEmitter<{ proveedorData: Proveedor, secretarioIdSeleccionado: number | null, secretarioIdOriginal: number | null }>();
   @Output() delete = new EventEmitter<void>();
+
+  secretarioIdSeleccionadoEnModal: number | null = null;
+  secretarioIdOriginalAsignado: number | null = null;
+
+  ngOnChanges(): void {
+    if (this.modo === 'edit' && this.proveedor && this.todosLosSecretarios.length > 0) {
+      const secretarioAsignado = this.todosLosSecretarios.find(s => s.proveedor?.id === this.proveedor.id);
+      this.secretarioIdSeleccionadoEnModal = secretarioAsignado ? secretarioAsignado.id : null;
+      this.secretarioIdOriginalAsignado = this.secretarioIdSeleccionadoEnModal;
+    } else if (this.modo === 'add') {
+      this.secretarioIdSeleccionadoEnModal = null;
+      this.secretarioIdOriginalAsignado = null;
+    }
+    // Asegura estructura
+    if (!this.proveedor.servicio) this.proveedor.servicio = { id: null };
+  }
+
+  getEmptyProveedor(): Partial<Proveedor> {
+    return {
+      id: undefined, nombre: '', apellido: '', nombreUsuario: '', email: '',
+      telefono: '', telefonoMovil: '', domicilio: '', ciudad: '', estado: '',
+      codigoPostal: '', notas: '', servicio: { id: null },
+    };
+  }
 
   onSave(): void {
     if (this.validarFormulario()) {
-      this.save.emit(this._proveedorData as Proveedor);
+      this.save.emit({
+        proveedorData: this.proveedor as Proveedor,
+        secretarioIdSeleccionado: this.secretarioIdSeleccionadoEnModal,
+        secretarioIdOriginal: this.secretarioIdOriginalAsignado
+      });
     }
   }
 
-  onDelete(): void {
-    this.delete.emit();
-  }
-
-  onClose(): void {
-    this.close.emit();
-  }
+  onDelete(): void { this.delete.emit(); }
+  onClose(): void { this.close.emit(); }
 
   private validarFormulario(): boolean {
-    const p = this._proveedorData;
-    if (!p.nombre?.trim() ||
-        !p.apellido?.trim() ||
-        !p.email?.trim() ||
-        !p.servicio || p.servicio.id === null) {
+    const p = this.proveedor;
+    if (!p.nombre?.trim() || !p.apellido?.trim() || !p.email?.trim() || !p.servicio || p.servicio.id === null) {
       alert('Por favor complete todos los campos obligatorios: Nombre, Apellido, Correo Electrónico y Servicio.');
       return false;
     }

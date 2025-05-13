@@ -1,3 +1,4 @@
+<!-- filepath: [proveedores.component.html](http://_vscodecontentref_/3) -->
 <app-admin-header></app-admin-header>
 
 <div class="p-4">
@@ -114,42 +115,48 @@
             <label class="text-gray-500 text-sm font-medium">Notas</label>
             <textarea class="border rounded px-2 py-1 w-full" rows="2" [(ngModel)]="proveedorSeleccionado.notas" readonly></textarea>
           </div>
+          <div>
+            <label class="text-gray-500 text-sm font-medium">Secretaria Asignada</label>
+            <input class="border rounded px-2 py-1 w-full bg-gray-50"
+              [value]="getSecretariaAsignada(proveedorSeleccionado) ? (getSecretariaAsignada(proveedorSeleccionado)!.nombre + ' ' + getSecretariaAsignada(proveedorSeleccionado)!.apellido) : 'Ninguna'"
+              readonly />
+          </div>
         </div>
       </div>
 
       <div class="col-span-3 flex flex-col">
-  <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIO ASIGNADO</h2>
-  <ng-container *ngIf="getServicioAsignado(); else noServicio">
-    <div
-      class="rounded-lg border border-green-400 bg-white p-4 mb-4"
-      [ngStyle]="{
-        'box-shadow': '0 1px 2px 0 rgba(60, 180, 80, 0.05)',
-        'border-color': getColorServicioAsignado()
-      }"
-    >
-      <span class="font-semibold text-green-700 text-base block mb-1">
-        {{ getServicioAsignado()?.nombre || 'Sin servicio' }}
-      </span>
-      <span class="text-gray-700 text-sm block mb-1">
-        <strong>Duración:</strong> {{ getServicioAsignado()?.duracionMinutos }} min
-      </span>
-      <span class="text-gray-700 text-sm block mb-1">
-        <strong>Precio:</strong> {{ getServicioAsignado()?.precio | currency:getServicioAsignado()?.moneda }}
-      </span>
-      <span class="text-gray-700 text-sm block mb-1">
-        <strong>Categoría:</strong> {{ getServicioAsignado()?.categoriaNombre || '-' }}
-      </span>
-      <span class="text-gray-700 text-sm block">
-        <strong>Descripción:</strong> {{ getServicioAsignado()?.descripcion || '-' }}
-      </span>
-    </div>
-  </ng-container>
-  <ng-template #noServicio>
-    <div class="rounded-lg border border-gray-200 bg-white p-4 text-gray-500 text-center">
-      Sin servicio asignado
-    </div>
-  </ng-template>
-</div>
+        <h2 class="text-lg font-medium mb-4 text-gray-700">SERVICIO ASIGNADO</h2>
+        <ng-container *ngIf="getServicioAsignado(); else noServicio">
+          <div
+            class="rounded-lg border border-green-400 bg-white p-4 mb-4"
+            [ngStyle]="{
+              'box-shadow': '0 1px 2px 0 rgba(60, 180, 80, 0.05)',
+              'border-color': getColorServicioAsignado()
+            }"
+          >
+            <span class="font-semibold text-green-700 text-base block mb-1">
+              {{ getServicioAsignado()?.nombre || 'Sin servicio' }}
+            </span>
+            <span class="text-gray-700 text-sm block mb-1">
+              <strong>Duración:</strong> {{ getServicioAsignado()?.duracionMinutos }} min
+            </span>
+            <span class="text-gray-700 text-sm block mb-1">
+              <strong>Precio:</strong> {{ getServicioAsignado()?.precio | currency:getServicioAsignado()?.moneda }}
+            </span>
+            <span class="text-gray-700 text-sm block mb-1">
+              <strong>Categoría:</strong> {{ getServicioAsignado()?.categoriaNombre || '-' }}
+            </span>
+            <span class="text-gray-700 text-sm block">
+              <strong>Descripción:</strong> {{ getServicioAsignado()?.descripcion || '-' }}
+            </span>
+          </div>
+        </ng-container>
+        <ng-template #noServicio>
+          <div class="rounded-lg border border-gray-200 bg-white p-4 text-gray-500 text-center">
+            Sin servicio asignado
+          </div>
+        </ng-template>
+      </div>
     </ng-container>
 
     <ng-template #noSelection>
@@ -167,6 +174,8 @@
   [modo]="modalModo"
   [proveedor]="modalProveedor"
   [servicios]="servicios"
+  [todosLosSecretarios]="secretarios"
+  [secretariosDisponiblesParaDropdown]="secretariosDisponiblesParaModal"
   (close)="cerrarModal()"
   (save)="guardarModal($event)"
   (delete)="eliminarModal()"

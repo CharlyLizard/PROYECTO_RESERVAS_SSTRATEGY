@@ -4,7 +4,6 @@
       {{ modo === 'add' ? 'Agregar Proveedor' : (modo === 'edit' ? 'Editar Proveedor' : 'Eliminar Proveedor') }}
     </h2>
 
-    <!-- Form for Add/Edit Modes -->
     <form *ngIf="modo === 'add' || modo === 'edit'" (ngSubmit)="onSave()" autocomplete="off">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -51,38 +50,40 @@
           <label class="block text-gray-700 font-medium mb-1">Notas</label>
           <textarea class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.notas" name="notas" rows="2"></textarea>
         </div>
-        <div class="md:col-span-2">
+        <div class="md:col-span-2" *ngIf="proveedor.servicio">
           <label class="block text-gray-700 font-medium mb-1">Servicio Asociado *</label>
-          <select class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.servicio" name="servicio" required>
+          <select class="border rounded px-2 py-1 w-full" [(ngModel)]="proveedor.servicio.id" name="servicioId" required>
             <option [ngValue]="null">Seleccione un servicio</option>
             <option *ngFor="let servicio of servicios" [ngValue]="servicio.id">
               {{ servicio.nombre }}
             </option>
           </select>
         </div>
+        <div class="md:col-span-2">
+          <label class="block text-gray-700 font-medium mb-1">Secretaria Asignada</label>
+          <select class="border rounded px-2 py-1 w-full" [(ngModel)]="secretarioIdSeleccionadoEnModal" name="secretarioIdSeleccionadoEnModal">
+            <option [ngValue]="null">Sin asignar</option>
+            <option *ngFor="let secretario of secretariosDisponiblesParaDropdown" [ngValue]="secretario.id">
+              {{ secretario.nombre }} {{ secretario.apellido }}
+            </option>
+          </select>
+        </div>
       </div>
       <div class="flex justify-end gap-2 mt-6">
-        <button type="button" class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">
-          Cancelar
-        </button>
+        <button type="button" class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">Cancelar</button>
         <button type="submit" class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
           {{ modo === 'add' ? 'Agregar' : 'Guardar Cambios' }}
         </button>
       </div>
     </form>
 
-    <!-- Confirmation for Delete Mode -->
     <div *ngIf="modo === 'delete'">
       <p class="mb-6">
         ¿Seguro que deseas eliminar al proveedor <b>{{ proveedor.nombre }} {{ proveedor.apellido }}</b>? Esta acción no se puede deshacer.
       </p>
       <div class="flex justify-end gap-2">
-        <button class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">
-          Cancelar
-        </button>
-        <button class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700" (click)="onDelete()">
-          Eliminar
-        </button>
+        <button class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">Cancelar</button>
+        <button class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700" (click)="onDelete()">Eliminar</button>
       </div>
     </div>
   </div>
