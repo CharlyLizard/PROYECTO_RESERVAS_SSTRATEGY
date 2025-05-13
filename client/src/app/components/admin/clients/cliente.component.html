@@ -2,20 +2,27 @@
 
 <div class="p-4">
   <div class="mb-4 flex items-center space-x-2">
-      <input matInput placeholder="Buscar clientes..." class="py-1">
+    <mat-form-field class="w-60 bg-white rounded-lg" appearance="outline">
       <mat-icon matPrefix class="text-gray-500">search</mat-icon>
+      <input
+        matInput
+        placeholder="Buscar clientes..."
+        class="py-1"
+        [(ngModel)]="textoBusqueda"
+        (input)="filtrarClientes()"
+      />
+    </mat-form-field>
 
-
-      <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" (click)="abrirModalAgregar()">
       <mat-icon>add</mat-icon>
       AGREGAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!clienteSeleccionado" (click)="abrirModalEditar()">
       <mat-icon>edit</mat-icon>
       EDITAR
     </button>
-    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700">
-      <mat-icon >delete</mat-icon>
+    <button mat-raised-button class="bg-green-600 text-white hover:bg-green-700" [disabled]="!clienteSeleccionado" (click)="abrirModalEliminar()">
+      <mat-icon>delete</mat-icon>
       ELIMINAR
     </button>
   </div>
@@ -24,82 +31,62 @@
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">CLIENTES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        @for (client of clients; track client.id) {
-          <div
-            class="p-4 border-b cursor-pointer transition-colors duration-200"
-            [class.bg-green-50]="selectedClient?.id === client.id"
-            [class.border-green-500]="selectedClient?.id === client.id"
-            (click)="selectClient(client)"
-          >
-            <h3 class="font-medium text-gray-800">{{client.name}} {{client.lastName}}</h3>
-            <p class="text-sm text-gray-600">{{client.email}}</p>
-            <p class="text-sm text-gray-600">{{client.phone}}</p>
-          </div>
-        }
+        <div
+          *ngFor="let cliente of clientesFiltrados"
+          class="p-4 border-b cursor-pointer transition-colors duration-200"
+          [class.bg-green-50]="clienteSeleccionado?.id === cliente.id"
+          [class.border-green-500]="clienteSeleccionado?.id === cliente.id"
+          (click)="selectCliente(cliente)"
+        >
+          <h3 class="font-medium text-gray-800">{{ cliente.name }}</h3>
+          <p class="text-sm text-gray-600">{{ cliente.email }}</p>
+        </div>
       </div>
     </div>
 
-    @if (selectedClient) {
-      <div class="col-span-5">
-        <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
-        <div class="bg-white rounded-lg shadow p-6 space-y-4">
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Nombre</h3>
-            <p class="text-gray-800">{{selectedClient.name}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Apellido</h3>
-            <p class="text-gray-800">{{selectedClient.lastName}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Dirección de E-mail</h3>
-            <p class="text-gray-800">{{selectedClient.email}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Número de teléfono</h3>
-            <p class="text-gray-800">{{selectedClient.phone}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Domicilio</h3>
-            <p class="text-gray-800">{{selectedClient.address}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Ciudad</h3>
-            <p class="text-gray-800">{{selectedClient.city}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Código postal</h3>
-            <p class="text-gray-800">{{selectedClient.postalCode}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Idioma</h3>
-            <p class="text-gray-800">{{selectedClient.language}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Zona horaria</h3>
-            <p class="text-gray-800">{{selectedClient.timezone}}</p>
-          </div>
-          <div>
-            <h3 class="text-gray-500 text-sm font-medium">Notas</h3>
-            <p class="text-gray-800">{{selectedClient.notes || '-'}}</p>
-          </div>
+    <div class="col-span-9" *ngIf="clienteSeleccionado; else noSelection">
+      <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
+      <div class="bg-white rounded-lg shadow p-6 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Nombre</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.name }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Correo Electrónico</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.email }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Teléfono</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.phone }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Dirección</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.address || '-' }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Ciudad</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.city || '-' }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm font-medium">Código Postal</h3>
+          <p class="text-gray-800">{{ clienteSeleccionado.postalCode || '-' }}</p>
         </div>
       </div>
+    </div>
 
-      <div class="col-span-4">
-        <h2 class="text-lg font-medium mb-4 text-gray-700">CITAS</h2>
-        <div class="bg-white rounded-lg shadow p-6">
-          @for (appointment of selectedClient.appointments; track appointment.service) {
-            <div class="mb-4 p-3 border rounded-lg hover:border-green-500 transition-colors duration-200">
-              <div class="text-green-600 font-medium">{{appointment.service}}</div>
-              <div class="text-sm text-gray-600">
-                {{appointment.date}} {{appointment.time}}
-              </div>
-              <div class="text-sm text-gray-500">{{appointment.timezone}}</div>
-            </div>
-          }
-        </div>
-      </div>
-    }
+    <ng-template #noSelection>
+      <p class="text-gray-500 text-center col-span-9">
+        Selecciona un cliente para ver los detalles.
+      </p>
+    </ng-template>
   </div>
 </div>
+
+<app-modal-cliente
+  [visible]="modalVisible"
+  [modo]="modalModo"
+  [cliente]="modalCliente"
+  (close)="cerrarModal()"
+  (save)="guardarModal($event)"
+  (delete)="eliminarModal()"
+></app-modal-cliente>

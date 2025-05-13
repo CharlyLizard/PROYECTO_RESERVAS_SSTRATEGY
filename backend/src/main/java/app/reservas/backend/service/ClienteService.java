@@ -1,7 +1,7 @@
 package app.reservas.backend.service;
 
 import app.reservas.backend.entity.Client;
-import app.reservas.backend.repository.ClientRepository;
+import app.reservas.backend.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ClientService {
+public class ClienteService {
 
-    private final ClientRepository clientRepository;
+    private final ClienteRepository clienteRepository;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
     }
 
     public List<Client> getAllClientes() {
-        return clientRepository.findAll();
+        return clienteRepository.findAll();
     }
 
     public Map<String, Object> gestionarCliente(Map<String, Object> payload) {
@@ -42,21 +42,21 @@ public class ClientService {
         switch (accion) {
             case "add":
                 cliente.setId(null);
-                clientRepository.save(cliente);
+                clienteRepository.save(cliente);
                 break;
             case "edit":
-                if (cliente.getId() != null && clientRepository.existsById(cliente.getId())) {
-                    clientRepository.save(cliente);
+                if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+                    clienteRepository.save(cliente);
                 }
                 break;
             case "delete":
-                if (cliente.getId() != null && clientRepository.existsById(cliente.getId())) {
-                    clientRepository.deleteById(cliente.getId());
+                if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+                    clienteRepository.deleteById(cliente.getId());
                 }
                 break;
         }
 
-        List<Client> clientes = clientRepository.findAll();
+        List<Client> clientes = clienteRepository.findAll();
         return Map.of("clientes", clientes);
     }
 }

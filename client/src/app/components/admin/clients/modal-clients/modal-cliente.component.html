@@ -1,0 +1,52 @@
+<div *ngIf="visible" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+    <h2 class="text-lg font-bold mb-4">
+      {{ modo === 'add' ? 'Agregar Cliente' : (modo === 'edit' ? 'Editar Cliente' : 'Eliminar Cliente') }}
+    </h2>
+
+    <form *ngIf="modo === 'add' || modo === 'edit'" (ngSubmit)="onSave()" autocomplete="off">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Nombre *</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.name" name="nombre" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Correo Electrónico *</label>
+          <input type="email" class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.email" name="email" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Teléfono</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.phone" name="telefono" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Dirección</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.address" name="direccion" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Ciudad</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.city" name="ciudad" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Código Postal</label>
+          <input class="border rounded px-2 py-1 w-full" [(ngModel)]="cliente.postalCode" name="codigoPostal" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button type="button" class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">Cancelar</button>
+        <button type="submit" class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
+          {{ modo === 'add' ? 'Agregar' : 'Guardar Cambios' }}
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="modo === 'delete'">
+      <p class="mb-6">
+        ¿Seguro que deseas eliminar al cliente <b>{{ cliente.name }}</b>? Esta acción no se puede deshacer.
+      </p>
+      <div class="flex justify-end gap-2">
+        <button class="bg-gray-300 px-4 py-1 rounded hover:bg-gray-400" (click)="onClose()">Cancelar</button>
+        <button class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700" (click)="onDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

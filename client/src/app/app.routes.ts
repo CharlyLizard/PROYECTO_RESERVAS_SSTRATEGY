@@ -3,7 +3,7 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardAdminComponent } from './components/admin/dashboard/dashboard-admin.component';
 import { LoginWindowComponent } from './components/login/login-window/login-window.component';
 import { RecoveryWindowComponent } from './components/login/recovery-window/recovery-window.component';
-import { ClientsComponent } from './components/admin/clients/cliente.component';
+import { ClienteComponent } from './components/admin/clients/cliente.component';
 import { ServiciosComponent } from './components/admin/servicios/servicios.component';
 import { CategoriasComponent} from './components/admin/categorias/categorias.component';
 import { ProveedoresComponent } from './components/admin/proveedores/proveedores.component';
@@ -26,7 +26,7 @@ export const routes: Routes = [
   { path: 'admin/employees', component: DashboardAdminComponent, canActivate: [AuthGuard] },
   { path: 'admin/reports', component: DashboardAdminComponent, canActivate: [AuthGuard] },
   { path: 'admin/settings', component: DashboardAdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/clients', component: ClientsComponent, canActivate: [AuthGuard] },
+  { path: 'admin/clients', component: ClienteComponent, canActivate: [AuthGuard] },
   { path: 'admin/services', component: ServiciosComponent, canActivate: [AuthGuard] },
   { path: 'admin/categories', component: CategoriasComponent, canActivate: [AuthGuard] },
   { path: 'admin/providers', component: ProveedoresComponent, canActivate: [AuthGuard] },

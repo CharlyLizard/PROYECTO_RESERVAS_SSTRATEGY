@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import {    AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
+import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.component';
+import { ModalClienteComponent } from './modal-clients/modal-cliente.component';
+import { ClienteService } from '../../../services/api/clients.service';
+import { Cliente } from '../../../models/client/cliente.model';
 
 @Component({
   selector: 'app-cliente',
@@ -13,49 +16,89 @@ import {    AdminHeaderComponent } from '../dashboard/admin-header/admin-header.
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatTableModule,
-    AdminHeaderComponent
+    AdminHeaderComponent,
+    ModalClienteComponent
   ]
 })
-export class ClientsComponent {
-  selectedClient: any = null;
+export class ClienteComponent implements OnInit {
+  clientes: Cliente[] = [];
+  clientesFiltrados: Cliente[] = [];
+  clienteSeleccionado: Cliente | null = null;
+  textoBusqueda: string = '';
 
-  clients = [
-    {
-      id: 1,
-      name: 'Carlos',
-      lastName: 'Martin Salvatierra',
-      email: 'carlosmartinsalvatierra@gmail.com',
-      phone: '666666666',
-      address: '28006',
-      city: 'Madrid',
-      postalCode: '28006',
-      language: 'Spanish',
-      timezone: 'UTC',
-      notes: '',
-      appointments: [
-        {
-          service: 'Service - Jane Doe',
-          date: '31/03/2025',
-          time: '1:15 pm',
-          timezone: 'UTC'
-        },
-        {
-          service: 'Service - Jane Doe',
-          date: '24/04/2025',
-          time: '9:30 am',
-          timezone: 'UTC'
-        }
-      ]
-    }
-  ];
+  modalVisible = false;
+  modalModo: 'add' | 'edit' | 'delete' = 'add';
+  modalCliente: Partial<Cliente> = {};
 
-  selectClient(client: any) {
-    this.selectedClient = client;
-    console.log('Token en localStorage:', localStorage.getItem('accessToken')); // LOG 3
+  constructor(private clienteService: ClienteService) {}
+
+  ngOnInit(): void {
+    this.cargarClientes();
   }
 
+  cargarClientes(): void {
+    this.clienteService.getClientes().subscribe((clientes: Cliente[]) => {
+      this.clientes = clientes;
+      this.clientesFiltrados = clientes;
+    });
+  }
+
+  filtrarClientes(): void {
+    this.clientesFiltrados = this.clientes.filter((cliente) =>
+      cliente.name.toLowerCase().includes(this.textoBusqueda.toLowerCase())
+    );
+  }
+
+  selectCliente(cliente: Cliente): void {
+    this.clienteSeleccionado = cliente;
+  }
+
+  abrirModalAgregar(): void {
+    this.modalModo = 'add';
+    this.modalCliente = {};
+    this.modalVisible = true;
+  }
+
+  abrirModalEditar(): void {
+    if (this.clienteSeleccionado) {
+      this.modalModo = 'edit';
+      this.modalCliente = { ...this.clienteSeleccionado };
+      this.modalVisible = true;
+    }
+  }
+
+  abrirModalEliminar(): void {
+    if (this.clienteSeleccionado) {
+      this.modalModo = 'delete';
+      this.modalCliente = { ...this.clienteSeleccionado };
+      this.modalVisible = true;
+    }
+  }
+
+  cerrarModal(): void {
+    this.modalVisible = false;
+  }
+
+  guardarModal(cliente: Cliente): void {
+    this.clienteService.gestionarCliente(this.modalModo, cliente).subscribe((resp: { clientes: Cliente[] }) => {
+      this.clientes = resp.clientes;
+      this.clientesFiltrados = resp.clientes;
+      this.cerrarModal();
+    });
+  }
+
+  eliminarModal(): void {
+    if (this.modalCliente.id) {
+      this.clienteService.gestionarCliente('delete', this.modalCliente as Cliente).subscribe((resp: { clientes: Cliente[] }) => {
+        this.clientes = resp.clientes;
+        this.clientesFiltrados = resp.clientes;
+        this.clienteSeleccionado = null;
+        this.cerrarModal();
+      });
+    }
+  }
 }
