@@ -32,4 +32,9 @@ public class AppointmentController {
         AppointmentDTO savedAppointment = appointmentService.saveAppointment(appointmentDTO);
         return ResponseEntity.ok(savedAppointment);
     }
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByClientId(@PathVariable Long clientId) {
+        List<AppointmentDTO> appointments = appointmentService.getAppointmentsByClientId(clientId);
+        return ResponseEntity.ok(appointments);
+    }
 }

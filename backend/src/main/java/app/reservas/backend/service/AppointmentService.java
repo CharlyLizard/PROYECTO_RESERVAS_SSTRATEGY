@@ -36,6 +36,11 @@ public class AppointmentService {
         List<Appointment> appointments = appointmentRepository.findAll();
         return appointments.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+    // Obtener todas las citas de un cliente por su ID
+    public List<AppointmentDTO> getAppointmentsByClientId(Long clientId) {
+        List<Appointment> appointments = appointmentRepository.findByClientId(clientId);
+        return appointments.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
     // Guardar una cita desde un DTO
     public AppointmentDTO saveAppointment(AppointmentDTO appointmentDTO) {

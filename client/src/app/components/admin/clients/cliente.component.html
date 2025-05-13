@@ -28,6 +28,7 @@
   </div>
 
   <div class="grid grid-cols-12 gap-6">
+    <!-- Lista de clientes -->
     <div class="col-span-3">
       <h2 class="text-lg font-medium mb-4 text-gray-700">CLIENTES</h2>
       <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -44,7 +45,8 @@
       </div>
     </div>
 
-    <div class="col-span-9" *ngIf="clienteSeleccionado; else noSelection">
+    <!-- Detalles del cliente -->
+    <div class="col-span-6" *ngIf="clienteSeleccionado; else noSelection">
       <h2 class="text-lg font-medium mb-4 text-gray-700">DETALLES</h2>
       <div class="bg-white rounded-lg shadow p-6 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -73,20 +75,37 @@
         </div>
       </div>
     </div>
-
     <ng-template #noSelection>
-      <p class="text-gray-500 text-center col-span-9">
-        Selecciona un cliente para ver los detalles.
-      </p>
+      <div class="bg-white rounded-lg shadow p-6 flex items-center justify-center h-full min-h-[200px]">
+        <span class="text-gray-400 text-lg">Selecciona un cliente para ver los detalles</span>
+      </div>
     </ng-template>
-  </div>
-</div>
 
-<app-modal-cliente
-  [visible]="modalVisible"
-  [modo]="modalModo"
-  [cliente]="modalCliente"
-  (close)="cerrarModal()"
-  (save)="guardarModal($event)"
-  (delete)="eliminarModal()"
-></app-modal-cliente>
+    <!-- Citas asignadas -->
+    <div class="col-span-3 flex flex-col">
+      <h2 class="text-lg font-medium mb-4 text-gray-700">CITAS ASIGNADAS</h2>
+      <ng-container *ngIf="citas.length > 0; else noCitas">
+        <div
+          *ngFor="let cita of citas"
+          class="rounded-lg border border-green-400 bg-white p-4 mb-4"
+        >
+          <span class="font-semibold text-green-700 text-base block mb-1">
+            Fecha: {{ cita.date | date: 'fullDate' }}
+          </span>
+          <span class="text-gray-700 text-sm block mb-1">
+            <strong>Hora:</strong> {{ cita.time }}
+          </span>
+          <span class="text-gray-700 text-sm block mb-1">
+            <strong>Zona Horaria:</strong> {{ cita.timezone }}
+          </span>
+          <span class="text-gray-700 text-sm block mb-1">
+            <strong>Notas:</strong> {{ cita.notes || '-' }}
+          </span>
+        </div>
+      </ng-container>
+      <ng-template #noCitas>
+        <div class="rounded-lg border border-gray-200 bg-white p-4 text-gray-500 text-center">
+          Sin citas asignadas
+        </div>
+      </ng-template>
+    </div>

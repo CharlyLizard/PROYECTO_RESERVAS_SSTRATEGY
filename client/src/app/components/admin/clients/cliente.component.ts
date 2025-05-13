@@ -8,6 +8,7 @@ import { AdminHeaderComponent } from '../dashboard/admin-header/admin-header.com
 import { ModalClienteComponent } from './modal-clients/modal-cliente.component';
 import { ClienteService } from '../../../services/api/clients.service';
 import { Cliente } from '../../../models/client/cliente.model';
+import { Appointment } from '../../../models/appointment/appointment.model';
 
 @Component({
   selector: 'app-cliente',
@@ -29,6 +30,9 @@ export class ClienteComponent implements OnInit {
   clientesFiltrados: Cliente[] = [];
   clienteSeleccionado: Cliente | null = null;
   textoBusqueda: string = '';
+
+  citas: Appointment[] = []; // Lista de citas del cliente seleccionado
+
 
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';
@@ -55,7 +59,14 @@ export class ClienteComponent implements OnInit {
 
   selectCliente(cliente: Cliente): void {
     this.clienteSeleccionado = cliente;
+    this.cargarCitas(cliente.id);
   }
+
+  cargarCitas(clientId: number): void {
+    this.clienteService.getAppointmentsByClientId(clientId).subscribe((citas: Appointment[]) => {
+      this.citas = citas;
+    });
+    }
 
   abrirModalAgregar(): void {
     this.modalModo = 'add';
