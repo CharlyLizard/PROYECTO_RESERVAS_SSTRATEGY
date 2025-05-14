@@ -34,28 +34,28 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:4200")); // Cambia por el origen correcto del cliente
+                    config.setAllowedOrigins(List.of("http://localhost:4200"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                     config.setAllowCredentials(true);
                     return config;
                 }))
-                .csrf(csrf -> csrf.disable()) // Deshabilitamos CSRF para APIs REST
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Permitir iframes (para H2)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API sin estado
+                .csrf(csrf -> csrf.disable()) 
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) 
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/error", "/auth/**").permitAll() // Rutas públicas
-                        .requestMatchers("/categorias/**").hasRole("ADMIN") // Solo ADMIN puede acceder a /categorias
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas protegidas para administradores
+                        .requestMatchers("/", "/error", "/auth/**").permitAll() 
+                        .requestMatchers("/categorias/**").hasRole("ADMIN") 
+                        .requestMatchers("/admin/**").hasRole("ADMIN") 
                         .requestMatchers(HttpMethod.GET, "/api/servicios/seleccionados").permitAll()                        
-                        .requestMatchers(HttpMethod.GET,"/secretario/all").permitAll() // Permitir acceso público a secretarios
-                        .requestMatchers(HttpMethod.GET,"/api/proveedores/all").permitAll() // Permitir acceso público a proveedores
-                        
-                        //.requestMatchers("/client/**").hasRole("USER") // Rutas protegidas para usuarios
-                        .anyRequest().authenticated() // Todas las demás requieren autenticación
+                        .requestMatchers(HttpMethod.GET,"/secretarios/all").permitAll() 
+                        .requestMatchers(HttpMethod.GET,"/api/proveedores/all").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/appointments").permitAll()
+
+                        .anyRequest().authenticated()
                 )
-                .authenticationProvider(authenticationProvider()) // Configurar el proveedor de autenticación
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Filtro JWT
+                .authenticationProvider(authenticationProvider()) 
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

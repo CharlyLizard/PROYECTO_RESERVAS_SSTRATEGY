@@ -21,10 +21,15 @@ public class ClientService {
     public List<Client> getAllClientes() {
         return clientRepository.findAll();
     }
-
+    
+    @SuppressWarnings("unchecked")
     public Map<String, Object> gestionarCliente(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
-        Map<String, Object> clienteMap = (Map<String, Object>) payload.get("cliente");
+        Map<String, Object> clienteMap = null;
+        Object clienteObj = payload.get("cliente");
+        if (clienteObj instanceof Map) {
+            clienteMap = (Map<String, Object>) clienteObj;
+        }
 
         Client cliente = new Client();
         if (clienteMap != null) {

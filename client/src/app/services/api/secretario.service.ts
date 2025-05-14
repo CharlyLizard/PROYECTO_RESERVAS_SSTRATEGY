@@ -7,7 +7,7 @@ import { Secretario } from '../../models/secretario/secretario.model';
   providedIn: 'root',
 })
 export class SecretarioService {
-  private apiUrl = 'http://localhost:8080/secretario';
+  private apiUrl = 'http://localhost:8080/secretarios';
 
   constructor(private http: HttpClient) {}
 

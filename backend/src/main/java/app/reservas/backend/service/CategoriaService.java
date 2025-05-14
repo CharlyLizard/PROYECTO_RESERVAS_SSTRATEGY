@@ -19,15 +19,19 @@ public class CategoriaService {
         this.categoriaServicioRepository = categoriaServicioRepository;
     }
 
-    // Obtener todas las categorías
     public List<CategoriaServicio> getAllCategorias() {
         return categoriaServicioRepository.findAll();
     }
 
-    // Gestionar categorías (add, edit, delete)
     public Map<String, Object> gestionarCategoria(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
-        Map<String, Object> categoriaMap = (Map<String, Object>) payload.get("categoria");
+        Map<String, Object> categoriaMap = null;
+        Object categoriaObj = payload.get("categoria");
+        if (categoriaObj instanceof Map<?, ?>) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> tempMap = (Map<String, Object>) categoriaObj;
+            categoriaMap = tempMap;
+        }
 
         CategoriaServicio categoria = new CategoriaServicio();
         if (categoriaMap != null) {
@@ -60,7 +64,6 @@ public class CategoriaService {
                 break;
         }
 
-        // Devuelve la lista actualizada de categorías
         List<CategoriaServicio> categorias = categoriaServicioRepository.findAll();
         return Map.of("categorias", categorias);
     }

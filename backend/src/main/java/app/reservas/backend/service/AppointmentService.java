@@ -31,18 +31,16 @@ public class AppointmentService {
         this.servicioRepository = servicioRepository;
     }
 
-    // Obtener todas las citas como DTOs
     public List<AppointmentDTO> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
         return appointments.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-    // Obtener todas las citas de un cliente por su ID
+
     public List<AppointmentDTO> getAppointmentsByClientId(Long clientId) {
         List<Appointment> appointments = appointmentRepository.findByClientId(clientId);
         return appointments.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    // Guardar una cita desde un DTO
     public AppointmentDTO saveAppointment(AppointmentDTO appointmentDTO) {
         Client client = clientRepository.findByEmail(appointmentDTO.getClient().getEmail());
         if (client == null) {
@@ -50,7 +48,6 @@ public class AppointmentService {
             client = clientRepository.save(client);
         }
 
-        // Crear la cita
         Appointment appointment = new Appointment();
         appointment.setClient(client);
         appointment.setDate(appointmentDTO.getDate());
@@ -66,7 +63,6 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    // Convertir una entidad Appointment a un DTO
     private AppointmentDTO convertToDTO(Appointment appointment) {
         AppointmentDTO dto = new AppointmentDTO();
         dto.setClient(convertToDTO(appointment.getClient()));
@@ -78,7 +74,6 @@ public class AppointmentService {
         return dto;
     }
 
-    // Convertir una entidad Client a un DTO
     private ClientDTO convertToDTO(Client client) {
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
@@ -91,7 +86,6 @@ public class AppointmentService {
         return dto;
     }
 
-    // Convertir un DTO a una entidad Client
     private Client convertToEntity(ClientDTO dto) {
         Client client = new Client();
         client.setName(dto.getName());

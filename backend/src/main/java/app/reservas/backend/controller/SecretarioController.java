@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/secretario")
+@RequestMapping("/secretarios")
 public class SecretarioController {
 
     private final SecretarioService secretarioService;
@@ -33,7 +33,7 @@ public class SecretarioController {
     @PutMapping("/{secretarioId}/asignar-proveedor")
     public ResponseEntity<Secretario> asignarProveedor(
             @PathVariable Long secretarioId,
-            @RequestParam(required = false) Long proveedorId) { // proveedorId puede ser null para desasignar
+            @RequestParam(required = false) Long proveedorId) { 
         return ResponseEntity.ok(secretarioService.asignarProveedorASecretario(secretarioId, proveedorId));
     }
 

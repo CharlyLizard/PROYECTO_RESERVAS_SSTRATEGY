@@ -3,14 +3,12 @@ package app.reservas.backend.Security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,14 +24,12 @@ Valida si el token pertenece al usuario y si está expirado.
 @RequiredArgsConstructor
 public class JwtService {
 
-    // --------------------------
     private final SecretKey SECRET_KEY = generateSecureKey();
 
     private SecretKey generateSecureKey() {
-        return Jwts.SIG.HS256.key().build(); // Genera una clave segura de 256 bits
+        return Jwts.SIG.HS256.key().build(); 
     }
 
-    // --------------------------
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -49,7 +45,7 @@ public class JwtService {
 
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet()); // Cambiamos a Set para evitar duplicados
+                .collect(Collectors.toSet());
 
         claims.put("roles", roles);
 
@@ -57,7 +53,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) 
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
@@ -80,7 +76,6 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        //return Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET_KEY));
         return SECRET_KEY;
     }
 

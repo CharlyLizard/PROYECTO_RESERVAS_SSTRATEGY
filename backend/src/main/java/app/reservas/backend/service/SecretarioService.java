@@ -26,7 +26,8 @@ public class SecretarioService {
     public List<Secretario> getAllSecretarios() {
         return secretarioRepository.findAll();
     }
-
+    
+    @SuppressWarnings("unchecked")
     public Map<String, Object> gestionarSecretario(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
         Map<String, Object> secretarioMap = (Map<String, Object>) payload.get("secretario");
@@ -85,8 +86,6 @@ public class SecretarioService {
             Proveedor proveedor = proveedorRepository.findById(proveedorId)
                     .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con ID: " + proveedorId));
             
-            // Opcional: Si un proveedor solo puede tener un secretario, desasigna al anterior.
-            // Esta lógica asume que al asignar un secretario X a un proveedor P, si P ya tenía un secretario Y, Y queda libre.
             Optional<Secretario> secretarioAnteriorOpt = secretarioRepository.findByProveedor_Id(proveedorId);
             if(secretarioAnteriorOpt.isPresent()){
                 Secretario secretarioAnterior = secretarioAnteriorOpt.get();
@@ -101,11 +100,9 @@ public class SecretarioService {
     }
 
     public List<Secretario> getSecretariosDisponiblesParaProveedorDropdown(Long proveedorIdActual) {
-        // Para el dropdown, queremos los no asignados + el que ya podría estar asignado a este proveedor
-        if (proveedorIdActual == null) { // Modo añadir proveedor
+        if (proveedorIdActual == null) {
             return secretarioRepository.findByProveedorIsNull();
         }
-        // Modo editar proveedor
         return secretarioRepository.findByProveedor_IdOrProveedorIsNull(proveedorIdActual);
     }
 }

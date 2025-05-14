@@ -12,61 +12,43 @@ import app.reservas.backend.dto.AdminDTO;
 import app.reservas.backend.dto.LoginRequest;
 import app.reservas.backend.dto.LoginResponse;
 import app.reservas.backend.entity.Admin;
-import app.reservas.backend.repository.AdminRepository;
+import app.reservas.backend.service.AdminService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AdminRepository adminRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final AdminService adminService;
 
     @Autowired
-    public AuthController(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
-        this.adminRepository = adminRepository;
+    public AuthController(JwtService jwtService, PasswordEncoder passwordEncoder,AdminService adminService) {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
+        this.adminService = adminService;
     }
 
     // ENDPOINT DE LOGUEO
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        Admin admin = adminService.getAllAdmins().stream()
+                .filter(a -> a.getNombreUsuario().equals(request.getUsername()))
+                .findFirst()
+                .orElse(null);
 
-        Admin admin = adminRepository.findByNombreUsuario(request.getUsername());
-        if (admin == null) {
+        if (admin == null || !passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
-        boolean passwordMatch = passwordEncoder.matches(request.getPassword(), admin.getPassword());
-        if (!passwordMatch) {
-            return ResponseEntity.status(401).body("Credenciales incorrectas");
-        }
 
-        // Mapear Admin a AdminDTO
-        AdminDTO dto = new AdminDTO();
-        dto.setId(admin.getId());
-        dto.setNombre(admin.getNombre());
-        dto.setApellido(admin.getApellido());
-        dto.setNombreUsuario(admin.getNombreUsuario());
-        dto.setEmail(admin.getEmail());
-        dto.setTelefono(admin.getTelefono());
-        dto.setTelefonoMovil(admin.getTelefonoMovil());
-        dto.setDomicilio(admin.getDomicilio());
-        dto.setCiudad(admin.getCiudad());
-        dto.setEstado(admin.getEstado());
-        dto.setCodigoPostal(admin.getCodigoPostal());
-        dto.setNotas(admin.getNotas());
-        dto.setCalendario(admin.getCalendario());
-        dto.setIdioma(admin.getIdioma());
-        dto.setZonaHoraria(admin.getZonaHoraria());
-        dto.setRecibirNotificaciones(admin.getRecibirNotificaciones());
+        AdminDTO dto = adminService.convertToDTO(admin);
 
         // Generar tokens usando UserDetails
         UserDetails userDetails = org.springframework.security.core.userdetails.User
-            .withUsername(admin.getNombreUsuario())
-            .password("")
-            .authorities("ROLE_ADMIN")
-            .build();
+                .withUsername(admin.getNombreUsuario())
+                .password("")
+                .authorities("ROLE_ADMIN")
+                .build();
 
         String accessToken = jwtService.generateToken(userDetails);
         String refreshToken = jwtService.generateToken(userDetails);
@@ -81,30 +63,12 @@ public class AuthController {
     }
 
     @PutMapping("/admin")
-    public ResponseEntity<?> actualizarAdmin(@RequestBody AdminDTO adminDto) {
-        Admin admin = adminRepository.findById(adminDto.getId()).orElse(null);
-        if (admin == null) {
-            return ResponseEntity.status(404).body("Administrador no encontrado");
+        public ResponseEntity<?> actualizarAdmin(@RequestBody AdminDTO adminDto) {
+            try {
+                AdminDTO updatedAdmin = adminService.actualizarAdmin(adminDto);
+                return ResponseEntity.ok(updatedAdmin);
+            } catch (RuntimeException e) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
         }
-
-        // Actualiza los campos
-        admin.setNombre(adminDto.getNombre());
-        admin.setApellido(adminDto.getApellido());
-        admin.setNombreUsuario(adminDto.getNombreUsuario());
-        admin.setEmail(adminDto.getEmail());
-        admin.setTelefono(adminDto.getTelefono());
-        admin.setTelefonoMovil(adminDto.getTelefonoMovil());
-        admin.setDomicilio(adminDto.getDomicilio());
-        admin.setCiudad(adminDto.getCiudad());
-        admin.setEstado(adminDto.getEstado());
-        admin.setCodigoPostal(adminDto.getCodigoPostal());
-        admin.setNotas(adminDto.getNotas());
-        admin.setCalendario(adminDto.getCalendario());
-        admin.setIdioma(adminDto.getIdioma());
-        admin.setZonaHoraria(adminDto.getZonaHoraria());
-        admin.setRecibirNotificaciones(adminDto.getRecibirNotificaciones());
-
-        adminRepository.save(admin);
-        return ResponseEntity.ok(adminDto);
-    }
 }

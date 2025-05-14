@@ -24,7 +24,13 @@ public class ClienteService {
 
     public Map<String, Object> gestionarCliente(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
-        Map<String, Object> clienteMap = (Map<String, Object>) payload.get("cliente");
+        Map<String, Object> clienteMap = null;
+        Object clienteObj = payload.get("cliente");
+        if (clienteObj instanceof Map<?, ?>) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> tempMap = (Map<String, Object>) clienteObj;
+            clienteMap = tempMap;
+        }
 
         Client cliente = new Client();
         if (clienteMap != null) {

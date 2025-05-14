@@ -25,7 +25,8 @@ public class ProveedorService {
     public List<Proveedor> getAllProveedores() {
         return proveedorRepository.findAll();
     }
-
+    
+    @SuppressWarnings("unchecked")
     public Map<String, Object> gestionarProveedor(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
         Map<String, Object> proveedorMap = (Map<String, Object>) payload.get("proveedor");

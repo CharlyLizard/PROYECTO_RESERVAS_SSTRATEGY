@@ -34,32 +34,34 @@ public class ServicioService {
     }
 
     public List<ServicioDTO> getAllServiciosDTO() {
-        List<Servicio> servicios = getAllServicios();
-        return servicios.stream()
-            .map(servicio -> {
-                ServicioDTO dto = new ServicioDTO();
-                dto.setId(servicio.getId());
-                dto.setNombre(servicio.getNombre());
-                dto.setDuracionMinutos(servicio.getDuracionMinutos());
-                dto.setPrecio(servicio.getPrecio());
-                dto.setMoneda(servicio.getMoneda());
-                if (servicio.getCategoria() != null) {
-                    dto.setCategoriaId(servicio.getCategoria().getId());
-                    dto.setCategoriaNombre(servicio.getCategoria().getNombre());
-                }
-                dto.setTiposDisponibles(servicio.getTiposDisponibles());
-                dto.setNumeroAsistentes(servicio.getNumeroAsistentes());
-                dto.setUbicacion(servicio.getUbicacion());
-                dto.setColor(servicio.getColor());
-                dto.setOcultarPublico(servicio.getOcultarPublico());
-                dto.setDescripcion(servicio.getDescripcion());
-                dto.setFechaCreacion(servicio.getFechaCreacion() != null ? servicio.getFechaCreacion().toString() : null);
-                dto.setIsSelected(servicio.getIsSelected());
-                return dto;
-            })
-            .collect(Collectors.toList());
+        return getAllServicios().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
+    public ServicioDTO convertToDTO(Servicio servicio) {
+        ServicioDTO dto = new ServicioDTO();
+        dto.setId(servicio.getId());
+        dto.setNombre(servicio.getNombre());
+        dto.setDuracionMinutos(servicio.getDuracionMinutos());
+        dto.setPrecio(servicio.getPrecio());
+        dto.setMoneda(servicio.getMoneda());
+        if (servicio.getCategoria() != null) {
+            dto.setCategoriaId(servicio.getCategoria().getId());
+            dto.setCategoriaNombre(servicio.getCategoria().getNombre());
+        }
+        dto.setTiposDisponibles(servicio.getTiposDisponibles());
+        dto.setNumeroAsistentes(servicio.getNumeroAsistentes());
+        dto.setUbicacion(servicio.getUbicacion());
+        dto.setColor(servicio.getColor());
+        dto.setOcultarPublico(servicio.getOcultarPublico());
+        dto.setDescripcion(servicio.getDescripcion());
+        dto.setFechaCreacion(servicio.getFechaCreacion() != null ? servicio.getFechaCreacion().toString() : null);
+        dto.setIsSelected(servicio.getIsSelected());
+        return dto;
+    }
+
+    @SuppressWarnings("unchecked")
     public Map<String, Object> gestionarServicio(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
         Map<String, Object> servicioMap = (Map<String, Object>) payload.get("servicio");
@@ -119,33 +121,34 @@ public class ServicioService {
         return Map.of("servicios", servicios);
     }
 
+    public List<ServicioDTO> seleccionarServicioPrincipal(Long servicioId) {
+        List<Servicio> serviciosActualizados = seleccionarServicioPrincipalEntity(servicioId);
+        return serviciosActualizados.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
-    public List<Servicio> seleccionarServicioPrincipal(Long servicioId) {
+    public List<Servicio> seleccionarServicioPrincipalEntity(Long servicioId) {
         Servicio servicioASeleccionar = servicioRepository.findById(servicioId)
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + servicioId));
 
-        // Si el servicio ya está seleccionado, no es necesario hacer cambios en la BD.
-        // Devolvemos la lista actual de todos los servicios.
         if (Boolean.TRUE.equals(servicioASeleccionar.getIsSelected())) {
             return servicioRepository.findAll();
         }
 
-        // Poner todos los servicios con isSelected = false
         List<Servicio> todosLosServicios = servicioRepository.findAll();
         for (Servicio s : todosLosServicios) {
             s.setIsSelected(false);
         }
 
-        // Marcar el servicio elegido como isSelected = true
-        // Es importante actualizar la instancia de la lista 'todosLosServicios'
         for (Servicio s : todosLosServicios) {
             if (s.getId().equals(servicioId)) {
                 s.setIsSelected(true);
-                break; 
+                break;
             }
         }
-        
-        // Guardar todos los cambios y devolver la lista actualizada
+
         return servicioRepository.saveAll(todosLosServicios);
     }
 }

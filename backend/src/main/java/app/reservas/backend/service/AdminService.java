@@ -1,5 +1,6 @@
 package app.reservas.backend.service;
 
+import app.reservas.backend.dto.AdminDTO;
 import app.reservas.backend.entity.Admin;
 import app.reservas.backend.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,57 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
+    public AdminDTO convertToDTO(Admin admin) {
+        AdminDTO dto = new AdminDTO();
+        dto.setId(admin.getId());
+        dto.setNombre(admin.getNombre());
+        dto.setApellido(admin.getApellido());
+        dto.setNombreUsuario(admin.getNombreUsuario());
+        dto.setEmail(admin.getEmail());
+        dto.setTelefono(admin.getTelefono());
+        dto.setTelefonoMovil(admin.getTelefonoMovil());
+        dto.setDomicilio(admin.getDomicilio());
+        dto.setCiudad(admin.getCiudad());
+        dto.setEstado(admin.getEstado());
+        dto.setCodigoPostal(admin.getCodigoPostal());
+        dto.setNotas(admin.getNotas());
+        dto.setCalendario(admin.getCalendario());
+        dto.setIdioma(admin.getIdioma());
+        dto.setZonaHoraria(admin.getZonaHoraria());
+        dto.setRecibirNotificaciones(admin.getRecibirNotificaciones());
+        return dto;
+    }
+
+    public Admin convertToEntity(AdminDTO dto) {
+        Admin admin = new Admin();
+        admin.setId(dto.getId());
+        admin.setNombre(dto.getNombre());
+        admin.setApellido(dto.getApellido());
+        admin.setNombreUsuario(dto.getNombreUsuario());
+        admin.setEmail(dto.getEmail());
+        admin.setTelefono(dto.getTelefono());
+        admin.setTelefonoMovil(dto.getTelefonoMovil());
+        admin.setDomicilio(dto.getDomicilio());
+        admin.setCiudad(dto.getCiudad());
+        admin.setEstado(dto.getEstado());
+        admin.setCodigoPostal(dto.getCodigoPostal());
+        admin.setNotas(dto.getNotas());
+        admin.setCalendario(dto.getCalendario());
+        admin.setIdioma(dto.getIdioma());
+        admin.setZonaHoraria(dto.getZonaHoraria());
+        admin.setRecibirNotificaciones(dto.getRecibirNotificaciones());
+        return admin;
+    }
+
+    @SuppressWarnings("unchecked")
     public Map<String, Object> gestionarAdmin(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
-        Map<String, Object> adminMap = (Map<String, Object>) payload.get("admin");
-
+        Map<String, Object> adminMap = null;
+        Object adminObj = payload.get("admin");
+        if (adminObj instanceof Map<?, ?>) {
+            adminMap = (Map<String, Object>) adminObj;
+        }
+            
         Admin admin = new Admin();
         if (adminMap != null) {
             if (adminMap.get("id") != null) {
@@ -52,10 +100,8 @@ public class AdminService {
             admin.setRecibirNotificaciones(adminMap.get("recibirNotificaciones") != null ? Boolean.valueOf(adminMap.get("recibirNotificaciones").toString()) : false);
 
             if (adminMap.get("password") != null && !((String) adminMap.get("password")).isEmpty()) {
-                // Si se proporciona una nueva contraseña, encriptarla
                 admin.setPassword(passwordEncoder.encode((String) adminMap.get("password")));
             } else if (admin.getId() != null) {
-                // Mantener la contraseña existente si no se proporciona una nueva
                 admin.setPassword(adminRepository.findById(admin.getId())
                         .map(Admin::getPassword)
                         .orElse(null));
@@ -81,5 +127,31 @@ public class AdminService {
 
         List<Admin> administradores = adminRepository.findAll();
         return Map.of("administradores", administradores);
+    }
+
+    public AdminDTO actualizarAdmin(AdminDTO adminDto) {
+        Admin admin = adminRepository.findById(adminDto.getId()).orElse(null);
+        if (admin == null) {
+            throw new RuntimeException("Administrador no encontrado");
+        }
+
+        admin.setNombre(adminDto.getNombre());
+        admin.setApellido(adminDto.getApellido());
+        admin.setNombreUsuario(adminDto.getNombreUsuario());
+        admin.setEmail(adminDto.getEmail());
+        admin.setTelefono(adminDto.getTelefono());
+        admin.setTelefonoMovil(adminDto.getTelefonoMovil());
+        admin.setDomicilio(adminDto.getDomicilio());
+        admin.setCiudad(adminDto.getCiudad());
+        admin.setEstado(adminDto.getEstado());
+        admin.setCodigoPostal(adminDto.getCodigoPostal());
+        admin.setNotas(adminDto.getNotas());
+        admin.setCalendario(adminDto.getCalendario());
+        admin.setIdioma(adminDto.getIdioma());
+        admin.setZonaHoraria(adminDto.getZonaHoraria());
+        admin.setRecibirNotificaciones(adminDto.getRecibirNotificaciones());
+
+        adminRepository.save(admin);
+        return convertToDTO(admin);
     }
 }
