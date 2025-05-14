@@ -13,13 +13,8 @@ export class ProveedoresService {
   constructor(private http: HttpClient) {}
 
   getProveedores(): Observable<Proveedor[]> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-    return this.http.get<Proveedor[]>(`${this.apiUrl}/all`, { headers });
+    return this.http.get<Proveedor[]>(`${this.apiUrl}/all`);
   }
-
   gestionarProveedor(accion: string, proveedor: Proveedor): Observable<GestionarProveedorResponse> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({

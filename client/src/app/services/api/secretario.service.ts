@@ -19,7 +19,7 @@ export class SecretarioService {
   }
 
   getAllSecretarios(): Observable<Secretario[]> {
-    return this.http.get<Secretario[]>(`${this.apiUrl}/all`, { headers: this.getHeaders() });
+    return this.http.get<Secretario[]>(`${this.apiUrl}/all`);
   }
 
   gestionarSecretario(

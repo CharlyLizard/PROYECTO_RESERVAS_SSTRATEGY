@@ -47,6 +47,9 @@ public class SecurityConfig {
                         .requestMatchers("/categorias/**").hasRole("ADMIN") // Solo ADMIN puede acceder a /categorias
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas protegidas para administradores
                         .requestMatchers("/api/servicios/**").permitAll()
+                        .requestMatchers("/secretario/**").permitAll() // Permitir acceso público a secretarios
+                        .requestMatchers("/api/proveedores/**").permitAll() // Permitir acceso público a proveedores
+                        
                         //.requestMatchers("/client/**").hasRole("USER") // Rutas protegidas para usuarios
                         .anyRequest().authenticated() // Todas las demás requieren autenticación
                 )
