@@ -3,6 +3,7 @@ package app.reservas.backend.Security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -46,9 +47,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "/error", "/auth/**").permitAll() // Rutas públicas
                         .requestMatchers("/categorias/**").hasRole("ADMIN") // Solo ADMIN puede acceder a /categorias
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas protegidas para administradores
-                        .requestMatchers("/api/servicios/**").permitAll()
-                        .requestMatchers("/secretario/**").permitAll() // Permitir acceso público a secretarios
-                        .requestMatchers("/api/proveedores/**").permitAll() // Permitir acceso público a proveedores
+                        .requestMatchers(HttpMethod.GET, "/api/servicios/seleccionados").permitAll()                        
+                        .requestMatchers(HttpMethod.GET,"/secretario/all").permitAll() // Permitir acceso público a secretarios
+                        .requestMatchers(HttpMethod.GET,"/api/proveedores/all").permitAll() // Permitir acceso público a proveedores
                         
                         //.requestMatchers("/client/**").hasRole("USER") // Rutas protegidas para usuarios
                         .anyRequest().authenticated() // Todas las demás requieren autenticación
