@@ -7,10 +7,12 @@ import app.reservas.backend.repository.CategoriaServicioRepository;
 import app.reservas.backend.repository.ServicioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 @Service
 public class ServicioService {
 
@@ -115,5 +117,35 @@ public class ServicioService {
         // Devuelve la lista actualizada de servicios (puedes mapear a DTO si lo prefieres)
         List<Servicio> servicios = servicioRepository.findAll();
         return Map.of("servicios", servicios);
+    }
+
+    @Transactional
+    public List<Servicio> seleccionarServicioPrincipal(Long servicioId) {
+        Servicio servicioASeleccionar = servicioRepository.findById(servicioId)
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + servicioId));
+
+        // Si el servicio ya está seleccionado, no es necesario hacer cambios en la BD.
+        // Devolvemos la lista actual de todos los servicios.
+        if (Boolean.TRUE.equals(servicioASeleccionar.getIsSelected())) {
+            return servicioRepository.findAll();
+        }
+
+        // Poner todos los servicios con isSelected = false
+        List<Servicio> todosLosServicios = servicioRepository.findAll();
+        for (Servicio s : todosLosServicios) {
+            s.setIsSelected(false);
+        }
+
+        // Marcar el servicio elegido como isSelected = true
+        // Es importante actualizar la instancia de la lista 'todosLosServicios'
+        for (Servicio s : todosLosServicios) {
+            if (s.getId().equals(servicioId)) {
+                s.setIsSelected(true);
+                break; 
+            }
+        }
+        
+        // Guardar todos los cambios y devolver la lista actualizada
+        return servicioRepository.saveAll(todosLosServicios);
     }
 }

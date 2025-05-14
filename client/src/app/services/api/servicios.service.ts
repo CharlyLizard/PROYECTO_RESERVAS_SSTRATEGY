@@ -38,4 +38,12 @@ export class ServiciosService {
       { headers }
     );
   }
+
+  seleccionarServicioPrincipal(servicioId: number): Observable<Servicio[]> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.put<Servicio[]>(`${this.apiUrl}/seleccionar-principal/${servicioId}`, {}, { headers });
+  }
 }

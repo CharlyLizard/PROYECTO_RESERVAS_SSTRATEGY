@@ -38,9 +38,13 @@
             class="p-4 border-b cursor-pointer transition-colors duration-200"
             [class.bg-green-50]="servicioSeleccionado?.id === servicio.id"
             [class.border-green-500]="servicioSeleccionado?.id === servicio.id"
+            [class.bg-yellow-100]="servicio.isSelected && servicioSeleccionado?.id !== servicio.id" 
             (click)="selectServicio(servicio)"
           >
-            <h3 class="font-medium text-gray-800">{{ servicio.nombre }}</h3>
+            <h3 class="font-medium text-gray-800">
+              {{ servicio.nombre }}
+              <mat-icon *ngIf="servicio.isSelected" class="text-yellow-500 text-sm align-middle ml-1">star</mat-icon>
+            </h3>
             <p class="text-sm text-gray-600">{{ servicio.descripcion }}</p>
           </div>
         } @empty {
@@ -94,6 +98,23 @@
           <div>
             <h3 class="text-gray-500 text-sm font-medium">Ocultar del público</h3>
             <p class="text-gray-800">{{servicioSeleccionado.ocultarPublico ? 'Sí' : 'No'}}</p>
+          </div>
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">Principal</h3>
+            <p class="text-gray-800">
+              <span *ngIf="servicioSeleccionado.isSelected" class="text-green-600 font-semibold">Sí</span>
+              <span *ngIf="!servicioSeleccionado.isSelected">No</span>
+            </p>
+          </div>
+          <div class="mt-4">
+            <button
+              mat-raised-button
+              class="bg-blue-600 text-white hover:bg-blue-700"
+              (click)="seleccionarComoPrincipal(servicioSeleccionado)"
+              [disabled]="servicioSeleccionado.isSelected">
+              <mat-icon>check_circle</mat-icon>
+              {{ servicioSeleccionado.isSelected ? 'PRINCIPAL SELECCIONADO' : 'SELECCIONAR COMO PRINCIPAL' }}
+            </button>
           </div>
         </div>
       </div>

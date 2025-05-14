@@ -142,4 +142,31 @@ export class ServiciosComponent implements OnInit {
       });
     }
   }
+
+  seleccionarComoPrincipal(servicio: Servicio): void {
+    if (servicio.isSelected) {
+      console.log('Este servicio ya es el principal.');
+      return;
+    }
+
+    this.serviciosService.seleccionarServicioPrincipal(servicio.id).subscribe({
+      next: (serviciosActualizados) => {
+        this.servicios = serviciosActualizados;
+        this.filtrarServicios(); // Actualiza la lista filtrada
+
+        // Actualiza el servicioSeleccionado si es el que se está mostrando en detalles
+        if (this.servicioSeleccionado && this.servicioSeleccionado.id === servicio.id) {
+          const updatedSelected = this.servicios.find(s => s.id === servicio.id);
+          this.servicioSeleccionado = updatedSelected ? { ...updatedSelected } : null;
+        } else if (!this.servicioSeleccionado && this.servicios.length > 0) {
+            // Si no había ninguno seleccionado, y ahora hay uno principal, puede que quieras seleccionarlo para vista detalle
+            this.servicioSeleccionado = this.servicios.find(s => s.isSelected) || this.servicios[0];
+        }
+        console.log('Servicio principal actualizado con éxito.');
+      },
+      error: (err) => {
+        console.error('Error al seleccionar servicio principal:', err);
+      }
+    });
+  }
 }

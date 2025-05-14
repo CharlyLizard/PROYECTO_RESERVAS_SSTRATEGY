@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/servicios")
@@ -41,5 +44,33 @@ public class ServicioController {
     @PostMapping("/gestionar")
     public ResponseEntity<?> gestionarServicio(@RequestBody Map<String, Object> payload) {
         return ResponseEntity.ok(servicioService.gestionarServicio(payload));
+    }
+
+    // ENDPOINT PARA SELECCIONAR UN SERVICIO COMO PRINCIPAL
+    @PutMapping("/seleccionar-principal/{id}")
+    public ResponseEntity<List<ServicioDTO>> seleccionarServicioPrincipal(@PathVariable Long id) {
+        List<Servicio> serviciosActualizados = servicioService.seleccionarServicioPrincipal(id);
+        List<ServicioDTO> dtos = serviciosActualizados.stream().map(servicio -> {
+            ServicioDTO dto = new ServicioDTO();
+            dto.setId(servicio.getId());
+            dto.setNombre(servicio.getNombre());
+            dto.setDuracionMinutos(servicio.getDuracionMinutos());
+            dto.setPrecio(servicio.getPrecio());
+            dto.setMoneda(servicio.getMoneda());
+            if (servicio.getCategoria() != null) {
+                dto.setCategoriaId(servicio.getCategoria().getId());
+                dto.setCategoriaNombre(servicio.getCategoria().getNombre());
+            }
+            dto.setTiposDisponibles(servicio.getTiposDisponibles());
+            dto.setNumeroAsistentes(servicio.getNumeroAsistentes());
+            dto.setUbicacion(servicio.getUbicacion());
+            dto.setColor(servicio.getColor());
+            dto.setOcultarPublico(servicio.getOcultarPublico());
+            dto.setDescripcion(servicio.getDescripcion());
+            dto.setFechaCreacion(servicio.getFechaCreacion() != null ? servicio.getFechaCreacion().toString() : null);
+            dto.setIsSelected(servicio.getIsSelected());
+            return dto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 }
