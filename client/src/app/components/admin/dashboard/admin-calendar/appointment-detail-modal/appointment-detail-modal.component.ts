@@ -14,11 +14,16 @@ export class AppointmentDetailModalComponent {
   @Input() appointment: any;
   @Input() visible: boolean = false;
   @Output() close = new EventEmitter<void>();
+  @Output() modify = new EventEmitter<any>(); // Emit the appointment data for modification
 
   constructor() {}
 
   closeModal(): void {
     this.close.emit();
+  }
+
+  onModify(): void {
+    this.modify.emit(this.appointment); // Emit the current appointment data
   }
 
   get clientName(): string {

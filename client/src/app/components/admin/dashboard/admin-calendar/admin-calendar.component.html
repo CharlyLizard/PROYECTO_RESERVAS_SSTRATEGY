@@ -5,5 +5,15 @@
 <app-appointment-detail-modal
   [visible]="isDetailModalVisible"
   [appointment]="selectedAppointmentForModal"
-  (close)="closeAppointmentDetailModal()">
+  (close)="closeAppointmentDetailModal()"
+  (modify)="handleModifyAppointmentRequest($event)"> <!-- Listen to modify event -->
 </app-appointment-detail-modal>
+
+<app-appointment-form-modal
+  [visible]="isAppointmentFormModalVisible"
+  [mode]="appointmentFormMode"
+  [selectedDate]="dateForNewAppointment"
+  [appointmentToEdit]="currentAppointmentToEdit"
+  (close)="closeAppointmentFormModal()"
+  (save)="guardarModalCita($event)">
+</app-appointment-form-modal>

@@ -1,0 +1,67 @@
+<!-- filepath: client/src/app/components/admin/dashboard/admin-calendar/appointment-form-modal/appointment-form-modal.component.html -->
+<div *ngIf="visible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" (click)="closeModal()">
+  <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" (click)="closeModal()" aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800 border-b pb-3">
+      {{ mode === 'add' ? 'Crear Nueva Cita' : 'Modificar Cita' }}
+    </h2>
+
+    <form #appointmentForm="ngForm" (ngSubmit)="onSubmit(appointmentForm)">
+      <div class="space-y-4">
+        <div>
+          <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Fecha *</label>
+          <input type="date" id="appointmentDate" name="appointmentDate" [(ngModel)]="formData.date" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                 [readonly]="mode === 'add' && selectedDate !== ''">
+        </div>
+
+        <div>
+          <label for="appointmentTime" class="block text-sm font-medium text-gray-700">Hora *</label>
+          <input type="time" id="appointmentTime" name="appointmentTime" [(ngModel)]="formTime" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        </div>
+
+        <div>
+          <label for="client" class="block text-sm font-medium text-gray-700">Cliente *</label>
+          <select id="client" name="client" [(ngModel)]="formData.clientId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option [ngValue]="null" disabled>Seleccione un cliente</option>
+            <option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="service" class="block text-sm font-medium text-gray-700">Servicio *</label>
+          <select id="service" name="service" [(ngModel)]="formData.serviceId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option [ngValue]="null" disabled>Seleccione un servicio</option>
+            <option *ngFor="let service of services" [value]="service.id">{{ service.nombre }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="timezone" class="block text-sm font-medium text-gray-700">Zona Horaria</label>
+          <input type="text" id="timezone" name="timezone" [(ngModel)]="formData.timezone"
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                 placeholder="Ej: Europe/Madrid">
+        </div>
+
+        <div>
+          <label for="notes" class="block text-sm font-medium text-gray-700">Notas</label>
+          <textarea id="notes" name="notes" [(ngModel)]="formData.notes" rows="3"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"></textarea>
+        </div>
+      </div>
+
+      <div class="mt-8 text-right space-x-2">
+        <button type="button" mat-stroked-button (click)="closeModal()">Cancelar</button>
+        <button type="submit" mat-flat-button color="primary" class="bg-green-600 hover:bg-green-700 text-white" [disabled]="!appointmentForm.form.valid || !formData.clientId || !formData.serviceId">
+          {{ mode === 'add' ? 'Crear Cita' : 'Guardar Cambios' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Servicio } from '../models/servicios/servicio';
-import { HttpClient } from '@angular/common/http'; // Asegúrate de que HttpClient esté importado
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Asegúrate de que HttpClient y HttpHeaders estén importados
 import { Observable } from 'rxjs'; // Asegúrate de que Observable esté importado
 
 @Injectable({
@@ -92,5 +92,25 @@ export class ReservasDataService {
 
   getAllAppointmentsWithDetails(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/details`);
+  }
+
+  createAppointment(appointment: any) {
+    return this.http.post<any>(`${this.apiUrl}/appointments`, appointment);
+  }
+
+  updateAppointment(id: number, appointment: any) {
+    return this.http.put<any>(`${this.apiUrl}/appointments/${id}`, appointment);
+  }
+
+  gestionarAppointment(accion: 'add' | 'edit' | 'delete', appointment: any): Observable<{ appointments: any[] }> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.post<{ appointments: any[] }>(
+      `${this.apiUrl}/appointments/gestionar`,
+      { accion, appointment },
+      { headers }
+    );
   }
 }

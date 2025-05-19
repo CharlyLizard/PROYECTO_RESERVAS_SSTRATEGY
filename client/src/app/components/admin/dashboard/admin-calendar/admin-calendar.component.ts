@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // Import ChangeDetectorRef
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
 import { ReservasDataService } from '../../../../services/reservas-data.service';
-import { AppointmentDetailModalComponent } from './appointment-detail-modal/appointment-detail-modal.component'; // Importa el nuevo modal
-import { CommonModule } from '@angular/common'; // Importa CommonModule
+import { AppointmentDetailModalComponent } from './appointment-detail-modal/appointment-detail-modal.component';
+import { AppointmentFormModalComponent, AppointmentFormData } from './appointment-form-modal/appointment-form-modal.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-calendar',
   templateUrl: './admin-calendar.component.html',
   styleUrls: ['./admin-calendar.component.css'],
-  standalone: true,
   imports: [
-    CommonModule, // Agrega CommonModule
+    CommonModule,
     FullCalendarModule,
-    AppointmentDetailModalComponent // Agrega el nuevo modal a los imports
+    AppointmentDetailModalComponent,
+    AppointmentFormModalComponent
   ]
 })
 export class AdminCalendarComponent implements OnInit {
@@ -31,132 +32,173 @@ export class AdminCalendarComponent implements OnInit {
     events: [],
     editable: true,
     selectable: true,
-    select: this.handleDateSelect.bind(this),
-    eventClick: this.handleEventClick.bind(this),
-    // eventDrop: this.handleEventDrop.bind(this), // Opcional
-    // eventResize: this.handleEventResize.bind(this) // Opcional
+    select: (selectInfo: DateSelectArg) => this.handleDateSelect(selectInfo),
+    eventClick: (clickInfo: EventClickArg) => this.handleEventClick(clickInfo)
   };
 
   isDetailModalVisible = false;
   selectedAppointmentForModal: any = null;
 
-  constructor(private reservasDataService: ReservasDataService) {}
+  isAppointmentFormModalVisible = false;
+  appointmentFormMode: 'add' | 'edit' = 'add';
+  dateForNewAppointment: string = ''; // YYYY-MM-DD
+  currentAppointmentToEdit: any | null = null;
+
+  citas: any[] = []; // Añade esto si quieres almacenar las citas en el componente
+
+  constructor(
+    private reservasDataService: ReservasDataService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.loadAppointmentsForCalendar();
+    this.loadAppointmentsForCalendar(); // Load events so eventClick can be tested
   }
 
   private parseAmPmTime(timeStr: string | null | undefined): string {
-    if (!timeStr || !timeStr.includes(' ') || !timeStr.includes(':')) {
-      return '00:00:00'; // Default for invalid format
+    if (!timeStr) return '00:00:00';
+    // Robust parsing for "HH:mm AM/PM"
+    const amPmMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (amPmMatch) {
+        let hours = parseInt(amPmMatch[1], 10);
+        const minutes = parseInt(amPmMatch[2], 10);
+        const modifier = amPmMatch[3].toUpperCase();
+
+        if (modifier === 'PM' && hours < 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0; // Midnight case
+
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
     }
-    try {
-      const parts = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-      if (!parts) {
-        return '00:00:00';
-      }
-      let hours = parseInt(parts[1], 10);
-      const minutes = parseInt(parts[2], 10);
-      const modifier = parts[3].toUpperCase();
-
-      if (isNaN(hours) || isNaN(minutes)) {
-        return '00:00:00';
-      }
-
-      if (modifier === 'PM' && hours < 12) {
-        hours += 12;
-      }
-      if (modifier === 'AM' && hours === 12) { // Midnight case: 12 AM should be 00 hours
-        hours = 0;
-      }
-
-      const formattedHours = hours.toString().padStart(2, '0');
-      const formattedMinutes = minutes.toString().padStart(2, '0');
-
-      return `${formattedHours}:${formattedMinutes}:00`; // HH:mm:ss
-    } catch (e) {
-      return '00:00:00';
+    // Fallback for "HH:mm:ss" or "HH:mm"
+    const timeParts = timeStr.split(':');
+    if (timeParts.length >= 2) {
+        const h = parseInt(timeParts[0], 10);
+        const m = parseInt(timeParts[1], 10);
+        if (!isNaN(h) && !isNaN(m)) {
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${(timeParts[2] || '00').padStart(2, '0')}`;
+        }
     }
+    return '00:00:00'; // Default if parsing fails
+  }
+
+  private convertToAmPm(time24: string): string { // time24 is HH:mm
+    if (!time24) return '';
+    const [hoursStr, minutesStr] = time24.split(':');
+    let hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+    if (isNaN(hours) || isNaN(minutes)) return '';
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${ampm}`;
   }
 
   loadAppointmentsForCalendar(): void {
     this.reservasDataService.getAllAppointmentsWithDetails().subscribe(
       (appointments: any[]) => {
         const calendarEvents = appointments.map(app => {
-          if (!app.date) {
-            return null; // Skip si no hay fecha
-          }
+          if (!app.date) return null;
+          let eventTitle = 'Cita';
+          if (app.service && app.client) eventTitle = `${app.service.name} - ${app.client.name}`;
+          else if (app.service) eventTitle = app.service.name;
+          else if (app.client) eventTitle = `Cita con ${app.client.name}`;
 
-          let eventTitle = 'Cita'; // Título por defecto
-          if (app.service && app.client) {
-            eventTitle = `${app.service.name} - ${app.client.name}`;
-          } else if (app.service) {
-            eventTitle = app.service.name;
-          } else if (app.client) {
-            eventTitle = `Cita con ${app.client.name}`;
-          }
-
-          const datePart = app.date.substring(0, 10); // Extrae YYYY-MM-DD de la cadena ISO
-          const timePart24Hour = this.parseAmPmTime(app.time); // Parsea "HH:mm AM/PM" a "HH:mm:ss"
-
+          const datePart = app.date.substring(0, 10);
+          const timePart24Hour = this.parseAmPmTime(app.time);
           const eventStart = `${datePart}T${timePart24Hour}`;
 
           return {
             title: eventTitle,
-            start: eventStart, // Combina la fecha con la hora parseada
+            start: eventStart,
             color: app.service?.color || '#3788D8',
-            extendedProps: {
-              appointmentDetails: app
-            }
+            extendedProps: { appointmentDetails: app }
           };
-        }).filter(event => event !== null); // Filtra los eventos nulos
+        }).filter(event => event !== null);
 
+        // Update calendarOptions events and trigger change detection
         this.calendarOptions = { ...this.calendarOptions, events: calendarEvents as any[] };
+        this.cdr.detectChanges(); // Explicitly trigger change detection
       },
-      error => {
-        console.error('Error fetching appointments for calendar:', error);
-      }
+      error => console.error('Error fetching appointments for calendar:', error)
     );
   }
 
-  handleDateSelect(selectInfo: any) {
-    const title = prompt('Por favor, ingrese un título para su nuevo evento:');
-    const calendarApi = selectInfo.view.calendar;
-
-    calendarApi.unselect();
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
+  handleDateSelect(selectInfo: DateSelectArg): void {
+    console.log('handleDateSelect triggered. Date:', selectInfo.startStr);
+    this.dateForNewAppointment = selectInfo.startStr.substring(0, 10);
+    this.appointmentFormMode = 'add';
+    this.currentAppointmentToEdit = null;
+    this.isAppointmentFormModalVisible = true;
+    console.log('isAppointmentFormModalVisible set to true for ADD mode');
+    this.cdr.detectChanges();
   }
 
-  handleEventClick(clickInfo: any) {
-    this.selectedAppointmentForModal = clickInfo.event.extendedProps.appointmentDetails;
+  handleEventClick(clickInfo: EventClickArg): void {
+    console.log('handleEventClick triggered. Event:', clickInfo.event.title);
+this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDetails'];    if (!this.selectedAppointmentForModal) {
+        console.error('Error: appointmentDetails not found in event extendedProps.');
+        return;
+    }
     this.isDetailModalVisible = true;
+    console.log('isDetailModalVisible set to true');
+    this.cdr.detectChanges();
   }
 
   closeAppointmentDetailModal(): void {
     this.isDetailModalVisible = false;
     this.selectedAppointmentForModal = null;
+    this.cdr.detectChanges();
   }
 
-  // Opcional: Implementa handleEventDrop y handleEventResize si necesitas guardar cambios
-  // handleEventDrop(dropInfo: any) {
-  //   console.log('Evento movido:', dropInfo.event);
-  // }
+  handleModifyAppointmentRequest(appointmentData: any): void {
+    console.log('handleModifyAppointmentRequest triggered. Data:', appointmentData);
+    this.closeAppointmentDetailModal();
 
-  // handleEventResize(resizeInfo: any) {
-  //   console.log('Evento redimensionado:', resizeInfo.event);
-  // }
-}
+    this.currentAppointmentToEdit = appointmentData;
+    this.appointmentFormMode = 'edit';
+    this.isAppointmentFormModalVisible = true;
+    console.log('isAppointmentFormModalVisible set to true for EDIT mode');
+    this.cdr.detectChanges();
+  }
 
-let eventGuid = 0;
-export function createEventId() {
-  return String(eventGuid++);
+  handleSaveAppointment(formData: AppointmentFormData): void {
+    console.log('handleSaveAppointment called with data:', formData);
+    const dtoPayload = {
+      id: this.appointmentFormMode === 'edit' ? formData.id : undefined,
+      clientId: formData.clientId,
+      serviceId: formData.serviceId,
+      date: formData.date,
+      time: this.convertToAmPm(formData.time),
+      timezone: formData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      notes: formData.notes || ''
+    };
+
+    const operation = this.appointmentFormMode === 'add'
+      ? this.reservasDataService.createAppointment(dtoPayload)
+      : this.reservasDataService.updateAppointment(dtoPayload.id!, dtoPayload);
+
+    operation.subscribe({
+      next: () => {
+        console.log(`Appointment ${this.appointmentFormMode === 'add' ? 'created' : 'updated'} successfully`);
+        this.loadAppointmentsForCalendar(); // Reload appointments to show changes
+        this.closeAppointmentFormModal();
+      },
+      error: (err: any) => console.error(`Error ${this.appointmentFormMode === 'add' ? 'creating' : 'updating'} appointment`, err)
+    });
+  }
+
+  closeAppointmentFormModal(): void {
+    this.isAppointmentFormModalVisible = false;
+    this.currentAppointmentToEdit = null;
+    this.dateForNewAppointment = '';
+    this.cdr.detectChanges();
+  }
+
+  guardarModalCita(appointment: any) {
+    this.reservasDataService.gestionarAppointment(this.appointmentFormMode, appointment).subscribe((resp: { appointments: any[] }) => {
+      this.citas = resp.appointments;
+      this.closeAppointmentFormModal();
+      this.loadAppointmentsForCalendar(); // Para refrescar el calendario
+    });
+  }
 }

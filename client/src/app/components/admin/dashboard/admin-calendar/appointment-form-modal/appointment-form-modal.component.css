@@ -1,0 +1,35 @@
+/* filepath: client/src/app/components/admin/dashboard/admin-calendar/appointment-form-modal/appointment-form-modal.component.css */
+:host {
+  display: block;
+}
+
+/* Estilos para que el modal se vea bien con Tailwind y Material */
+.fixed.inset-0 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-white {
+  max-height: 90vh; /* Evita que el modal sea más alto que la pantalla */
+  overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+/* Para asegurar que el scrollbar (si aparece) tenga un estilo decente */
+.bg-white::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bg-white::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.bg-white::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.bg-white::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

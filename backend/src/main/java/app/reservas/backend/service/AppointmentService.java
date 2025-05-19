@@ -215,5 +215,56 @@ public class AppointmentService {
         return details;
     }).collect(Collectors.toList());
 }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> gestionarAppointment(Map<String, Object> payload) {
+        String accion = (String) payload.get("accion");
+        Map<String, Object> appointmentMap = null;
+        Object appointmentObj = payload.get("appointment");
+        if (appointmentObj instanceof Map) {
+            appointmentMap = (Map<String, Object>) appointmentObj;
+        }
+
+        Appointment appointment = new Appointment();
+        if (appointmentMap != null) {
+            if (appointmentMap.get("id") != null) {
+                appointment.setId(Long.valueOf(appointmentMap.get("id").toString()));
+            }
+            appointment.setDate((String) appointmentMap.get("date"));
+            appointment.setTime((String) appointmentMap.get("time"));
+            appointment.setTimezone((String) appointmentMap.get("timezone"));
+            appointment.setNotes((String) appointmentMap.get("notes"));
+
+            // Relacionar cliente y servicio (ajusta según tus entidades)
+            if (appointmentMap.get("clientId") != null) {
+                Long clientId = Long.valueOf(appointmentMap.get("clientId").toString());
+                appointment.setClient(clientRepository.findById(clientId).orElse(null));
+            }
+            if (appointmentMap.get("serviceId") != null) {
+                Long serviceId = Long.valueOf(appointmentMap.get("serviceId").toString());
+                appointment.setService(servicioRepository.findById(serviceId).orElse(null));
+            }
+        }
+
+        switch (accion) {
+            case "add":
+                appointment.setId(null);
+                appointmentRepository.save(appointment);
+                break;
+            case "edit":
+                if (appointment.getId() != null && appointmentRepository.existsById(appointment.getId())) {
+                    appointmentRepository.save(appointment);
+                }
+                break;
+            case "delete":
+                if (appointment.getId() != null && appointmentRepository.existsById(appointment.getId())) {
+                    appointmentRepository.deleteById(appointment.getId());
+                }
+                break;
+        }
+
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return Map.of("appointments", appointments);
+    }
     
 }
