@@ -1,7 +1,10 @@
 package app.reservas.backend.service;
 
 import app.reservas.backend.entity.Client;
+import app.reservas.backend.repository.AppointmentRepository;
 import app.reservas.backend.repository.ClienteRepository;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +14,21 @@ import java.util.Map;
 @Service
 public class ClienteService {
 
+    private final AppointmentRepository appointmentRepository;
     private final ClienteRepository clienteRepository;
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository,
+                          AppointmentRepository appointmentRepository) {
         this.clienteRepository = clienteRepository;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public List<Client> getAllClientes() {
         return clienteRepository.findAll();
     }
 
+    @Transactional
     public Map<String, Object> gestionarCliente(Map<String, Object> payload) {
         String accion = (String) payload.get("accion");
         Map<String, Object> clienteMap = null;
@@ -57,6 +64,8 @@ public class ClienteService {
                 break;
             case "delete":
                 if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+                    appointmentRepository.deleteByClientId(cliente.getId());
+
                     clienteRepository.deleteById(cliente.getId());
                 }
                 break;

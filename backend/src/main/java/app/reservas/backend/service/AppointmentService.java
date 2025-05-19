@@ -10,8 +10,10 @@ import app.reservas.backend.repository.ClientRepository;
 import app.reservas.backend.repository.ServicioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +71,14 @@ public class AppointmentService {
         dto.setDate(appointment.getDate());
         dto.setTime(appointment.getTime());
         dto.setTimezone(appointment.getTimezone());
-        dto.setService(appointment.getService().getId());
+
+        // Verificar si el servicio es null antes de acceder a sus propiedades
+        if (appointment.getService() != null) {
+            dto.setService(appointment.getService().getId());
+        } else {
+            dto.setService(null); // O manejarlo de otra manera, como asignar un valor predeterminado
+        }
+
         dto.setNotes(appointment.getNotes());
         return dto;
     }
@@ -96,4 +105,22 @@ public class AppointmentService {
         client.setPostalCode(dto.getPostalCode());
         return client;
     }
+
+    // Método para eliminar citas pasadas
+    public void eliminarCitasPasadas() {
+        LocalDate hoy = LocalDate.now();
+        List<Appointment> citasPasadas = appointmentRepository.findAll()
+            .stream()
+            .filter(cita -> LocalDate.parse(cita.getDate()).isBefore(hoy))
+            .collect(Collectors.toList());
+
+        appointmentRepository.deleteAll(citasPasadas);
+    }
+    
+        // Ejecutar todos los días a la medianoche
+        @Scheduled(cron = "0 */2 * * * ?")
+        public void eliminarCitasPasadasProgramadas() {
+            eliminarCitasPasadas();
+        }
+    
 }
