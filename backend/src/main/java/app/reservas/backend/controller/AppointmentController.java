@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -17,6 +18,13 @@ public class AppointmentController {
     @Autowired
     public AppointmentController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
+    }
+
+
+    @GetMapping("/details")
+    public ResponseEntity<List<Map<String, Object>>> getAllAppointmentsWithDetails() {
+        List<Map<String, Object>> appointments = appointmentService.getAllAppointmentsWithDetails();
+        return ResponseEntity.ok(appointments);
     }
 
     // Obtener todas las citas

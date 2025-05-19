@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Servicio } from '../models/servicios/servicio';
+import { HttpClient } from '@angular/common/http'; // Asegúrate de que HttpClient esté importado
+import { Observable } from 'rxjs'; // Asegúrate de que Observable esté importado
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +14,14 @@ export class ReservasDataService {
 
   private contactInfo: any = {};
   private servicioSeleccionado: Servicio | null = null;
+  private apiUrl = 'http://localhost:8080/api'; // Define una URL base para la API
 
-  constructor() {}
+  private currentStep = 0;
+
+  // Datos de la cita
+  private appointmentData: any = {};
+
+  constructor(private http: HttpClient) {} // Inyecta HttpClient
 
   // Métodos para actualizar los datos
   setDate(date: Date | null) {
@@ -66,13 +74,9 @@ export class ReservasDataService {
            this.selectedHour !== null &&
            this.selectedTimezone !== null;
   }
-  private currentStep = 0;
 
-  // Datos de la cita
-  private appointmentData: any = {};
-
-   // Métodos para manejar los pasos
-   nextStep() {
+  // Métodos para manejar los pasos
+  nextStep() {
     this.currentStep++;
   }
 
@@ -86,4 +90,7 @@ export class ReservasDataService {
     return this.currentStep;
   }
 
+  getAllAppointmentsWithDetails(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/appointments/details`);
+  }
 }

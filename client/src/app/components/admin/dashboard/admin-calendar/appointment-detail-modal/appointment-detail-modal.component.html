@@ -1,0 +1,77 @@
+<div *ngIf="visible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" (click)="closeModal()">
+  <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative" (click)="$event.stopPropagation()">
+    <button
+      mat-icon-button
+      class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+      (click)="closeModal()"
+      aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800 border-b pb-3">
+      Detalles de la Cita
+    </h2>
+
+    <div *ngIf="appointment" class="space-y-4 text-sm">
+      <div>
+        <strong class="text-gray-600 block mb-1">Fecha y Hora:</strong>
+        <p class="text-gray-800">{{ appointment.date | date:'fullDate':'':'es' }} a las {{ appointment.time }} ({{appointment.timezone}})</p>
+      </div>
+
+      <div>
+        <strong class="text-gray-600 block mb-1">Cliente:</strong>
+        <p class="text-gray-800">{{ clientName }}</p>
+        <p *ngIf="appointment.client?.email" class="text-gray-500">{{ appointment.client.email }}</p>
+        <p *ngIf="appointment.client?.phone" class="text-gray-500">{{ appointment.client.phone }}</p>
+      </div>
+
+      <div>
+        <strong class="text-gray-600 block mb-1">Servicio:</strong>
+        <div class="flex items-center">
+          <span class="inline-block w-4 h-4 rounded-full mr-2 border" [style.background-color]="serviceColor"></span>
+          <p class="text-gray-800">{{ serviceName }}</p>
+        </div>
+        <p *ngIf="appointment.service?.description" class="text-gray-500 mt-1">{{ appointment.service.description }}</p>
+      </div>
+
+      <div *ngIf="appointment.service?.category">
+        <strong class="text-gray-600 block mb-1">Categoría del Servicio:</strong>
+        <p class="text-gray-800">{{ appointment.service.category.name }}</p>
+      </div>
+
+      <div *ngIf="appointment.notes">
+        <strong class="text-gray-600 block mb-1">Notas de la Cita:</strong>
+        <p class="text-gray-800 whitespace-pre-wrap">{{ appointment.notes }}</p>
+      </div>
+
+      <div *ngIf="appointment.providers && appointment.providers.length > 0">
+        <strong class="text-gray-600 block mb-1">Profesionales Asignados:</strong>
+        <ul class="list-disc list-inside pl-1 text-gray-800">
+          <li *ngFor="let provider of appointment.providers">
+            {{ provider.name }} {{ provider.apellido || '' }}
+            <span *ngIf="provider.email" class="text-gray-500 text-xs"> ({{ provider.email }})</span>
+            <ul *ngIf="provider.secretary" class="list-disc list-inside pl-4 text-gray-700 text-xs">
+              <li>Secretario/a: {{ provider.secretary.name }} {{ provider.secretary.apellido || '' }}
+                <span *ngIf="provider.secretary.email" class="text-gray-500"> ({{ provider.secretary.email }})</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div *ngIf="!appointment" class="text-center text-gray-500 py-8">
+      No hay detalles de cita para mostrar.
+    </div>
+
+    <div class="mt-8 text-right">
+      <button
+        mat-flat-button
+        color="primary"
+        class="bg-green-600 hover:bg-green-700 text-white"
+        (click)="closeModal()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,9 @@
 <div class="calendar-container">
   <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
+
+<app-appointment-detail-modal
+  [visible]="isDetailModalVisible"
+  [appointment]="selectedAppointmentForModal"
+  (close)="closeAppointmentDetailModal()">
+</app-appointment-detail-modal>
