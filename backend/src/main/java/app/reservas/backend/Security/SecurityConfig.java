@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/proveedores/all").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/appointments").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/appointments/details").permitAll()
-
+                        .requestMatchers(HttpMethod.POST,"/api/appointments/gestionar").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider()) 

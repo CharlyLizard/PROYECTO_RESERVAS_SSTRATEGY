@@ -187,6 +187,25 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     });
   }
 
+  handleDeleteAppointmentRequest(appointmentId: number) {
+    console.log(`Solicitud para eliminar cita con ID: ${appointmentId}`);
+    if (!appointmentId) {
+      console.error('Error: Se intentó eliminar una cita sin ID.');
+      return;
+    }
+    this.reservasDataService.gestionarAppointment('delete', { id: appointmentId }).subscribe({
+      next: () => {
+        console.log(`Cita con ID: ${appointmentId} eliminada exitosamente.`);
+        this.loadAppointmentsForCalendar(); // Recarga el calendario
+        this.closeAppointmentDetailModal(); // Cierra el modal de detalles
+      },
+      error: (err: any) => {
+        console.error(`Error al eliminar la cita con ID: ${appointmentId}`, err);
+        // Opcionalmente, mostrar un mensaje al usuario aquí
+      }
+    });
+  }
+
   closeAppointmentFormModal(): void {
     this.isAppointmentFormModalVisible = false;
     this.currentAppointmentToEdit = null;
@@ -194,11 +213,39 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     this.cdr.detectChanges();
   }
 
-  guardarModalCita(appointment: any) {
-    this.reservasDataService.gestionarAppointment(this.appointmentFormMode, appointment).subscribe((resp: { appointments: any[] }) => {
-      this.citas = resp.appointments;
-      this.closeAppointmentFormModal();
-      this.loadAppointmentsForCalendar(); // Para refrescar el calendario
+  guardarModalCita(appointmentData: any) { // Cambiado de 'appointment' a 'appointmentData' para claridad
+    // Asegúrate de que 'appointmentData' tiene la estructura que espera 'gestionarAppointment'
+    // o ajústalo aquí antes de enviarlo.
+    // Por ejemplo, si 'gestionarAppointment' espera { id: ..., clientId: ..., etc. }
+    // y 'appointmentData' ya es así, está bien.
+    // Si 'appointmentData' es solo el ID para 'delete', eso se maneja en handleDeleteAppointmentRequest.
+
+    // El método 'gestionarAppointment' en el servicio probablemente espera un payload como:
+    // { accion: 'add'/'edit', appointment: { ...datos de la cita... } }
+
+    const payload = {
+      // id: this.appointmentFormMode === 'edit' ? appointmentData.id : undefined, // Si el ID está en appointmentData
+      clientId: appointmentData.clientId,
+      serviceId: appointmentData.serviceId,
+      date: appointmentData.date,
+      time: this.convertToAmPm(appointmentData.time), // Asegúrate que esto es necesario y correcto
+      timezone: appointmentData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      notes: appointmentData.notes || ''
+    };
+    if (this.appointmentFormMode === 'edit' && this.currentAppointmentToEdit?.id) {
+      (payload as any).id = this.currentAppointmentToEdit.id;
+    }
+
+    this.reservasDataService.gestionarAppointment(this.appointmentFormMode, payload).subscribe({
+      next: (resp: { appointments: any[] }) => { // Asumiendo que la respuesta tiene una propiedad 'appointments'
+        // this.citas = resp.appointments; // Si necesitas la lista completa de citas aquí
+        console.log(`Cita ${this.appointmentFormMode}d exitosamente.`);
+        this.closeAppointmentFormModal();
+        this.loadAppointmentsForCalendar(); // Para refrescar el calendario
+      },
+      error: (err: any) => {
+        console.error(`Error al ${this.appointmentFormMode} la cita:`, err);
+      }
     });
   }
 }

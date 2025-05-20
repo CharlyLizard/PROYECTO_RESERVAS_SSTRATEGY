@@ -64,20 +64,27 @@
       No hay detalles de cita para mostrar.
     </div>
 
-    <div class="mt-8 text-right space-x-2"> <!-- Added space-x-2 for button spacing -->
-      <button
-        mat-stroked-button
-        (click)="onModify()"
-        class="border-blue-500 text-blue-500 hover:bg-blue-50"> <!-- Styling for modify button -->
-        Modificar
-      </button>
-      <button
-        mat-flat-button
-        color="primary"
-        class="bg-green-600 hover:bg-green-700 text-white"
-        (click)="closeModal()">
-        Cerrar
-      </button>
-    </div>
+    <div class="mt-8 text-right space-x-2">
+  <button
+    mat-stroked-button
+    (click)="onModify()"
+    class="border-blue-500 text-blue-500 hover:bg-blue-50">
+    Modificar
+  </button>
+  <button
+    mat-stroked-button
+    color="warn"
+    (click)="onDelete()"
+    class="border-red-500 text-red-500 hover:bg-red-50">
+    Eliminar
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    class="bg-green-600 hover:bg-green-700 text-white"
+    (click)="closeModal()">
+    Cerrar
+  </button>
+</div>
   </div>
 </div>

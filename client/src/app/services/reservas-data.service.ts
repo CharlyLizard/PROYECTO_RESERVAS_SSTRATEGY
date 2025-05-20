@@ -90,27 +90,27 @@ export class ReservasDataService {
     return this.currentStep;
   }
 
+  gestionarAppointment(accion: 'add' | 'edit' | 'delete', appointmentData: any): Observable<any> {
+    const payload = {
+      accion: accion,
+      appointment: appointmentData // Para 'delete', appointmentData sería { id: appointmentId }
+    };
+    return this.http.post<any>(`${this.apiUrl}/appointments/gestionar`, payload);
+  }
+
+  createAppointment(appointmentData: any): Observable<any> {
+    // Esta función podría ser una llamada específica si 'gestionarAppointment' no la cubre para 'add'
+    // o simplemente llamar a gestionarAppointment
+    return this.gestionarAppointment('add', appointmentData);
+  }
+
+  updateAppointment(appointmentId: number, appointmentData: any): Observable<any> {
+    // Similar a createAppointment
+    const dataWithId = { ...appointmentData, id: appointmentId };
+    return this.gestionarAppointment('edit', dataWithId);
+  }
+
   getAllAppointmentsWithDetails(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/details`);
-  }
-
-  createAppointment(appointment: any) {
-    return this.http.post<any>(`${this.apiUrl}/appointments`, appointment);
-  }
-
-  updateAppointment(id: number, appointment: any) {
-    return this.http.put<any>(`${this.apiUrl}/appointments/${id}`, appointment);
-  }
-
-  gestionarAppointment(accion: 'add' | 'edit' | 'delete', appointment: any): Observable<{ appointments: any[] }> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-    return this.http.post<{ appointments: any[] }>(
-      `${this.apiUrl}/appointments/gestionar`,
-      { accion, appointment },
-      { headers }
-    );
   }
 }

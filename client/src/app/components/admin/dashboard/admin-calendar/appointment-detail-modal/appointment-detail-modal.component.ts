@@ -15,6 +15,7 @@ export class AppointmentDetailModalComponent {
   @Input() visible: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() modify = new EventEmitter<any>(); // Emit the appointment data for modification
+  @Output() delete = new EventEmitter<any>();
 
   constructor() {}
 
@@ -25,6 +26,16 @@ export class AppointmentDetailModalComponent {
   onModify(): void {
     this.modify.emit(this.appointment); // Emit the current appointment data
   }
+
+  onDelete(): void {
+    if (this.appointment && this.appointment.appointmentId
+) {
+      this.delete.emit(this.appointment.appointmentId
+); // Emite el ID de la cita
+    } else {
+      console.error('Error: No se puede eliminar la cita sin un ID.');
+    }
+}
 
   get clientName(): string {
     return this.appointment?.client?.name || 'No especificado';
