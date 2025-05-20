@@ -1,28 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Necesario para directivas como *ngIf
-import { FormsModule } from '@angular/forms';   // Necesario para [(ngModel)]
-import { ConfiguracionService } from '../../../services/api/configuracion.service'; // Asegúrate que la ruta es correcta
+import { ConfigGeneral } from '../../../models/admin/config-general.model';
+import { ConfiguracionService } from '../../../services/api/configuracion.service';
+import { FormsModule } from '@angular/forms';
 
-export interface ConfigGeneral {
-  nombreEmpresa: string;
-  emailEmpresa: string;
-  enlaceEmpresa: string;
-  logotipoUrl?: string; // URL del logotipo actual (la carga de archivos se maneja por separado)
-  selectedFile?: File | null; // Para el archivo seleccionado
-  colorCorporativo: string;
-  tema: string;
-  formatoFecha: string;
-  primerDiaSemana: string;
-  idiomaPredeterminado: string;
-  zonaHorariaPredeterminada: string;
-}
 
 @Component({
   selector: 'app-config-general',
-  standalone: true,
-  imports: [CommonModule, FormsModule], // Asegúrate de que FormsModule y CommonModule estén aquí
   templateUrl: './config-general.component.html',
-  styleUrl: './config-general.component.css'
+  styleUrls: ['./config-general.component.css'],
+    standalone: true,
+  imports: [FormsModule]
+
 })
 export class ConfigGeneralComponent implements OnInit {
   config: ConfigGeneral = {
@@ -31,83 +19,79 @@ export class ConfigGeneralComponent implements OnInit {
     enlaceEmpresa: '',
     logotipoUrl: '',
     selectedFile: null,
-    colorCorporativo: '#439B84',
-    tema: 'Default',
-    formatoFecha: 'DMY',
-    primerDiaSemana: 'Lunes',
-    idiomaPredeterminado: 'Español',
-    zonaHorariaPredeterminada: 'UTC'
+    colorCorporativo: '',
+    tema: '',
+    formatoFecha: '',
+    primerDiaSemana: '',
+    idiomaPredeterminado: '',
+    zonaHorariaPredeterminada: ''
   };
 
-  constructor(private configuracionService: ConfiguracionService) {} // Inyecta el servicio
+  constructor(private configuracionService: ConfiguracionService) {}
 
   ngOnInit(): void {
     this.cargarConfiguracion();
   }
+onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    const file = input.files[0];
+    this.config.selectedFile = file; // Guarda el archivo seleccionado en el modelo
 
-  cargarConfiguracion(): void {
-    this.configuracionService.getGeneralConfig().subscribe({
-      next: (data) => {
-        if (data) {
-          this.config = { ...this.config, ...data }; // Fusiona con valores por defecto
-          if (data.logotipoUrl) { // Si el backend devuelve la URL del logo
-            this.config.logotipoUrl = data.logotipoUrl;
-          }
-        }
-        console.log('Configuración general cargada:', this.config);
+    // Llama al servicio para subir el logotipo
+    this.configuracionService.uploadLogo(file).subscribe({
+      next: (response: { logotipoUrl: string }) => {
+        this.config.logotipoUrl = response.logotipoUrl; // Actualiza la URL del logotipo
+        alert('Logotipo subido con éxito.');
       },
-      error: (err) => console.error('Error al cargar la configuración general:', err)
+      error: (err: any) => {
+        console.error('Error al subir el logotipo:', err);
+        alert('Error al subir el logotipo.');
+      }
     });
   }
-
-  onFileSelected(event: Event): void {
-    const element = event.currentTarget as HTMLInputElement;
-    let fileList: FileList | null = element.files;
-    if (fileList && fileList.length > 0) {
-      this.config.selectedFile = fileList[0];
-      // Opcional: Mostrar previsualización
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.config.logotipoUrl = e.target.result; // Para previsualización
-      };
-      reader.readAsDataURL(this.config.selectedFile);
-      console.log('Archivo seleccionado:', this.config.selectedFile.name);
-    } else {
-      this.config.selectedFile = null;
-    }
+}
+  cargarConfiguracion(): void {
+    this.configuracionService.getGeneralConfig().subscribe({
+      next: (config: ConfigGeneral) => {
+        this.config = config;
+      },
+      error: (err: any) => {
+        console.error('Error al cargar la configuración:', err);
+      }
+    });
   }
 
   guardarConfiguracion(): void {
-    if (this.config.selectedFile) {
-      this.configuracionService.uploadLogo(this.config.selectedFile).subscribe({
-        next: (response) => {
-          // Asumiendo que el backend devuelve la nueva URL del logo
-          this.config.logotipoUrl = response.logotipoUrl;
-          this.guardarDatosConfig();
-        },
-        error: (err) => console.error('Error al subir el logotipo:', err)
-      });
-    } else {
-      this.guardarDatosConfig();
-    }
-  }
-
-  private guardarDatosConfig(): void {
-    // Crea una copia del objeto config sin selectedFile para enviar al backend
     const configToSave = { ...this.config };
-    delete configToSave.selectedFile;
+    //delete configToSave.selectedFile;
 
     this.configuracionService.saveGeneralConfig(configToSave).subscribe({
-      next: (savedConfig) => {
-        this.config = { ...this.config, ...savedConfig };
-        if (savedConfig.logotipoUrl) {
-          this.config.logotipoUrl = savedConfig.logotipoUrl;
-        }
-        this.config.selectedFile = null; // Limpiar el archivo seleccionado después de guardar
-        console.log('Configuración general guardada exitosamente:', this.config);
-        // Aquí podrías mostrar una notificación de éxito al usuario
+      next: (savedConfig: ConfigGeneral) => {
+        this.config = savedConfig;
+        alert('Configuración guardada con éxito.');
       },
-      error: (err) => console.error('Error al guardar la configuración general:', err)
+      error: (err: any) => {
+        console.error('Error al guardar la configuración:', err);
+        alert('Error al guardar la configuración.');
+      }
     });
+  }
+
+  subirLogotipo(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.configuracionService.uploadLogo(file).subscribe({
+        next: (response: { logotipoUrl: string }) => {
+          this.config.logotipoUrl = response.logotipoUrl;
+          alert('Logotipo subido con éxito.');
+        },
+        error: (err: any) => {
+          console.error('Error al subir el logotipo:', err);
+          alert('Error al subir el logotipo.');
+        }
+      });
+    }
   }
 }
