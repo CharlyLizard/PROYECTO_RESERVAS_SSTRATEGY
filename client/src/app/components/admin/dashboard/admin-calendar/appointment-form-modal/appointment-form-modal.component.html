@@ -38,7 +38,17 @@
           <select id="service" name="service" [(ngModel)]="formData.serviceId" required
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
             <option [ngValue]="null" disabled>Seleccione un servicio</option>
-            <option *ngFor="let service of services" [value]="service.id">{{ service.nombre }}</option>
+            <option *ngFor="let service of availableServices" [value]="service.id">{{ service.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Nuevo campo para Estado de la Cita -->
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700">Estado *</label>
+          <select id="status" name="status" [(ngModel)]="formData.status" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option value="" disabled>Seleccione un estado</option>
+            <option *ngFor="let status of availableStatuses" [value]="status">{{ status }}</option>
           </select>
         </div>
 
@@ -58,7 +68,7 @@
 
       <div class="mt-8 text-right space-x-2">
         <button type="button" mat-stroked-button (click)="closeModal()">Cancelar</button>
-        <button type="submit" mat-flat-button color="primary" class="bg-green-600 hover:bg-green-700 text-white" [disabled]="!appointmentForm.form.valid || !formData.clientId || !formData.serviceId">
+        <button type="submit" mat-flat-button color="primary" class="bg-green-600 hover:bg-green-700 text-white" [disabled]="!appointmentForm.form.valid || !formData.clientId || !formData.serviceId || !formData.status">
           {{ mode === 'add' ? 'Crear Cita' : 'Guardar Cambios' }}
         </button>
       </div>

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { ReservasDataService } from './../../../../../services/reservas-data.service';
+import { Component, OnInit, Inject } from '@angular/core';
+// Corrige esta ruta
+import { ReservasDataService } from '../../../../../services/reservas-data.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -8,6 +9,10 @@ import { CommonModule } from '@angular/common';
 import { CalendarioComponent } from "../minicomponents/calendario/calendario.component";
 import { ZonaHorariaComponent } from '../minicomponents/zona-horaria/zona-horaria.component';
 import { HorasReservaComponent } from '../minicomponents/horas-reserva/horas-reserva.component';
+// Corrige esta ruta:
+// import { Servicio } from '../../../../../models/Servicio/servicio.model';
+// Por esta:
+import { Servicio } from '../../../../../models/servicios/servicio';
 @Component({
   selector: 'app-first-window',
   imports: [
@@ -20,35 +25,45 @@ import { HorasReservaComponent } from '../minicomponents/horas-reserva/horas-res
     ZonaHorariaComponent,
     HorasReservaComponent,
   ],
+  providers: [ReservasDataService],
   templateUrl: './first-window.component.html',
 })
-export class FirstWindowComponent {
-  get selectedDate(): Date | null {
-    return this.ReservasSvc.selectedDate;
+export class FirstWindowComponent implements OnInit {
+  selectedDate: Date | null = new Date(); // Inicializar con la fecha actual
+  selectedHour: string | null = null;
+  selectedTimezone: string | null = null;
+
+  currentServiceDuration: number = 30;
+
+  constructor(@Inject(ReservasDataService) private reservasDataService: ReservasDataService) {}
+
+  ngOnInit(): void {
+    // Si selectedDate se inicializa, llamar a onDateSelected para propagar
+    if (this.selectedDate) {
+      this.onDateSelected(this.selectedDate);
+    }
+
+    const servicioSeleccionado: Servicio | null = this.reservasDataService.getServicioSeleccionado();
+    if (servicioSeleccionado && servicioSeleccionado.duracionMinutos) {
+      this.currentServiceDuration = servicioSeleccionado.duracionMinutos;
+    }
+    // También podrías suscribirte a cambios en el servicio seleccionado si puede cambiar dinámicamente
   }
 
-  get selectedHour(): string | null {
-    return this.ReservasSvc.selectedHour;
+  onDateSelected(date: Date | null): void {
+    this.selectedDate = date; // Esta propiedad se enlaza al input de HorasReservaComponent
+    this.reservasDataService.setDate(this.selectedDate);
+    // La actualización de horas en HorasReservaComponent se activará por ngOnChanges
+    // cuando this.selectedDate (que es un @Input para HorasReservaComponent) cambie.
   }
 
-  get selectedTimezone(): string | null {
-    return this.ReservasSvc.selectedTimezone;
+  onHourSelected(hour: string): void {
+    this.selectedHour = hour;
+    this.reservasDataService.setHour(this.selectedHour);
   }
 
-  constructor(private ReservasSvc: ReservasDataService) {}
-
-  ngOnInit() {
-  }
-
-  onDateSelected(date: Date | null) {
-    this.ReservasSvc.setDate(date);
-  }
-
-  onHourSelected(hour: string) {
-    this.ReservasSvc.setHour(hour);
-  }
-
-  onTimezoneSelected(timezone: string) {
-    this.ReservasSvc.setTimezone(timezone);
+  onTimezoneSelected(timezone: string): void {
+    this.selectedTimezone = timezone;
+    this.reservasDataService.setTimezone(this.selectedTimezone);
   }
 }

@@ -9,7 +9,12 @@
     <calendario [initialDate]="selectedDate" (dateChange)="onDateSelected($event)"></calendario>
     <div class="flex flex-col space-y-4">
       <zona-horaria [initialTimezone]="selectedTimezone" (timezoneChange)="onTimezoneSelected($event)"></zona-horaria>
-      <horas-reserva [initialHour]="selectedHour" (hourChange)="onHourSelected($event)"></horas-reserva>
+      <horas-reserva
+        [initialHour]="selectedHour"
+        [selectedDate]="selectedDate"
+        [serviceDurationMinutes]="currentServiceDuration"
+        (hourChange)="onHourSelected($event)">
+      </horas-reserva>
     </div>
   </div>
 

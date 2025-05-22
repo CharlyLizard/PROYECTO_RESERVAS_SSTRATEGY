@@ -25,4 +25,7 @@ public class Appointment {
     private Servicio service;
 
     private String notes;
+    private String status; 
+
+    
 }

@@ -74,6 +74,7 @@ public class AppointmentService {
             .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
         appointment.setService(servicio);
         appointment.setNotes(appointmentDTO.getNotes());
+        appointment.setStatus(appointmentDTO.getStatus()); // Añadir esto
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
@@ -95,6 +96,7 @@ public class AppointmentService {
         }
 
         dto.setNotes(appointment.getNotes());
+        dto.setStatus(appointment.getStatus()); // Añadir esto
         return dto;
     }
 
@@ -148,6 +150,7 @@ public class AppointmentService {
         details.put("time", appointment.getTime());
         details.put("timezone", appointment.getTimezone());
         details.put("notes", appointment.getNotes());
+        details.put("status", appointment.getStatus()); // Añadir esto
 
         // Cliente
         Client client = appointment.getClient();
@@ -234,6 +237,7 @@ public class AppointmentService {
             appointment.setTime((String) appointmentMap.get("time"));
             appointment.setTimezone((String) appointmentMap.get("timezone"));
             appointment.setNotes((String) appointmentMap.get("notes"));
+            appointment.setStatus((String) appointmentMap.get("status")); // Añadir esto
 
             // Relacionar cliente y servicio (ajusta según tus entidades)
             if (appointmentMap.get("clientId") != null) {

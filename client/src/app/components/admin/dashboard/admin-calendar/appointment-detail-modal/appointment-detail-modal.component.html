@@ -15,10 +15,16 @@
     <div *ngIf="appointment" class="space-y-4 text-sm">
       <div>
         <strong class="text-gray-600 block mb-1">Fecha y Hora:</strong>
-        <p class="text-gray-800">{{ appointment.date | date:'fullDate':'':'es' }} a las {{ appointment.time }} ({{appointment.timezone}})</p>
+        <p class="text-gray-800">{{ appointment.date | date:'fullDate' }} a las {{ appointment.time }} ({{ appointment.timezone }})</p>
       </div>
 
-      <div>
+      <!-- Mostrar Estado de la Cita -->
+      <div *ngIf="appointment.status">
+        <strong class="text-gray-600 block mb-1">Estado:</strong>
+        <p class="text-gray-800">{{ appointment.status }}</p>
+      </div>
+
+      <div *ngIf="appointment.client">
         <strong class="text-gray-600 block mb-1">Cliente:</strong>
         <p class="text-gray-800">{{ clientName }}</p>
         <p *ngIf="appointment.client?.email" class="text-gray-500">{{ appointment.client.email }}</p>
