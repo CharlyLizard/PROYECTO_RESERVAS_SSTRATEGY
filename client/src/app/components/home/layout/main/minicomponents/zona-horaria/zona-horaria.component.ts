@@ -1,50 +1,96 @@
+import { Component, EventEmitter, OnInit, Output, Input, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+
+interface TimezoneGroup {
+  continent: string;
+  timezones: string[];
+}
 
 @Component({
-  selector: 'zona-horaria',
-  imports: [MatSelectModule,CommonModule],
-  templateUrl: './zona-horaria.component.html'
+  selector: 'app-zona-horaria',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './zona-horaria.component.html',
 })
-export class ZonaHorariaComponent {
+export class ZonaHorariaComponent implements OnInit {
   @Input() initialTimezone: string | null = null;
-  @Output() timezoneChange = new EventEmitter<string>();
+  @Output() timezoneSelected = new EventEmitter<string>();
 
-  selectedTimezone: string | null = null;
+  selectedTimezone: string = '';
+  groupedTimezones: TimezoneGroup[] = [];
+  isDropdownOpen = false;
 
-  timezonesByContinent = [
-    {
-      continent: 'Europa',
-      timezones: [
-        { name: 'Madrid', offset: '+1:00' },
-        { name: 'Londres', offset: '0:00' }
-      ]
-    },
-    {
-      continent: 'América',
-      timezones: [
-        { name: 'New York', offset: '-5:00' },
-        { name: 'Los Ángeles', offset: '-8:00' }
-      ]
-    },
-    {
-      continent: 'Asia',
-      timezones: [
-        { name: 'Tokyo', offset: '+9:00' },
-        { name: 'Beijing', offset: '+8:00' }
-      ]
-    }
-  ];
-
-  ngOnInit() {
-    if (this.initialTimezone) {
-      this.selectedTimezone = this.initialTimezone;
+  // Para cerrar el dropdown si se hace clic fuera
+  @HostListener('document:click', ['$event'])
+  clickout(event: Event) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.isDropdownOpen = false;
     }
   }
 
-  onTimezoneSelected(timezone: string) {
+  constructor(private elementRef: ElementRef) {}
+
+  ngOnInit(): void {
+    try {
+      const allTimezones = Intl.supportedValuesOf('timeZone');
+      this.groupTimezonesByContinent(allTimezones);
+
+      let defaultTimezone = this.initialTimezone;
+
+      if (!defaultTimezone || !allTimezones.includes(defaultTimezone)) {
+        defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      }
+
+      if (allTimezones.includes(defaultTimezone)) {
+        this.selectedTimezone = defaultTimezone;
+      } else if (this.groupedTimezones.length > 0 && this.groupedTimezones[0].timezones.length > 0) {
+        this.selectedTimezone = this.groupedTimezones[0].timezones[0];
+      }
+      this.timezoneSelected.emit(this.selectedTimezone); // Emitir la zona horaria inicial
+    } catch (e) {
+      console.error('Error al obtener las zonas horarias:', e);
+      // Fallback con algunas zonas comunes si Intl.supportedValuesOf no funciona o da error
+      const fallbackTimezones = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo', 'Australia/Sydney'];
+      this.groupTimezonesByContinent(fallbackTimezones);
+      this.selectedTimezone = this.initialTimezone && fallbackTimezones.includes(this.initialTimezone) ? this.initialTimezone : 'UTC';
+      this.timezoneSelected.emit(this.selectedTimezone);
+    }
+  }
+
+  private groupTimezonesByContinent(timezones: string[]): void {
+    const groups: { [key: string]: string[] } = {};
+    timezones.forEach(tz => {
+      const parts = tz.split('/');
+      const continent = parts[0];
+      if (parts.length > 1) { // Solo agrupar si tiene formato Continente/Ciudad
+        if (!groups[continent]) {
+          groups[continent] = [];
+        }
+        groups[continent].push(tz);
+      } else { // Para zonas como 'UTC', 'GMT', etc.
+        if (!groups['Otros']) {
+          groups['Otros'] = [];
+        }
+        groups['Otros'].push(tz);
+      }
+    });
+
+    this.groupedTimezones = Object.keys(groups)
+      .sort() // Ordenar continentes alfabéticamente
+      .map(continent => ({
+        continent,
+        timezones: groups[continent].sort() // Ordenar zonas dentro de cada continente
+      }));
+  }
+
+  onTimezoneChange(timezone: string): void {
     this.selectedTimezone = timezone;
-    this.timezoneChange.emit(timezone);
+    this.timezoneSelected.emit(this.selectedTimezone);
+    this.isDropdownOpen = false; // Cerrar dropdown al seleccionar
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 }

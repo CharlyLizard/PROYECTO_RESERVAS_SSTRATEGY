@@ -25,7 +25,7 @@ import { Servicio } from '../../../../../models/servicios/servicio';
     ZonaHorariaComponent,
     HorasReservaComponent,
   ],
-  providers: [ReservasDataService],
+  // providers: [ReservasDataService], // Elimina esta línea
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent implements OnInit {

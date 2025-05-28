@@ -1,0 +1,34 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+    <h2 class="text-xl font-semibold mb-4">Añadir a Google Calendar</h2>
+    <p class="mb-2">Hemos detectado que usas una dirección de Gmail.</p>
+    <p class="mb-4">¿Deseas añadir esta cita a tu Google Calendar antes de confirmar?</p>
+
+    <div *ngIf="appointmentDetails" class="mb-6 p-3 bg-gray-50 rounded border">
+      <p><strong>Servicio:</strong> {{ appointmentDetails.serviceName }}</p>
+      <p><strong>Fecha:</strong> {{ appointmentDetails.date | date:'fullDate' }}</p>
+      <p><strong>Hora:</strong> {{ appointmentDetails.time }}</p>
+    </div>
+
+    <div class="flex justify-end gap-3">
+      <button
+        (click)="onAddToCalendarAndConfirm()"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
+      >
+        Añadir y Confirmar
+      </button>
+      <button
+        (click)="onConfirmOnly()"
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors"
+      >
+        Confirmar Solo
+      </button>
+      <button
+        (click)="onCancel()"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md transition-colors"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

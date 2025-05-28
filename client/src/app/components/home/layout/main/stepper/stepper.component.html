@@ -36,4 +36,12 @@
       </button>
     }
   </div>
+
+  <app-google-calendar-modal
+    *ngIf="showGoogleCalendarModal && modalDetails"
+    [appointmentDetails]="modalDetails"
+    (addToCalendarAndConfirm)="handleAddToCalendarAndConfirm()"
+    (confirmOnly)="handleConfirmOnly()"
+    (cancel)="handleModalCancel()">
+  </app-google-calendar-modal>
 </main>

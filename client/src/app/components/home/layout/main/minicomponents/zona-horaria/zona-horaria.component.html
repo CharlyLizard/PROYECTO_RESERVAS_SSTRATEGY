@@ -1,14 +1,53 @@
-<div class="flex flex-col space-y-2">
-  <label class="text-gray-700 font-medium">Zona horaria</label>
-  <mat-select
-    class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-    (selectionChange)="onTimezoneSelected($event.value)"
-    [value]="selectedTimezone"
+<div class="relative w-full">
+  <label id="listbox-label" class="block text-sm font-medium text-gray-700 mb-1">
+    Zona horaria
+  </label>
+  <button
+    type="button"
+    (click)="toggleDropdown()"
+    class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm"
+    aria-haspopup="listbox"
+    aria-expanded="true"
+    aria-labelledby="listbox-label"
   >
-    <mat-optgroup [label]="group.continent" *ngFor="let group of timezonesByContinent">
-      <mat-option [value]="timezone.name" *ngFor="let timezone of group.timezones">
-        {{ timezone.name }} ({{ timezone.offset }})
-      </mat-option>
-    </mat-optgroup>
-  </mat-select>
+    <span class="block truncate">{{ selectedTimezone || 'Seleccionar zona horaria' }}</span>
+    <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 6.03 8.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm0 14a.75.75 0 01-.53-.22l-3.5-3.5a.75.75 0 011.06-1.06L10 15.19l3.97-3.97a.75.75 0 011.06 1.06l-3.5 3.5A.75.75 0 0110 17z" clip-rule="evenodd" />
+      </svg>
+    </span>
+  </button>
+
+  <div
+    *ngIf="isDropdownOpen"
+    class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-80 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+  >
+    <ng-container *ngFor="let group of groupedTimezones">
+      <div class="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50 sticky top-0">
+        {{ group.continent }}
+      </div>
+      <ul role="listbox" aria-labelledby="listbox-label">
+        <li
+          *ngFor="let tz of group.timezones"
+          (click)="onTimezoneChange(tz)"
+          class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-green-50"
+          [class.bg-green-100]="tz === selectedTimezone"
+          [class.font-semibold]="tz === selectedTimezone"
+          role="option"
+        >
+          <span class="block truncate" [class.font-semibold]="tz === selectedTimezone">
+            {{ tz }}
+          </span>
+          <span *ngIf="tz === selectedTimezone" class="text-green-600 absolute inset-y-0 right-0 flex items-center pr-4">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </li>
+      </ul>
+    </ng-container>
+    <div *ngIf="groupedTimezones.length === 0" class="px-3 py-2 text-sm text-gray-500">
+      No hay zonas horarias disponibles.
+    </div>
+  </div>
 </div>
