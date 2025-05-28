@@ -10,7 +10,7 @@
     aria-expanded="true"
     aria-labelledby="listbox-label"
   >
-    <span class="block truncate">{{ selectedTimezone || 'Seleccionar zona horaria' }}</span>
+    <span class="block truncate">{{ selectedTimezoneDisplay || 'Seleccionar zona horaria' }}</span>
     <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
       <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
         <path fill-rule="evenodd" d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 6.03 8.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm0 14a.75.75 0 01-.53-.22l-3.5-3.5a.75.75 0 011.06-1.06L10 15.19l3.97-3.97a.75.75 0 011.06 1.06l-3.5 3.5A.75.75 0 0110 17z" clip-rule="evenodd" />
@@ -31,14 +31,14 @@
           *ngFor="let tz of group.timezones"
           (click)="onTimezoneChange(tz)"
           class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-green-50"
-          [class.bg-green-100]="tz === selectedTimezone"
-          [class.font-semibold]="tz === selectedTimezone"
+          [class.bg-green-100]="tz.name === selectedTimezoneName"
+          [class.font-semibold]="tz.name === selectedTimezoneName"
           role="option"
         >
-          <span class="block truncate" [class.font-semibold]="tz === selectedTimezone">
-            {{ tz }}
+          <span class="block truncate" [class.font-semibold]="tz.name === selectedTimezoneName">
+            {{ tz.displayName }}
           </span>
-          <span *ngIf="tz === selectedTimezone" class="text-green-600 absolute inset-y-0 right-0 flex items-center pr-4">
+          <span *ngIf="tz.name === selectedTimezoneName" class="text-green-600 absolute inset-y-0 right-0 flex items-center pr-4">
             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
             </svg>
