@@ -12,7 +12,7 @@ export interface Language {
   providedIn: 'root',
 })
 export class LanguageService {
-  private currentLanguageSignal = signal<string>('es'); // Idioma por defecto
+  private currentLanguageSignal = signal<string>('en'); // Idioma por defecto
   private translationsSignal = signal<Record<string, string>>({});
 
   // Lista de idiomas disponibles. Puedes obtenerla de una configuración o API si es necesario.
