@@ -9,12 +9,13 @@ import { ProveedoresService } from '../../../../../services/api/proveedores.serv
 import { SecretarioService } from '../../../../../services/api/secretario.service';
 import { forkJoin, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { TranslatePipe } from '../../../../../pipe/translate.pipe';
 
 @Component({
   selector: 'app-third-window',
   templateUrl: './third-window.component.html',
   standalone: true, // Asumiendo que es standalone como otros componentes recientes
-  imports: [CommonModule] // Asegúrate que CommonModule está si usas *ngIf, etc.
+  imports: [CommonModule,TranslatePipe] // Asegúrate que CommonModule está si usas *ngIf, etc.
 })
 export class ThirdWindowComponent implements OnInit {
   reservationDetails: any = null;

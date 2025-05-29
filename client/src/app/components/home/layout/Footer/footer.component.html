@@ -3,7 +3,15 @@
     <button
       class="bg-green-500 text-white px-3 py-1 rounded-lg"
       routerLink="/login">
-      Iniciar sesión
+      {{ 'LOGIN_BUTTON' | translate }} <!-- Esto usará tu TranslatePipe personalizado -->
     </button>
+    <select
+      class="ml-4 px-2 py-1 border rounded"
+      [value]="currentLang"
+      (change)="changeLang($event)"> <!-- Pasamos el evento completo -->
+      <option *ngFor="let lang of languages" [value]="lang.code">
+        {{ lang.name }}
+      </option>
+    </select>
   </div>
 </footer>

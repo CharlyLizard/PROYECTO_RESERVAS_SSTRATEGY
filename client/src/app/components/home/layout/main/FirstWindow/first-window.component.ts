@@ -1,20 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
-// Corrige esta ruta
-import { ReservasDataService } from '../../../../../services/reservas-data.service';
+import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
 import { CalendarioComponent } from "../minicomponents/calendario/calendario.component";
 import { ZonaHorariaComponent } from '../minicomponents/zona-horaria/zona-horaria.component';
 import { HorasReservaComponent } from '../minicomponents/horas-reserva/horas-reserva.component';
-// Corrige esta ruta:
-// import { Servicio } from '../../../../../models/Servicio/servicio.model';
-// Por esta:
+import { ReservasDataService } from '../../../../../services/reservas-data.service';
 import { Servicio } from '../../../../../models/servicios/servicio';
+import { TranslatePipe } from '../../../../../pipe/translate.pipe';
+
 @Component({
   selector: 'app-first-window',
+  standalone: true,
   imports: [
     CommonModule,
     MatSelectModule,
@@ -24,8 +23,8 @@ import { Servicio } from '../../../../../models/servicios/servicio';
     CalendarioComponent,
     ZonaHorariaComponent,
     HorasReservaComponent,
+    TranslatePipe
   ],
-  // providers: [ReservasDataService], // Elimina esta línea
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent implements OnInit {

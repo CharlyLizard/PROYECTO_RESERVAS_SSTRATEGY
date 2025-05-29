@@ -1,81 +1,71 @@
-<div class="p-6 md:p-8 bg-gray-50 min-h-[calc(100vh-var(--header-height,100px))]"> <!-- Ajusta min-h si es necesario -->
+<div class="p-6 md:p-8 bg-gray-50 min-h-[calc(100vh-var(--header-height,100px))]">
   <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-6 md:p-8">
     <h2 class="text-center text-gray-800 text-2xl font-bold mb-8 border-b pb-4">
-      CONFIRME SU CITA
+      {{ 'CONFIRM_APPOINTMENT_TITLE' | translate }}
     </h2>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
-
-      <!-- Columna Izquierda: Detalles de la Cita, Servicio, Proveedor, Secretaria -->
       <div class="space-y-6">
-
-        <!-- Detalles de la Cita -->
         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3">Detalles de la Cita</h3>
+          <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ 'APPOINTMENT_DETAILS_TITLE' | translate }}</h3>
           <div class="space-y-1 text-sm">
-            <p><strong class="text-gray-600 w-28 inline-block">Fecha:</strong> {{ reservationDetails?.date | date: 'fullDate' }}</p>
-            <p><strong class="text-gray-600 w-28 inline-block">Hora:</strong> {{ reservationDetails?.hour }}</p>
-            <p><strong class="text-gray-600 w-28 inline-block">Zona horaria:</strong> {{ reservationDetails?.timezone }}</p>
+            <p><strong class="text-gray-600 w-28 inline-block">{{ 'DATE_LABEL' | translate }}:</strong> {{ reservationDetails?.date | date: 'fullDate' }}</p>
+            <p><strong class="text-gray-600 w-28 inline-block">{{ 'HOUR_LABEL' | translate }}:</strong> {{ reservationDetails?.hour }}</p>
+            <p><strong class="text-gray-600 w-28 inline-block">{{ 'TIMEZONE_LABEL' | translate }}:</strong> {{ reservationDetails?.timezone }}</p>
           </div>
         </div>
 
-        <!-- Servicio Seleccionado -->
         <ng-container *ngIf="servicioSeleccionado">
           <div class="p-4 border border-gray-200 rounded-lg">
-            <h3 class="text-lg font-semibold text-gray-700 mb-3">Servicio Seleccionado</h3>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ 'SERVICE_SELECTED_TITLE' | translate }}</h3>
             <div class="space-y-1 text-sm">
-              <p><strong class="text-gray-600 w-28 inline-block">Nombre:</strong> {{ servicioSeleccionado.nombre }}</p>
+              <p><strong class="text-gray-600 w-28 inline-block">{{ 'NAME_LABEL' | translate }}:</strong> {{ servicioSeleccionado.nombre }}</p>
               <div class="flex items-center">
-                <strong class="text-gray-600 w-28 inline-block">Color:</strong>
+                <strong class="text-gray-600 w-28 inline-block">{{ 'COLOR_LABEL' | translate }}:</strong>
                 <span class="inline-block w-5 h-5 rounded-full border border-gray-300 shadow-sm" [ngStyle]="{'background-color': servicioSeleccionado.color}"></span>
               </div>
             </div>
           </div>
         </ng-container>
 
-        <!-- Proveedor del Servicio -->
         <ng-container *ngIf="proveedorDelServicio">
           <div class="p-4 border border-gray-200 rounded-lg">
-            <h3 class="text-lg font-semibold text-gray-700 mb-3">Profesional Asignado</h3>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ 'PROFESSIONAL_ASSIGNED_TITLE' | translate }}</h3>
             <div class="space-y-1 text-sm">
-              <p><strong class="text-gray-600 w-28 inline-block">Nombre:</strong> {{ proveedorDelServicio.nombre }} {{ proveedorDelServicio.apellido }}</p>
+              <p><strong class="text-gray-600 w-28 inline-block">{{ 'NAME_LABEL' | translate }}:</strong> {{ proveedorDelServicio.nombre }} {{ proveedorDelServicio.apellido }}</p>
             </div>
           </div>
         </ng-container>
 
-        <!-- Secretario Asociado -->
         <ng-container *ngIf="secretarioAsociado">
           <div class="p-4 border border-gray-200 rounded-lg">
-            <h3 class="text-lg font-semibold text-gray-700 mb-3">Secretaría</h3>
+            <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ 'SECRETARY_ASSOCIATED_TITLE' | translate }}</h3>
             <div class="space-y-1 text-sm">
-              <p><strong class="text-gray-600 w-28 inline-block">Atendido por:</strong> {{ secretarioAsociado.nombre }} {{ secretarioAsociado.apellido }}</p>
+              <p><strong class="text-gray-600 w-28 inline-block">{{ 'NAME_LABEL' | translate }}:</strong> {{ secretarioAsociado.nombre }} {{ secretarioAsociado.apellido }}</p>
             </div>
           </div>
         </ng-container>
+
         <ng-container *ngIf="!proveedorDelServicio && !secretarioAsociado && servicioSeleccionado">
-            <div class="p-4 border border-gray-200 rounded-lg">
-                <p class="text-sm text-gray-500">No hay un profesional o secretaría específicamente asignado para este servicio a través de la reserva online.</p>
-            </div>
+          <div class="p-4 border border-gray-200 rounded-lg">
+            <p class="text-sm text-gray-500">{{ 'NO_PROFESSIONAL_OR_SECRETARY_ASSIGNED' | translate }}</p>
+          </div>
         </ng-container>
-
-
       </div>
 
-      <!-- Columna Derecha: Información de Contacto -->
       <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
-        <h3 class="text-lg font-semibold text-gray-700 mb-3">Su Información de Contacto</h3>
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ 'CONTACT_INFO_TITLE' | translate }}</h3>
         <div class="space-y-1 text-sm">
-          <p><strong class="text-gray-600 w-32 inline-block">Nombre:</strong> {{ reservationDetails?.contactInfo?.nombre }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Apellido:</strong> {{ reservationDetails?.contactInfo?.apellido }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Email:</strong> {{ reservationDetails?.contactInfo?.email }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Teléfono:</strong> {{ reservationDetails?.contactInfo?.telefono }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Domicilio:</strong> {{ reservationDetails?.contactInfo?.domicilio || '-' }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Ciudad:</strong> {{ reservationDetails?.contactInfo?.ciudad || '-' }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Código Postal:</strong> {{ reservationDetails?.contactInfo?.codigoPostal || '-' }}</p>
-          <p><strong class="text-gray-600 w-32 inline-block">Notas:</strong> {{ reservationDetails?.contactInfo?.notas || '-' }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'NAME_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.nombre }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'SURNAME_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.apellido }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'EMAIL_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.email }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'PHONE_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.telefono }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'ADDRESS_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.domicilio || '-' }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'CITY_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.ciudad || '-' }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'POSTAL_CODE_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.codigoPostal || '-' }}</p>
+          <p><strong class="text-gray-600 w-32 inline-block">{{ 'NOTES_LABEL' | translate }}:</strong> {{ reservationDetails?.contactInfo?.notas || '-' }}</p>
         </div>
       </div>
     </div>
-    <!-- Los botones de navegación ATRÁS y CONFIRMAR se gestionan en stepper.component.html -->
   </div>
 </div>
