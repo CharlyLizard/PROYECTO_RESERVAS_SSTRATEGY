@@ -14,8 +14,8 @@ import { TranslatePipe } from '../../../../../pipe/translate.pipe';
 @Component({
   selector: 'app-third-window',
   templateUrl: './third-window.component.html',
-  standalone: true, // Asumiendo que es standalone como otros componentes recientes
-  imports: [CommonModule,TranslatePipe] // Asegúrate que CommonModule está si usas *ngIf, etc.
+  standalone: true,
+  imports: [CommonModule,TranslatePipe]
 })
 export class ThirdWindowComponent implements OnInit {
   reservationDetails: any = null;
@@ -25,7 +25,7 @@ export class ThirdWindowComponent implements OnInit {
 
   constructor(
     private reservasService: ReservasDataService,
-    private apiService: ApiService, // Cambiado ApiService a apiService (convención)
+    private apiService: ApiService,
     private proveedoresService: ProveedoresService,
     private secretarioService: SecretarioService
   ) {}
@@ -38,13 +38,12 @@ export class ThirdWindowComponent implements OnInit {
         this.servicioSeleccionado = servicios && servicios.length > 0 ? servicios[0] : null;
         if (this.servicioSeleccionado) {
           this.reservasService.setServicioSeleccionado(this.servicioSeleccionado);
-          // Cargar proveedores y secretarios
           return forkJoin({
             proveedores: this.proveedoresService.getProveedores(),
             secretarios: this.secretarioService.getAllSecretarios()
           });
         }
-        return of({ proveedores: [], secretarios: [] }); // Emite valor por defecto si no hay servicio
+        return of({ proveedores: [], secretarios: [] });
       }),
       map(({ proveedores, secretarios }) => {
         if (this.servicioSeleccionado && proveedores.length > 0) {
@@ -53,7 +52,7 @@ export class ThirdWindowComponent implements OnInit {
         if (this.proveedorDelServicio && secretarios.length > 0) {
           this.secretarioAsociado = secretarios.find(s => s.proveedor?.id === this.proveedorDelServicio!.id) || null;
         }
-        return null; // forkJoin ya emitió, aquí solo procesamos
+        return null;
       })
     ).subscribe({
         error: err => console.error('Error cargando datos adicionales para la confirmación:', err)

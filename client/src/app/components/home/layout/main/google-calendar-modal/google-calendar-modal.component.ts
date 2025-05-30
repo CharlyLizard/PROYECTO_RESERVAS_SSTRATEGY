@@ -1,18 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common'; // Importa DatePipe
+import { CommonModule, DatePipe } from '@angular/common';
 
 export interface GoogleCalendarModalDetails {
   serviceName: string;
   date: Date;
   time: string;
-  // Añade más campos si son necesarios para mostrar en el modal
 }
 
 @Component({
   selector: 'app-google-calendar-modal',
   standalone: true,
-  imports: [CommonModule], // DatePipe se provee a través de CommonModule en standalone
-  providers: [DatePipe], // O añádelo aquí si es necesario explícitamente
+  imports: [CommonModule],
+  providers: [DatePipe],
   templateUrl: './google-calendar-modal.component.html',
 })
 export class GoogleCalendarModalComponent {

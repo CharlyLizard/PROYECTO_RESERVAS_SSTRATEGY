@@ -36,7 +36,6 @@ export class ModalProveedoresComponent {
       this.secretarioIdSeleccionadoEnModal = null;
       this.secretarioIdOriginalAsignado = null;
     }
-    // Asegura estructura
     if (!this.proveedor.servicio) this.proveedor.servicio = { id: null };
   }
 

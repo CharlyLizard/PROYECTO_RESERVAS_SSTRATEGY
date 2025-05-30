@@ -33,7 +33,6 @@ export class AdministradoresComponent implements OnInit {
   administradorSeleccionado: Admin | null = null;
   filtro: string = '';
 
-  // Modal
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';
   modalAdmin: Admin = {} as Admin;
@@ -90,7 +89,6 @@ export class AdministradoresComponent implements OnInit {
   editAdministrador() {
     if (this.administradorSeleccionado) {
       this.modalModo = 'edit';
-      // Inicializar los campos de contraseña como vacíos
       this.modalAdmin = { ...this.administradorSeleccionado, contrasena: '', reingreseContrasena: '' };
       this.modalVisible = true;
     }
@@ -111,14 +109,12 @@ export class AdministradoresComponent implements OnInit {
   guardarModal(admin: Admin): void {
     const adminToSend: any = { ...admin };
 
-    // Solo incluir la contraseña si no está vacía
     if (adminToSend.contrasena && adminToSend.contrasena.trim() !== '') {
       adminToSend.password = adminToSend.contrasena;
     } else {
-      delete adminToSend.password; // Asegurarse de que no se envíe un campo vacío
+      delete adminToSend.password;
     }
 
-    // Eliminar los campos de contraseña del formulario
     delete adminToSend.contrasena;
     delete adminToSend.reingreseContrasena;
 

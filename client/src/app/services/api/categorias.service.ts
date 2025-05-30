@@ -1,8 +1,7 @@
-// filepath: client/src/app/services/api/categorias.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Categoria } from '../../models/orm/categoria.model'; // Corregida la ruta de importación
+import { Categoria } from '../../models/orm/categoria.model';
 
 @Injectable({
   providedIn: 'root'

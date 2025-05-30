@@ -15,8 +15,7 @@ export interface Admin {
   idioma: string;
   zonaHoraria: string;
   recibirNotificaciones: boolean;
-  fechaCreacion?: string; // Asumiendo que el backend lo envía
-  // Campos solo para el formulario, no necesariamente parte del DTO del backend para todas las operaciones
+  fechaCreacion?: string;
   contrasena?: string;
   reingreseContrasena?: string;
 }

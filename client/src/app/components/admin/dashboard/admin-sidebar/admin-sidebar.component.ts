@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-admin-sidebar',
   templateUrl: './admin-sidebar.component.html',
-  styleUrls: ['./admin-sidebar.component.css'],
   standalone: true,
   imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule]
 })

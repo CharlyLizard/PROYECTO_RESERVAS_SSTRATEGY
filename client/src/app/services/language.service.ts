@@ -19,7 +19,6 @@ export class LanguageService {
   availableLanguages: Language[] = [
     { code: 'en', name: 'Español' },
     { code: 'es', name: 'English' },
-    // Añade más idiomas aquí según tus archivos de traducción
   ];
 
   constructor(private http: HttpClient) {
@@ -38,7 +37,7 @@ export class LanguageService {
   }
 
   getCurrentLanguageSignal() {
-    return this.currentLanguageSignal.asReadonly(); // Exponer como readonly para evitar modificaciones externas
+    return this.currentLanguageSignal.asReadonly();
   }
 
   private loadTranslations(lang: string): void {
@@ -46,10 +45,10 @@ export class LanguageService {
       .pipe(
         catchError(() => {
           console.error(`Traducciones para '${lang}' no encontradas. Cargando 'es' por defecto.`);
-          if (lang !== 'es') { // Evitar bucle si 'es.json' también falla
+          if (lang !== 'es') {
             return this.http.get<Record<string, string>>(`/assets/i18n/es.json`);
           }
-          return of({}); // Fallback final a un objeto vacío
+          return of({});
         }),
         tap(data => this.translationsSignal.set(data))
       ).subscribe();
@@ -57,6 +56,6 @@ export class LanguageService {
 
   getTranslation(key: string): string {
     const translation = this.translationsSignal()[key];
-    return translation || key; // Devuelve la clave si no se encuentra la traducción
+    return translation || key;
   }
 }

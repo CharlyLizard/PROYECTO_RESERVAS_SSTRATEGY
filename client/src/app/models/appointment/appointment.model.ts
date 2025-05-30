@@ -6,6 +6,6 @@ export interface Appointment {
   date: string;
   time: string;
   timezone: string;
-  service: number | null; // Cambiado a number para que coincida con el id del servicio
+  service: number | null;
   notes?: string;
 }

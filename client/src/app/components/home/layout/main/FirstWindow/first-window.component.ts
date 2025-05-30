@@ -28,7 +28,7 @@ import { TranslatePipe } from '../../../../../pipe/translate.pipe';
   templateUrl: './first-window.component.html',
 })
 export class FirstWindowComponent implements OnInit {
-  selectedDate: Date | null = new Date(); // Inicializar con la fecha actual
+  selectedDate: Date | null = new Date();
   selectedHour: string | null = null;
   selectedTimezone: string | null = null;
 
@@ -37,7 +37,6 @@ export class FirstWindowComponent implements OnInit {
   constructor(@Inject(ReservasDataService) private reservasDataService: ReservasDataService) {}
 
   ngOnInit(): void {
-    // Si selectedDate se inicializa, llamar a onDateSelected para propagar
     if (this.selectedDate) {
       this.onDateSelected(this.selectedDate);
     }
@@ -46,14 +45,11 @@ export class FirstWindowComponent implements OnInit {
     if (servicioSeleccionado && servicioSeleccionado.duracionMinutos) {
       this.currentServiceDuration = servicioSeleccionado.duracionMinutos;
     }
-    // También podrías suscribirte a cambios en el servicio seleccionado si puede cambiar dinámicamente
   }
 
   onDateSelected(date: Date | null): void {
-    this.selectedDate = date; // Esta propiedad se enlaza al input de HorasReservaComponent
+    this.selectedDate = date;
     this.reservasDataService.setDate(this.selectedDate);
-    // La actualización de horas en HorasReservaComponent se activará por ngOnChanges
-    // cuando this.selectedDate (que es un @Input para HorasReservaComponent) cambie.
   }
 
   onHourSelected(hour: string): void {

@@ -1,6 +1,6 @@
 export interface Categoria {
-  id?: number; // Opcional al crear una nueva
+  id?: number;
   nombre: string;
   descripcion: string;
-  fechaCreacion?: string; // El backend la asigna
+  fechaCreacion?: string;
 }

@@ -8,8 +8,8 @@ import { Servicio } from '../../../models/servicios/servicio';
 import { ServiciosService } from '../../../services/api/servicios.service';
 import { CategoriasService } from '../../../services/api/categorias.service';
 import { ModalServiciosComponent } from './modal-servicios/modal-servicios.component';
-import { Categoria } from '../../../models/orm/categoria.model'; // Para el array de categorías
-import {FormsModule} from '@angular/forms'; // Importa FormsModule para usar [(ngModel)]
+import { Categoria } from '../../../models/orm/categoria.model';
+import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-servicios',
   templateUrl: './servicios.component.html',
@@ -28,14 +28,14 @@ import {FormsModule} from '@angular/forms'; // Importa FormsModule para usar [(n
 })
 export class ServiciosComponent implements OnInit {
   servicios: Servicio[] = [];
-  categorias: Categoria[] = []; // Usa el tipo Categoria
+  categorias: Categoria[] = [];
   serviciosFiltrados: Servicio[] = [];
-  textoBusqueda: string = ''; // Texto ingresado en la barra de búsqueda
+  textoBusqueda: string = '';
   servicioSeleccionado: Servicio | null = null;
 
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';
-  modalServicio: Partial<Servicio> = {}; // Usa Partial<Servicio> para el objeto del modal
+  modalServicio: Partial<Servicio> = {};
 
   constructor(
     private serviciosService: ServiciosService,
@@ -43,7 +43,7 @@ export class ServiciosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.categoriasService.getCategorias().subscribe((categorias: Categoria[]) => { // Tipa la respuesta
+    this.categoriasService.getCategorias().subscribe((categorias: Categoria[]) => {
       this.categorias = categorias;
     });
     this.cargarServicios();
@@ -52,14 +52,14 @@ export class ServiciosComponent implements OnInit {
   cargarServicios(): void {
     this.serviciosService.getServicios().subscribe((servicios) => {
       this.servicios = servicios;
-      this.serviciosFiltrados = servicios; // Inicialmente, mostrar todos los servicios
+      this.serviciosFiltrados = servicios;
     });
   }
 
   filtrarServicios(): void {
     const texto = this.textoBusqueda.toLowerCase().trim();
     if (texto === '') {
-      this.serviciosFiltrados = this.servicios; // Mostrar todos los servicios si no hay texto
+      this.serviciosFiltrados = this.servicios;
     } else {
       this.serviciosFiltrados = this.servicios.filter((servicio) =>
         servicio.nombre.toLowerCase().includes(texto) ||
@@ -68,19 +68,19 @@ export class ServiciosComponent implements OnInit {
     }
   }
 
-  getNombreCategoria(categoriaId: number | null): string { // Permite null
+  getNombreCategoria(categoriaId: number | null): string {
     if (categoriaId === null) return 'Sin categoría';
     const categoria = this.categorias.find(cat => cat.id === categoriaId);
     return categoria ? categoria.nombre : 'Sin categoría';
   }
 
-  selectService(servicio: Servicio): void { // Tipa el parámetro
+  selectService(servicio: Servicio): void {
     this.servicioSeleccionado = servicio;
   }
 
   addService(): void {
     this.modalModo = 'add';
-    this.modalServicio = { // Inicializa con campos de Servicio
+    this.modalServicio = {
       nombre: '',
       descripcion: '',
       categoriaId: null,
@@ -121,10 +121,10 @@ export class ServiciosComponent implements OnInit {
     this.modalVisible = false;
   }
 
-  guardarModal(servicio: Servicio): void { // Tipa el parámetro
+  guardarModal(servicio: Servicio): void {
     let accion: 'add' | 'edit' | 'delete' = this.modalModo;
      if (this.modalModo === 'add' || this.modalModo === 'edit') {
-        this.serviciosService.gestionarServicio(this.modalModo, servicio).subscribe((resp: { servicios: Servicio[], servicio?: Servicio }) => { // Tipa la respuesta
+        this.serviciosService.gestionarServicio(this.modalModo, servicio).subscribe((resp: { servicios: Servicio[], servicio?: Servicio }) => {
         this.servicios = resp.servicios;
         const servicioActualizado = resp.servicios.find(s => s.id === (resp.servicio?.id || servicio.id));
         this.selectService(servicioActualizado || this.servicios[0]);
@@ -134,8 +134,8 @@ export class ServiciosComponent implements OnInit {
   }
 
   eliminarModal(): void {
-    if (this.modalServicio.id) { // Asegúrate que hay un ID para eliminar
-        this.serviciosService.gestionarServicio('delete', this.modalServicio as Servicio).subscribe((resp: { servicios: Servicio[] }) => { // Tipa la respuesta
+    if (this.modalServicio.id) {
+        this.serviciosService.gestionarServicio('delete', this.modalServicio as Servicio).subscribe((resp: { servicios: Servicio[] }) => {
         this.servicios = resp.servicios;
         this.servicioSeleccionado = this.servicios.length > 0 ? this.servicios[0] : null;
         this.cerrarModal();
@@ -152,14 +152,12 @@ export class ServiciosComponent implements OnInit {
     this.serviciosService.seleccionarServicioPrincipal(servicio.id).subscribe({
       next: (serviciosActualizados) => {
         this.servicios = serviciosActualizados;
-        this.filtrarServicios(); // Actualiza la lista filtrada
+        this.filtrarServicios();
 
-        // Actualiza el servicioSeleccionado si es el que se está mostrando en detalles
         if (this.servicioSeleccionado && this.servicioSeleccionado.id === servicio.id) {
           const updatedSelected = this.servicios.find(s => s.id === servicio.id);
           this.servicioSeleccionado = updatedSelected ? { ...updatedSelected } : null;
         } else if (!this.servicioSeleccionado && this.servicios.length > 0) {
-            // Si no había ninguno seleccionado, y ahora hay uno principal, puede que quieras seleccionarlo para vista detalle
             this.servicioSeleccionado = this.servicios.find(s => s.isSelected) || this.servicios[0];
         }
         console.log('Servicio principal actualizado con éxito.');

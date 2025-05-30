@@ -34,10 +34,9 @@ export class DashboardAdminComponent {
   }
 
   gOnInit(): void {
-    // Suscribirse a los datos del administrador
     this.authService.adminData$.subscribe((data: any) => {
       if (data) {
-        this.adminName = data.nombreUsuario; // Mostrar el nombre de usuario en el header
+        this.adminName = data.nombreUsuario;
       }
     });
   }

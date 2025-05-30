@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common'; // Importa DatePipe
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-appointment-detail-modal',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, DatePipe], // Agrega DatePipe a imports
+  imports: [CommonModule, MatIconModule, MatButtonModule, DatePipe],
   templateUrl: './appointment-detail-modal.component.html',
   styleUrls: ['./appointment-detail-modal.component.css']
 })
@@ -14,7 +14,7 @@ export class AppointmentDetailModalComponent {
   @Input() appointment: any;
   @Input() visible: boolean = false;
   @Output() close = new EventEmitter<void>();
-  @Output() modify = new EventEmitter<any>(); // Emit the appointment data for modification
+  @Output() modify = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
 
   constructor() {}
@@ -24,14 +24,14 @@ export class AppointmentDetailModalComponent {
   }
 
   onModify(): void {
-    this.modify.emit(this.appointment); // Emit the current appointment data
+    this.modify.emit(this.appointment);
   }
 
   onDelete(): void {
     if (this.appointment && this.appointment.appointmentId
 ) {
       this.delete.emit(this.appointment.appointmentId
-); // Emite el ID de la cita
+);
     } else {
       console.error('Error: No se puede eliminar la cita sin un ID.');
     }

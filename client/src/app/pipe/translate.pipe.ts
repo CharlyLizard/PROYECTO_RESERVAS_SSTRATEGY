@@ -6,7 +6,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 @Pipe({
   name: 'translate',
   standalone: true,
-  pure: false, // Necesario para que el pipe se actualice cuando cambie el idioma o las traducciones
+  pure: false,
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
   private languageService = inject(LanguageService);
@@ -16,18 +16,17 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
   private lastValue: string = '';
 
   constructor() {
-    // Suscribirse a los cambios de idioma para forzar la actualización del pipe
     this.langChangeSubscription = toObservable(this.languageService.getCurrentLanguageSignal())
       .subscribe(() => {
-        if (this.lastKey) { // Si ya se ha traducido una clave antes
+        if (this.lastKey) {
           this.lastValue = this.languageService.getTranslation(this.lastKey);
-          this.cdr.markForCheck(); // Marcar para la detección de cambios
+          this.cdr.markForCheck();
         }
       });
   }
 
   transform(key: string): string {
-    if (key !== this.lastKey) { // Si la clave es nueva o diferente
+    if (key !== this.lastKey) {
       this.lastKey = key;
       this.lastValue = this.languageService.getTranslation(key);
     }

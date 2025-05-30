@@ -22,7 +22,6 @@ import { AdminHeaderComponent } from "../admin/dashboard/admin-header/admin-head
     AdminHeaderComponent
 ],
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.css'
 })
 export class SettingsComponent {
   selected: string = 'general';

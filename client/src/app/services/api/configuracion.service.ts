@@ -1,13 +1,9 @@
-import { Injectable, signal, WritableSignal, Signal, computed } from '@angular/core'; // Importa signal, WritableSignal, Signal
+import { Injectable, signal, WritableSignal, Signal, computed } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs'; // Importa tap
+import { Observable, of, tap } from 'rxjs';
 import { ConfigGeneral } from '../../models/admin/config-general.model';
-// Asegúrate que la importación de LogicaNegocioConfig y sus interfaces internas sea correcta
-// Si están definidas en logica-negocio.component.ts y exportadas, la ruta es correcta.
-// Si las moviste a un archivo .model.ts, ajusta la ruta.
 import { LogicaNegocioConfig, Horario, PeriodoDescanso } from '../../components/settings/logica-negocio/logica-negocio.component';
 
-// Define un valor por defecto para la lógica de negocio
 const DEFAULT_LOGICA_NEGOCIO_CONFIG: LogicaNegocioConfig = {
   horarioLaboral: [
     { dia: 'Domingo', inicio: '', final: '' },
@@ -28,14 +24,11 @@ const DEFAULT_LOGICA_NEGOCIO_CONFIG: LogicaNegocioConfig = {
 export class ConfiguracionService {
   private apiUrl = 'http://localhost:8080/api/configuracion';
 
-  // Señal para LogicaNegocioConfig
   private logicaNegocioConfigSignal: WritableSignal<LogicaNegocioConfig>;
 
-  // Señal pública de solo lectura para que otros componentes la consuman
   public readonly currentLogicaNegocioConfig: Signal<LogicaNegocioConfig>;
 
   constructor(private http: HttpClient) {
-    // Intenta cargar desde localStorage al iniciar, o usa el valor por defecto
     const storedConfig = localStorage.getItem('logicaNegocioConfig');
     this.logicaNegocioConfigSignal = signal(storedConfig ? JSON.parse(storedConfig) : DEFAULT_LOGICA_NEGOCIO_CONFIG);
     this.currentLogicaNegocioConfig = this.logicaNegocioConfigSignal.asReadonly();
@@ -60,27 +53,21 @@ export class ConfiguracionService {
     const formData = new FormData();
     formData.append('logo', file, file.name);
     return this.http.post<{ logotipoUrl: string }>(`${this.apiUrl}/general/logo`, formData, {
-      headers: this.getHeaders() // Ajustar si el backend espera diferentes headers para FormData
+      headers: this.getHeaders()
     });
   }
 
-  // Obtener la configuración de lógica de negocio (devuelve el valor actual de la señal)
   getLogicaNegocioConfig(): Observable<LogicaNegocioConfig> {
-    // El componente LogicaNegocioComponent usará esto para su carga inicial.
-    // La señal ya se inicializó en el constructor.
     return of(this.logicaNegocioConfigSignal());
   }
 
-  // Guardar la configuración de lógica de negocio
   saveLogicaNegocioConfig(config: LogicaNegocioConfig): Observable<LogicaNegocioConfig> {
-    this.logicaNegocioConfigSignal.set(config); // Actualiza la señal
-    localStorage.setItem('logicaNegocioConfig', JSON.stringify(config)); // Persiste en localStorage
+    this.logicaNegocioConfigSignal.set(config);
+    localStorage.setItem('logicaNegocioConfig', JSON.stringify(config));
     console.log('Lógica de negocio actualizada en signal y localStorage:', config);
-    // No hay llamada HTTP real ya que estos datos no van al backend
     return of(config);
   }
 
-  // --- Funciones de ayuda para la lógica de citas ---
 
   /**
    * Verifica si un intervalo de tiempo específico está disponible según la configuración.
@@ -90,7 +77,7 @@ export class ConfiguracionService {
    * @returns boolean Verdadero si está disponible, falso si no.
    */
   public isTimeSlotAvailable(date: Date, time: string, serviceDurationMinutes: number): boolean {
-    const config = this.logicaNegocioConfigSignal(); // Obtiene el valor actual de la señal
+    const config = this.logicaNegocioConfigSignal();
     const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const dayName = dayNames[date.getDay()];
 
@@ -98,7 +85,7 @@ export class ConfiguracionService {
 
     if (!horarioDia || !horarioDia.inicio || !horarioDia.final) {
       console.log(`Día ${dayName} no laborable o sin horario definido.`);
-      return false; // No es un día laborable o no tiene horario definido
+      return false;
     }
 
     const requestedStartTimeInMinutes = this.timeToMinutes(time);
@@ -107,30 +94,22 @@ export class ConfiguracionService {
     const workStartTimeInMinutes = this.timeToMinutes(horarioDia.inicio);
     const workEndTimeInMinutes = this.timeToMinutes(horarioDia.final);
 
-    // Verifica si la cita está dentro del horario laboral
     if (requestedStartTimeInMinutes < workStartTimeInMinutes || requestedEndTimeInMinutes > workEndTimeInMinutes) {
       console.log(`Cita ${time} fuera del horario laboral (${horarioDia.inicio} - ${horarioDia.final}) para ${dayName}.`);
       return false;
     }
 
-    // Verifica si la cita coincide con algún periodo de descanso
     for (const descanso of config.periodosDescanso) {
       if (descanso.dia === dayName && descanso.inicio && descanso.final) {
         const descansoStartInMinutes = this.timeToMinutes(descanso.inicio);
         const descansoEndInMinutes = this.timeToMinutes(descanso.final);
 
-        // Comprueba solapamiento: (InicioA < FinB) y (FinA > InicioB)
         if (requestedStartTimeInMinutes < descansoEndInMinutes && requestedEndTimeInMinutes > descansoStartInMinutes) {
           console.log(`Cita ${time} coincide con descanso (${descanso.inicio} - ${descanso.final}) para ${dayName}.`);
           return false;
         }
       }
     }
-
-    // Aquí se añadiría la lógica para comprobar contra citas existentes si fuera necesario,
-    // pero eso requeriría acceso a los datos de las citas.
-    // Por ahora, solo se basa en horario laboral y descansos.
-
     return true;
   }
 
@@ -157,7 +136,7 @@ export class ConfiguracionService {
     const horarioDia = config.horarioLaboral.find(h => h.dia === dayName);
 
     if (!horarioDia || !horarioDia.inicio || !horarioDia.final) {
-      return []; // No laborable
+      return [];
     }
 
     const availableSlots: string[] = [];
@@ -167,7 +146,6 @@ export class ConfiguracionService {
     for (let currentTime = workStartMinutes; currentTime < workEndMinutes; currentTime += intervalMinutes) {
       const slotStartTimeStr = this.minutesToTime(currentTime);
       if (this.isTimeSlotAvailable(date, slotStartTimeStr, serviceDurationMinutes)) {
-        // Asegurarse que el slot completo (inicio + duración) cabe antes de finalizar la jornada
         if ((currentTime + serviceDurationMinutes) <= workEndMinutes) {
             availableSlots.push(slotStartTimeStr);
         }

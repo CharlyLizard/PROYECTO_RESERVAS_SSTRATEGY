@@ -18,11 +18,11 @@ export class LoginWindowComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    this.authService.login({ username: this.username, password: this.password }).subscribe({ // Corregido: pasar un objeto
+    this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (response) => {
-        console.log('Login response:', response); // LOG 1
+        console.log('Login response:', response);
         this.authService.setAdminData(response.admin);
-        localStorage.setItem('accessToken', response.accessToken); // Asegúrate de guardar el token
+        localStorage.setItem('accessToken', response.accessToken);
         this.router.navigate(['/admin']);
       },
       error: (err) => {

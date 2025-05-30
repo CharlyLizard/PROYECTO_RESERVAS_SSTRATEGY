@@ -31,8 +31,7 @@ export class ClienteComponent implements OnInit {
   clienteSeleccionado: Cliente | null = null;
   textoBusqueda: string = '';
 
-  citas: Appointment[] = []; // Lista de citas del cliente seleccionado
-
+  citas: Appointment[] = [];
 
   modalVisible = false;
   modalModo: 'add' | 'edit' | 'delete' = 'add';

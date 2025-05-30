@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface TimezoneEntry {
-  name: string;         // Ejemplo: "Europe/Madrid"
-  displayName: string;  // Ejemplo: "Europe/Madrid (GMT+2:00)"
+  name: string;
+  displayName: string;
 }
 
 interface TimezoneGroup {
@@ -19,11 +19,11 @@ interface TimezoneGroup {
   templateUrl: './zona-horaria.component.html',
 })
 export class ZonaHorariaComponent implements OnInit {
-  @Input() initialTimezone: string | null = null; // Sigue siendo el nombre de la zona, ej: "Europe/Madrid"
-  @Output() timezoneSelected = new EventEmitter<string>(); // Emite el nombre de la zona
+  @Input() initialTimezone: string | null = null;
+  @Output() timezoneSelected = new EventEmitter<string>();
 
-  selectedTimezoneName: string = '';      // Nombre de la zona seleccionada (ej: "Europe/Madrid")
-  selectedTimezoneDisplay: string = ''; // Texto para mostrar en el botón (ej: "Europe/Madrid (GMT+2:00)")
+  selectedTimezoneName: string = '';
+  selectedTimezoneDisplay: string = '';
   groupedTimezones: TimezoneGroup[] = [];
   isDropdownOpen = false;
 
@@ -52,8 +52,8 @@ export class ZonaHorariaComponent implements OnInit {
       } else if (this.groupedTimezones.length > 0 && this.groupedTimezones[0].timezones.length > 0) {
         this.selectedTimezoneName = this.groupedTimezones[0].timezones[0].name;
       } else {
-        // Fallback si no hay zonas disponibles o la inicial no es válida
-        this.selectedTimezoneName = 'UTC'; // O alguna otra zona por defecto segura
+
+        this.selectedTimezoneName = 'UTC';
       }
 
       const foundEntry = this.findTimezoneEntry(this.selectedTimezoneName);
@@ -75,23 +75,18 @@ export class ZonaHorariaComponent implements OnInit {
   private getFormattedOffset(timeZone: string): string {
     try {
       const now = new Date();
-      // Intl.DateTimeFormat es la forma estándar de obtener esta información.
-      // 'en' se usa como un locale base, el formato del offset es estándar (GMT±HH:MM).
       const formatter = new Intl.DateTimeFormat('en', {
-        timeZoneName: 'longOffset', // Solicita el offset en formato GMT±HH:MM
+        timeZoneName: 'longOffset',
         timeZone: timeZone,
-        // Se requiere al menos un campo de fecha/hora para que timeZoneName funcione correctamente
-        hour: 'numeric', // Podría ser cualquier otro campo como year: 'numeric'
+        hour: 'numeric',
       });
       const parts = formatter.formatToParts(now);
       const offsetPart = parts.find(part => part.type === 'timeZoneName');
       if (offsetPart && offsetPart.value.startsWith('GMT')) {
-        return offsetPart.value; // Ej: "GMT+02:00" o "GMT-05:00"
+        return offsetPart.value;
       }
-      // console.warn(`No se pudo obtener el offset GMT para ${timeZone}, se obtuvo: ${offsetPart?.value}`);
-      return ''; // Fallback si no se obtiene el formato esperado
+      return '';
     } catch (error) {
-      // console.warn(`Error al obtener el offset para ${timeZone}:`, error);
       return '';
     }
   }

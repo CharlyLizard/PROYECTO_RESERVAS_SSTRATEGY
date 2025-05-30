@@ -10,9 +10,8 @@
   --light-teal: #90d8bc;
 }
 
-/* Estilo general para el calendario */
 .mat-calendar {
-  background-color: var(--light-background); /* Fondo del calendario */
+  background-color: var(--light-background);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

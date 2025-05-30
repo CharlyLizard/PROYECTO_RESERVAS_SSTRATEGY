@@ -20,7 +20,6 @@ export class CalendarioComponent {
   constructor() {}
 
   ngOnInit() {
-    // Inicializar con la fecha recibida si existe
     if (this.initialDate) {
       this.selected = this.initialDate;
     }
@@ -31,7 +30,6 @@ export class CalendarioComponent {
     this.dateChange.emit(date);
   }
 
-  // Filtro para deshabilitar los días pasados
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
     const currentDate = new Date();

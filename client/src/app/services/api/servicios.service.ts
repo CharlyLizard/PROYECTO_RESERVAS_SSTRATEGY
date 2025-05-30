@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Servicio } from '../../models/servicios/servicio'; // Importa el modelo
+import { Servicio } from '../../models/servicios/servicio';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ServiciosService {
 
   constructor(private http: HttpClient) {}
 
-  getServicios(): Observable<Servicio[]> { // Devuelve Observable<Servicio[]>
+  getServicios(): Observable<Servicio[]> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
@@ -19,7 +19,7 @@ export class ServiciosService {
     return this.http.get<Servicio[]>(this.apiUrl, { headers });
   }
 
-  getServiciosSeleccionados(): Observable<Servicio[]> { // Devuelve Observable<Servicio[]>
+  getServiciosSeleccionados(): Observable<Servicio[]> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // Import ChangeDetectorRef
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -41,10 +41,10 @@ export class AdminCalendarComponent implements OnInit {
 
   isAppointmentFormModalVisible = false;
   appointmentFormMode: 'add' | 'edit' = 'add';
-  dateForNewAppointment: string = ''; // YYYY-MM-DD
+  dateForNewAppointment: string = '';
   currentAppointmentToEdit: any | null = null;
 
-  citas: any[] = []; // Añade esto si quieres almacenar las citas en el componente
+  citas: any[] = [];
 
   constructor(
     private reservasDataService: ReservasDataService,
@@ -52,12 +52,11 @@ export class AdminCalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadAppointmentsForCalendar(); // Load events so eventClick can be tested
+    this.loadAppointmentsForCalendar();
   }
 
   private parseAmPmTime(timeStr: string | null | undefined): string {
     if (!timeStr) return '00:00:00';
-    // Robust parsing for "HH:mm AM/PM"
     const amPmMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
     if (amPmMatch) {
         let hours = parseInt(amPmMatch[1], 10);
@@ -65,11 +64,10 @@ export class AdminCalendarComponent implements OnInit {
         const modifier = amPmMatch[3].toUpperCase();
 
         if (modifier === 'PM' && hours < 12) hours += 12;
-        if (modifier === 'AM' && hours === 12) hours = 0; // Midnight case
+        if (modifier === 'AM' && hours === 12) hours = 0;
 
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
     }
-    // Fallback for "HH:mm:ss" or "HH:mm"
     const timeParts = timeStr.split(':');
     if (timeParts.length >= 2) {
         const h = parseInt(timeParts[0], 10);
@@ -78,10 +76,10 @@ export class AdminCalendarComponent implements OnInit {
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${(timeParts[2] || '00').padStart(2, '0')}`;
         }
     }
-    return '00:00:00'; // Default if parsing fails
+    return '00:00:00';
   }
 
-  private convertToAmPm(time24: string): string { // time24 is HH:mm
+  private convertToAmPm(time24: string): string {
     if (!time24) return '';
     const [hoursStr, minutesStr] = time24.split(':');
     let hours = parseInt(hoursStr, 10);
@@ -115,9 +113,8 @@ export class AdminCalendarComponent implements OnInit {
           };
         }).filter(event => event !== null);
 
-        // Update calendarOptions events and trigger change detection
         this.calendarOptions = { ...this.calendarOptions, events: calendarEvents as any[] };
-        this.cdr.detectChanges(); // Explicitly trigger change detection
+        this.cdr.detectChanges();
       },
       error => console.error('Error fetching appointments for calendar:', error)
     );
@@ -180,7 +177,7 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     operation.subscribe({
       next: () => {
         console.log(`Appointment ${this.appointmentFormMode === 'add' ? 'created' : 'updated'} successfully`);
-        this.loadAppointmentsForCalendar(); // Reload appointments to show changes
+        this.loadAppointmentsForCalendar();
         this.closeAppointmentFormModal();
       },
       error: (err: any) => console.error(`Error ${this.appointmentFormMode === 'add' ? 'creating' : 'updating'} appointment`, err)
@@ -196,12 +193,11 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     this.reservasDataService.gestionarAppointment('delete', { id: appointmentId }).subscribe({
       next: () => {
         console.log(`Cita con ID: ${appointmentId} eliminada exitosamente.`);
-        this.loadAppointmentsForCalendar(); // Recarga el calendario
-        this.closeAppointmentDetailModal(); // Cierra el modal de detalles
+        this.loadAppointmentsForCalendar();
+        this.closeAppointmentDetailModal();
       },
       error: (err: any) => {
         console.error(`Error al eliminar la cita con ID: ${appointmentId}`, err);
-        // Opcionalmente, mostrar un mensaje al usuario aquí
       }
     });
   }
@@ -213,22 +209,13 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     this.cdr.detectChanges();
   }
 
-  guardarModalCita(appointmentData: any) { // Cambiado de 'appointment' a 'appointmentData' para claridad
-    // Asegúrate de que 'appointmentData' tiene la estructura que espera 'gestionarAppointment'
-    // o ajústalo aquí antes de enviarlo.
-    // Por ejemplo, si 'gestionarAppointment' espera { id: ..., clientId: ..., etc. }
-    // y 'appointmentData' ya es así, está bien.
-    // Si 'appointmentData' es solo el ID para 'delete', eso se maneja en handleDeleteAppointmentRequest.
-
-    // El método 'gestionarAppointment' en el servicio probablemente espera un payload como:
-    // { accion: 'add'/'edit', appointment: { ...datos de la cita... } }
+  guardarModalCita(appointmentData: any) {
 
     const payload = {
-      // id: this.appointmentFormMode === 'edit' ? appointmentData.id : undefined, // Si el ID está en appointmentData
       clientId: appointmentData.clientId,
       serviceId: appointmentData.serviceId,
       date: appointmentData.date,
-      time: this.convertToAmPm(appointmentData.time), // Asegúrate que esto es necesario y correcto
+      time: this.convertToAmPm(appointmentData.time),
       timezone: appointmentData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
       notes: appointmentData.notes || ''
     };
@@ -237,11 +224,10 @@ this.selectedAppointmentForModal = clickInfo.event.extendedProps['appointmentDet
     }
 
     this.reservasDataService.gestionarAppointment(this.appointmentFormMode, payload).subscribe({
-      next: (resp: { appointments: any[] }) => { // Asumiendo que la respuesta tiene una propiedad 'appointments'
-        // this.citas = resp.appointments; // Si necesitas la lista completa de citas aquí
+      next: (resp: { appointments: any[] }) => {
         console.log(`Cita ${this.appointmentFormMode}d exitosamente.`);
         this.closeAppointmentFormModal();
-        this.loadAppointmentsForCalendar(); // Para refrescar el calendario
+        this.loadAppointmentsForCalendar();
       },
       error: (err: any) => {
         console.error(`Error al ${this.appointmentFormMode} la cita:`, err);

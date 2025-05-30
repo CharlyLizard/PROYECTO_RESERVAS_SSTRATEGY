@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ConfiguracionService } from '../../../services/api/configuracion.service'; // Asegúrate que la ruta es correcta
+import { ConfiguracionService } from '../../../services/api/configuracion.service';
 
 export interface Horario {
   dia: string;
@@ -21,9 +21,6 @@ export interface LogicaNegocioConfig {
   horarioLaboral: Horario[];
   periodosDescanso: PeriodoDescanso[];
   estadosCitas: string[];
-  // Aquí podrías añadir más configuraciones de lógica de negocio en el futuro
-  // ej: duracionMinimaCita: number;
-  // ej: antelacionMaximaReservaDias: number;
 }
 
 @Component({
@@ -60,7 +57,6 @@ export class LogicaNegocioComponent implements OnInit {
     this.configuracionService.getLogicaNegocioConfig().subscribe({
       next: (data) => {
         if (data) {
-          // Solo actualiza si los arrays no están vacíos para no perder los valores por defecto si el backend no devuelve nada aún
           if (data.horarioLaboral && data.horarioLaboral.length > 0) {
             this.config.horarioLaboral = data.horarioLaboral;
           }
@@ -80,7 +76,7 @@ export class LogicaNegocioComponent implements OnInit {
   guardarConfiguracion(): void {
     this.configuracionService.saveLogicaNegocioConfig(this.config).subscribe({
       next: (savedConfig) => {
-        this.config = savedConfig; // Actualiza con la respuesta del servidor
+        this.config = savedConfig;
         console.log('Configuración de lógica de negocio guardada:', this.config);
         alert('Configuración de lógica de negocio guardada exitosamente.');
       },
@@ -91,7 +87,6 @@ export class LogicaNegocioComponent implements OnInit {
     });
   }
 
-  // Métodos para manipular los arrays directamente en this.config
   agregarPeriodoDescanso(): void {
     this.config.periodosDescanso.push({ dia: 'Lunes', inicio: '12:00', final: '13:00' });
   }
@@ -108,7 +103,6 @@ export class LogicaNegocioComponent implements OnInit {
     this.config.estadosCitas.splice(index, 1);
   }
 
-  // Para el binding en el template de estadosCitas
   trackByFn(index: any, item: any) {
     return index;
   }

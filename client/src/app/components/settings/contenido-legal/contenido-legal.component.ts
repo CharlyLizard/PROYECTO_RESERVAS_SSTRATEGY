@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule]
 })
 export class ContenidoLegalComponent {
-  // Usamos WritableSignal para cada propiedad
   avisoCookiesMostrar: WritableSignal<boolean> = signal(true);
   avisoCookiesTexto: WritableSignal<string> = signal(
     'Este sitio web utiliza cookies para mejorar su experiencia. Asumiremos que está de acuerdo con esto, pero puede optar por no participar si lo desea. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl.'
@@ -30,15 +29,10 @@ export class ContenidoLegalComponent {
   );
 
   guardarContenido() {
-    // Con Signals, los datos ya están "guardados" en las señales.
-    // Esta función puede usarse para lógica adicional si es necesario,
-    // como marcar que los datos están "confirmados" por el usuario
-    // o interactuar con otros servicios locales si fuera el caso.
     console.log('Contenido legal "guardado" en señales:');
     console.log('Aviso Cookies Texto:', this.avisoCookiesTexto());
     console.log('Términos y Condiciones Texto:', this.terminosCondicionesTexto());
     console.log('Política Privacidad Texto:', this.politicaPrivacidadTexto());
-    // Aquí podrías, por ejemplo, mostrar una notificación de "Cambios guardados localmente"
     alert('Cambios guardados localmente en la página.');
   }
 }

@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-config-general',
   templateUrl: './config-general.component.html',
-  styleUrls: ['./config-general.component.css'],
     standalone: true,
   imports: [FormsModule]
 
@@ -36,12 +35,11 @@ onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
     const file = input.files[0];
-    this.config.selectedFile = file; // Guarda el archivo seleccionado en el modelo
+    this.config.selectedFile = file;
 
-    // Llama al servicio para subir el logotipo
     this.configuracionService.uploadLogo(file).subscribe({
       next: (response: { logotipoUrl: string }) => {
-        this.config.logotipoUrl = response.logotipoUrl; // Actualiza la URL del logotipo
+        this.config.logotipoUrl = response.logotipoUrl;
         alert('Logotipo subido con éxito.');
       },
       error: (err: any) => {
@@ -64,7 +62,6 @@ onFileSelected(event: Event): void {
 
   guardarConfiguracion(): void {
     const configToSave = { ...this.config };
-    //delete configToSave.selectedFile;
 
     this.configuracionService.saveGeneralConfig(configToSave).subscribe({
       next: (savedConfig: ConfigGeneral) => {

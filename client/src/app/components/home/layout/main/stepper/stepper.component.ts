@@ -44,16 +44,12 @@ export class StepperComponent {
     effect(() => {
       const response = this.ApiService.reservationResponse();
       if (response) {
-        // Esta lógica se activará cuando la reserva se complete exitosamente
-        // Podrías mover el alert y el reset aquí si prefieres
         console.log('Respuesta del servidor (desde effect):', response);
       }
     });
   }
 
-  // Avanzar al siguiente paso
   nextStep(): void {
-    // Si estamos en el paso del formulario (paso 1), guardar los datos antes de avanzar
     if (this.currentStep === 1 && this.secondWindowComponent) {
       this.secondWindowComponent.saveData();
     }
@@ -63,19 +59,16 @@ export class StepperComponent {
     }
   }
 
-  // Retroceder al paso anterior
   prevStep(): void {
     if (this.currentStep > 0) {
       this.currentStep--;
     }
   }
 
-  // Método para verificar si se puede avanzar al siguiente paso
   canProceed(): boolean {
     if (this.currentStep === 0) {
       return this.reservasService.isFirstStepComplete();
     } else if (this.currentStep === 1) {
-      // Si tenemos referencia al componente, verificar si el formulario es válido
       return this.secondWindowComponent
         ? this.secondWindowComponent.isFormValid()
         : false;
@@ -91,13 +84,13 @@ export class StepperComponent {
 
     if (!servicioSeleccionado || !servicioSeleccionado.id) {
       alert('Debes seleccionar un servicio antes de confirmar la cita.');
-      this.currentStep = 0; // O al paso de selección de servicio
+      this.currentStep = 0;
       return;
     }
 
     if (!appointmentData.date || !appointmentData.hour) {
       alert('Debes seleccionar una fecha y hora para la cita.');
-      this.currentStep = 0; // O al paso de selección de fecha/hora
+      this.currentStep = 0;
       return;
     }
 
@@ -110,15 +103,13 @@ export class StepperComponent {
         city: formData.ciudad || '',
         postalCode: formData.codigoPostal || '',
       },
-      date: appointmentData.date.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      time: appointmentData.hour, // Formato HH:mm
+      date: appointmentData.date.toISOString().split('T')[0],
+      time: appointmentData.hour,
       timezone:
         appointmentData.timezone ||
         Intl.DateTimeFormat().resolvedOptions().timeZone,
-      service: servicioSeleccionado.id, // Asegúrate que tu modelo Appointment espera serviceId
+      service: servicioSeleccionado.id,
       notes: formData.notas || '',
-      // providerId: ..., // Si aplica
-      // status: 'Pendiente', // Si aplica
     };
 
     this.currentAppointmentForModal = appointment;
@@ -142,11 +133,9 @@ export class StepperComponent {
   private proceedToCreateAppointment(appointment: Appointment): void {
     this.ApiService.sendReservationData(appointment)
       .then(() => {
-        // Asumiendo que sendReservationData devuelve una Promise
         alert('¡Cita confirmada exitosamente!');
-        this.reservasService.clearData(); // Cambiado de resetReservation a clearData
-        this.currentStep = 0; // Volver al inicio o a una página de agradecimiento
-        // this.router.navigate(['/ruta-confirmacion']);
+        this.reservasService.clearData();
+        this.currentStep = 0;
       })
       .catch((error) => {
         console.error('Error al confirmar la cita:', error);
@@ -154,7 +143,7 @@ export class StepperComponent {
           'Hubo un error al confirmar su cita. Por favor, inténtelo de nuevo.'
         );
       });
-    this.showGoogleCalendarModal = false; // Asegúrate de cerrar el modal
+    this.showGoogleCalendarModal = false;
   }
 
   handleAddToCalendarAndConfirm(): void {
@@ -200,21 +189,20 @@ export class StepperComponent {
 
   private constructGoogleCalendarLink(
     servicio: Servicio,
-    citaDate: Date, // La fecha de la cita (objeto Date)
-    citaTime: string, // La hora en formato "HH:mm"
+    citaDate: Date,
+    citaTime: string,
     notas?: string
   ): string {
     const tituloEvento = servicio.nombre;
 
-    const fechaInicio = new Date(citaDate); // Clonar para no modificar la original
+    const fechaInicio = new Date(citaDate);
     const [horasInicio, minutosInicio] = citaTime.split(':').map(Number);
-    fechaInicio.setHours(horasInicio, minutosInicio, 0, 0); // Establecer hora local
+    fechaInicio.setHours(horasInicio, minutosInicio, 0, 0);
 
     const fechaFin = new Date(fechaInicio);
     const duracionMinutos = servicio.duracionMinutos || 60;
     fechaFin.setMinutes(fechaInicio.getMinutes() + duracionMinutos);
 
-    // Google Calendar espera fechas en UTC para el formato YYYYMMDDTHHmmssZ
     const fechaInicioISO = this.formatToGoogleCalendarDate(fechaInicio);
     const fechaFinISO = this.formatToGoogleCalendarDate(fechaFin);
 
@@ -233,8 +221,6 @@ export class StepperComponent {
     if (ubicacionEvento) {
       params.append('location', ubicacionEvento);
     }
-    // params.append('crm', 'BUSY'); // Opcional: marcar como ocupado
-    // params.append('trp', 'false'); // Opcional: no mostrar como transparente
 
     return `${baseUrl}&${params.toString()}`;
   }
