@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para *ngFor
+import { RouterLink } from '@angular/router'; // Importar RouterLink
 import { LanguageService, Language } from '../../../../services/language.service'; // Tu servicio de idioma
 import { TranslatePipe } from '../../../../pipe/translate.pipe'; // Tu pipe de traducción personalizada
 
@@ -9,6 +10,7 @@ import { TranslatePipe } from '../../../../pipe/translate.pipe'; // Tu pipe de t
   standalone: true,
   imports: [
     CommonModule,    // Necesario para directivas como *ngFor
+    RouterLink,      // Añadir RouterLink para la directiva routerLink
     TranslatePipe    // Tu pipe de traducción personalizada
   ]
 })

@@ -36,5 +36,6 @@
   "GCAL_MODAL_ADD_CONFIRM_BUTTON": "Añadir y Confirmar",
   "GCAL_MODAL_CONFIRM_ONLY_BUTTON": "Confirmar Solo",
   "GCAL_MODAL_CANCEL_BUTTON": "Cancelar",
-  "SELECT_TIMEZONE_PLACEHOLDER": "Seleccionar zona horaria"
+  "SELECT_TIMEZONE_PLACEHOLDER": "Seleccionar zona horaria",
+  "LOGIN_BUTTON": "Iniciar sesión"
 }
