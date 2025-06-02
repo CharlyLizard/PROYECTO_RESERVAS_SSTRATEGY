@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigGeneral } from '../../../models/admin/config-general.model';
 import { ConfiguracionService } from '../../../services/api/configuracion.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-config-general',
   templateUrl: './config-general.component.html',
     standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule,CommonModule]
 
 })
 export class ConfigGeneralComponent implements OnInit {
