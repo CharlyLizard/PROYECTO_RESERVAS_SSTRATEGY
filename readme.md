@@ -20,11 +20,12 @@ Repositorio oficial: [https://github.com/CharlyLizard/PROYECTO_RESERVAS_SSTRATEG
 
 ## Requisitos previos
 
-- Node.js (v18 o superior recomendado)
-- Angular CLI (`npm install -g @angular/cli`)
-- Java 17 o superior
-- Maven
-- SQL Server (puedes adaptarlo a otra base de datos si lo necesitas)
+- **Node.js** (v18 o superior recomendado)
+- **Angular CLI** (`npm install -g @angular/cli`)
+- **Java 17** o superior
+- **Maven**
+- **SQL Server** (imprescindible, el proyecto está preparado para este motor)
+- **SSMS** (SQL Server Management Studio) o Azure Data Studio para ejecutar scripts SQL
 
 ---
 
@@ -37,9 +38,9 @@ git clone https://github.com/CharlyLizard/PROYECTO_RESERVAS_SSTRATEGY.git
 cd PROYECTO_RESERVAS_SSTRATEGY
 ```
 
-### 2. Configura la base de datos
+### 2. Configura la base de datos (SQL Server)
 
-- Crea una base de datos llamada `Sstrategy` en tu SQL Server.
+- Crea una base de datos llamada `Sstrategy` en tu instancia de SQL Server.
 - Ejecuta el script de creación y datos iniciales:
 
 ```sh
@@ -47,8 +48,15 @@ cd PROYECTO_RESERVAS_SSTRATEGY
 scripts bases de datos/script2.sql
 ```
 
-> **Nota:** Asegúrate de que el usuario y contraseña de la base de datos coincidan con los del archivo de configuración del backend:  
-> `backend/src/main/resources/application.properties`
+> **Nota importante:**  
+> - El usuario y contraseña de la base de datos deben coincidir con los definidos en `backend/src/main/resources/application.properties`.
+> - Por defecto, la conexión es:
+>   ```
+>   spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=Sstrategy;encrypt=false;trustServerCertificate=true
+>   spring.datasource.username=admin123
+>   spring.datasource.password=admin123
+>   ```
+> - Si cambias estos valores, actualízalos tanto en SQL Server como en el archivo de configuración.
 
 ### 3. Backend (Spring Boot)
 
@@ -81,9 +89,9 @@ El frontend estará disponible en [http://localhost:4200](http://localhost:4200)
 ## Estructura del proyecto
 
 ```
-backend/    # Código Java Spring Boot (API REST)
-client/     # Código Angular (frontend)
-scripts bases de datos/ # Scripts SQL para la base de datos
+backend/                  # Código Java Spring Boot (API REST)
+client/                   # Código Angular (frontend)
+scripts bases de datos/   # Scripts SQL para la base de datos (SQL Server)
 ```
 
 ---
@@ -94,7 +102,7 @@ El script principal es:
 
 - [`scripts bases de datos/script2.sql`](scripts%20bases%20de%20datos/script2.sql)
 
-Incluye la creación de tablas, relaciones y datos por defecto.
+Incluye la creación de tablas, relaciones y datos por defecto para SQL Server.
 
 ---
 
@@ -102,7 +110,7 @@ Incluye la creación de tablas, relaciones y datos por defecto.
 
 - Puedes modificar la configuración de la base de datos en `backend/src/main/resources/application.properties`.
 - El sistema está preparado para ampliaciones y personalizaciones según las necesidades de la empresa.
-- Si necesitas adaptar la base de datos a otro motor, revisa el script SQL y los parámetros de conexión en el backend.
+- Si necesitas adaptar la base de datos a otro motor distinto de SQL Server, revisa el script SQL y los parámetros de conexión en el backend.
 
 ---
 
